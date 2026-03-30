@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L+LO Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0B0F1A;--s:#13192A;--s2:#1C2438;--s3:#252E42;--b:#2A3448;--b2:#344060;--t:#E8EDF8;--t2:#8B9ABF;--t3:#5A6A8A;--ac:#3B82F6;--ac2:#1D4ED8;--ag:rgba(59,130,246,.15);--go:#F59E0B;--gg:rgba(245,158,11,.15);--gr:#10B981;--grg:rgba(16,185,129,.12);--re:#EF4444;--pu:#8B5CF6;--fm:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm2:'DM Mono',monospace}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -81,6 +82,14 @@ tr:hover td{background:var(--s2)}
 .wbox strong{color:var(--go)}
 .refresh-btn{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 14px;color:var(--t2);cursor:pointer;font-family:var(--fb);font-size:12px}
 .refresh-btn:hover{border-color:var(--ac);color:var(--ac)}
+.cgrid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.cgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.cc{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
+.ct{font-family:var(--fm);font-size:14px;font-weight:700;margin-bottom:4px}
+.cs{font-size:12px;color:var(--t3);margin-bottom:16px}
+.cw{position:relative;height:220px}
+.cw.t{height:260px}
 </style>
 </head>
 <body>
@@ -115,6 +124,7 @@ tr:hover td{background:var(--s2)}
         <div class="slbl" style="margin-bottom:12px">Analytics</div>
         <button class="nb on" data-tab="users">👥 Users</button>
         <button class="nb" data-tab="overview">📊 Overview</button>
+        <button class="nb" data-tab="analytics">⚡ Behavior</button>
       </div>
       <div class="ssec">
         <div class="slbl" style="margin-bottom:12px">Business</div>
@@ -175,22 +185,123 @@ tr:hover td{background:var(--s2)}
 
       <!-- OVERVIEW -->
       <div class="tab" id="tab-overview">
-        <div class="stitle">Overview</div>
-        <div class="ssub">Summary built from real sign-in data.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Overview</div>
+          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+        <div class="ssub">All data is real — pulled live from Supabase on every load.</div>
+
         <div class="kgrid">
           <div class="kcard ac"><div class="klbl">Total Users</div><div class="kval" id="ov-total">—</div><div class="ksub">All time</div></div>
-          <div class="kcard gr"><div class="klbl">Top City</div><div class="kval" style="font-size:16px;padding-top:6px" id="ov-city">—</div><div class="ksub">Most sign-ins</div></div>
-          <div class="kcard go"><div class="klbl">Latest Sign-In</div><div class="kval" style="font-size:14px;padding-top:6px" id="ov-latest">—</div><div class="ksub" id="ov-latest-time">—</div></div>
-          <div class="kcard pu"><div class="klbl">Status</div><div class="kval" style="font-size:16px;padding-top:6px">🟢 Live</div><div class="ksub">Supabase connected</div></div>
+          <div class="kcard gr"><div class="klbl">Top City</div><div class="kval" style="font-size:18px;padding-top:4px" id="ov-city">—</div><div class="ksub">Most sign-ins</div></div>
+          <div class="kcard go"><div class="klbl">Latest Sign-In</div><div class="kval" style="font-size:16px;padding-top:4px" id="ov-latest">—</div><div class="ksub" id="ov-latest-time">—</div></div>
+          <div class="kcard pu"><div class="klbl">Database</div><div class="kval" style="font-size:16px;padding-top:4px">🟢 Live</div><div class="ksub">Supabase connected</div></div>
         </div>
+
+        <div class="cgrid">
+          <div class="cc">
+            <div class="ct">Sign-Ins Over Time</div>
+            <div class="cs">Cumulative user growth</div>
+            <div class="cw t"><canvas id="growthC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Users by City</div>
+            <div class="cs">From onboarding</div>
+            <div class="cw t"><canvas id="cityC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Daily Sign-Ins</div>
+            <div class="cs">New users per day</div>
+            <div class="cw"><canvas id="dailyC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Sign-Ins by Day of Week</div>
+            <div class="cs">When families discover the app</div>
+            <div class="cw"><canvas id="dowC"></canvas></div>
+          </div>
+        </div>
+
         <div class="tcard">
-          <div class="th"><div class="tt">Users by City</div><div class="ts">From real sign-ins</div></div>
+          <div class="th"><div class="tt">Users by City</div><div class="ts">Real breakdown</div></div>
           <table>
             <thead><tr><th>City</th><th>Sign-Ins</th><th>Share</th></tr></thead>
             <tbody id="city-tbl"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
           </table>
         </div>
-        <div class="ibox"><strong>Note:</strong> All data on this page is pulled live from your Supabase database. No mock numbers anywhere.</div>
+      </div>
+
+      <!-- BEHAVIOR ANALYTICS -->
+      <div class="tab" id="tab-analytics">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Behavior Analytics</div>
+          <button class="refresh-btn" onclick="loadAnalytics()">↻ Refresh</button>
+        </div>
+        <div class="ssub">Every tap, map open, phone call, and category click — tracked in real time.</div>
+
+        <div class="kgrid" id="an-kpis">
+          <div class="kcard ac"><div class="klbl">Total Events</div><div class="kval" id="an-total">—</div><div class="ksub">All interactions</div></div>
+          <div class="kcard gr"><div class="klbl">Map Opens</div><div class="kval" id="an-maps">—</div><div class="ksub">Highest intent signal</div></div>
+          <div class="kcard go"><div class="klbl">Phone Taps</div><div class="kval" id="an-phones">—</div><div class="ksub">Near-certain customers</div></div>
+          <div class="kcard pu"><div class="klbl">Filter Clicks</div><div class="kval" id="an-filters">—</div><div class="ksub">Category interest</div></div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Events by Hour</div>
+            <div class="cs">When families are most active</div>
+            <div class="cw"><canvas id="hourlyC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Map Provider Split</div>
+            <div class="cs">Google Maps vs Waze</div>
+            <div class="cw"><canvas id="providerC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Tab Popularity</div>
+            <div class="cs">Visits per tab</div>
+            <div class="cw"><canvas id="tabPopC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Avg Dwell Time per Tab</div>
+            <div class="cs">Seconds spent on each screen</div>
+            <div class="cw"><canvas id="dwellC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="tcard" style="margin-bottom:16px">
+          <div class="th"><div class="tt">🏆 Listing Performance</div><div class="ts">Views · Map Opens · Phone Taps · Conversion Rate</div></div>
+          <table>
+            <thead><tr><th>Listing</th><th>Views</th><th>Map Opens</th><th>Map CTR</th><th>Phone Taps</th><th>Intent Score</th></tr></thead>
+            <tbody id="listing-tbl"><tr><td colspan="6" class="loading">Loading...</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="cgrid2">
+          <div class="tcard">
+            <div class="th"><div class="tt">🔍 Top Filter Clicks</div></div>
+            <table><thead><tr><th>Filter</th><th>Clicks</th></tr></thead>
+            <tbody id="filter-tbl"><tr><td colspan="2" class="loading">Loading...</td></tr></tbody></table>
+          </div>
+          <div class="tcard">
+            <div class="th"><div class="tt">🌤️ Weather × Usage</div></div>
+            <table><thead><tr><th>Weather</th><th>Events</th></tr></thead>
+            <tbody id="weather-tbl"><tr><td colspan="2" class="loading">Loading...</td></tr></tbody></table>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="th"><div class="tt">📋 Recent Events</div><div class="ts">Last 50 interactions</div></div>
+          <table>
+            <thead><tr><th>Time</th><th>Event</th><th>Detail</th><th>City</th><th>Weather</th></tr></thead>
+            <tbody id="events-tbl"><tr><td colspan="5" class="loading">Loading...</td></tr></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- PITCHES -->
@@ -283,7 +394,9 @@ document.querySelectorAll('.nb[data-tab]').forEach(function(b){
     document.querySelectorAll('.nb').forEach(function(x){x.classList.remove('on');});
     document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
     b.classList.add('on');
-    document.getElementById('tab-'+b.getAttribute('data-tab')).classList.add('on');
+    var t=b.getAttribute('data-tab');
+    document.getElementById('tab-'+t).classList.add('on');
+    if(t==='analytics')loadAnalytics();
   });
 });
 
@@ -338,31 +451,249 @@ function loadUsers(){
     });
 }
 
+var chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+
 function updateOverview(users){
   document.getElementById('ov-total').textContent=users.length;
-  if(users.length>0){
-    // Top city
-    var cities={};
-    users.forEach(function(u){var c=u.city||'Unknown';cities[c]=(cities[c]||0)+1;});
-    var topCity=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];})[0];
-    document.getElementById('ov-city').textContent=topCity+' ('+cities[topCity]+')';
-    // Latest
-    var latest=users[0];
-    document.getElementById('ov-latest').textContent=latest.name||latest.email.split('@')[0];
-    var d=new Date(latest.signed_in_at);
-    document.getElementById('ov-latest-time').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    // City breakdown
-    var cityTbl=document.getElementById('city-tbl');
-    cityTbl.innerHTML=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];}).map(function(c){
-      var pct=Math.round(cities[c]/users.length*100);
-      return '<tr><td class="nm">'+c+'</td><td class="num">'+cities[c]+'</td><td><span class="badge ac">'+pct+'%</span></td></tr>';
-    }).join('');
-  } else {
+
+  if(users.length===0){
     document.getElementById('ov-city').textContent='None yet';
     document.getElementById('ov-latest').textContent='None yet';
     document.getElementById('ov-latest-time').textContent='Share the app!';
-    document.getElementById('city-tbl').innerHTML='<tr><td colspan="3" class="loading">No data yet</td></tr>';
+    document.getElementById('city-tbl').innerHTML='<tr><td colspan="3" class="loading">No sign-ins yet</td></tr>';
+    return;
   }
+
+  Chart.defaults.color='#8B9ABF';
+  Chart.defaults.borderColor='#2A3448';
+  var B='rgba(59,130,246,',G='rgba(245,158,11,',Gr='rgba(16,185,129,';
+
+  // Top city
+  var cities={};
+  users.forEach(function(u){var c=u.city||'Unknown';cities[c]=(cities[c]||0)+1;});
+  var sortedCities=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];});
+  var topCity=sortedCities[0];
+  document.getElementById('ov-city').textContent=topCity;
+
+  // Latest
+  var latest=users[0];
+  document.getElementById('ov-latest').textContent=latest.name||latest.email.split('@')[0];
+  var ld=new Date(latest.signed_in_at);
+  document.getElementById('ov-latest-time').textContent=ld.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  // City table
+  document.getElementById('city-tbl').innerHTML=sortedCities.map(function(c){
+    var pct=Math.round(cities[c]/users.length*100);
+    return '<tr><td class="nm">'+c+'</td><td class="num">'+cities[c]+'</td><td><span class="badge ac">'+pct+'%</span></td></tr>';
+  }).join('');
+
+  // ── CHARTS ────────────────────────────────────────────────────────
+
+  // 1. Growth chart — cumulative sign-ins over time
+  var sorted=users.slice().sort(function(a,b){return new Date(a.signed_in_at)-new Date(b.signed_in_at);});
+  var growthLabels=[],growthData=[];
+  sorted.forEach(function(u,i){
+    var d=new Date(u.signed_in_at);
+    growthLabels.push(d.toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+    growthData.push(i+1);
+  });
+  destroyChart('growthC');
+  var gc=document.getElementById('growthC');
+  if(gc){
+    chartInstances['growthC']=new Chart(gc,{
+      type:'line',
+      data:{labels:growthLabels,datasets:[{label:'Total Users',data:growthData,
+        borderColor:'#3B82F6',backgroundColor:B+'0.08)',borderWidth:2.5,tension:.3,fill:true,pointRadius:growthData.length>20?0:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:10},maxTicksLimit:8}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
+
+  // 2. City donut
+  var cityColors=['#3B82F6','#10B981','#F59E0B','#8B5CF6','#EF4444','#06B6D4','#F97316'];
+  destroyChart('cityC');
+  var cc=document.getElementById('cityC');
+  if(cc){
+    chartInstances['cityC']=new Chart(cc,{
+      type:'doughnut',
+      data:{labels:sortedCities,datasets:[{data:sortedCities.map(function(c){return cities[c];}),
+        backgroundColor:cityColors.slice(0,sortedCities.length),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'right',labels:{font:{size:11},padding:12}}}}
+    });
+  }
+
+  // 3. Daily sign-ins bar chart
+  var dailyCounts={};
+  sorted.forEach(function(u){
+    var d=new Date(u.signed_in_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    dailyCounts[d]=(dailyCounts[d]||0)+1;
+  });
+  var dailyLabels=Object.keys(dailyCounts);
+  var dailyData=dailyLabels.map(function(d){return dailyCounts[d];});
+  destroyChart('dailyC');
+  var dc=document.getElementById('dailyC');
+  if(dc){
+    chartInstances['dailyC']=new Chart(dc,{
+      type:'bar',
+      data:{labels:dailyLabels,datasets:[{data:dailyData,backgroundColor:B+'0.75)',borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:10},maxTicksLimit:10}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
+
+  // 4. Day of week breakdown
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var dowCounts=[0,0,0,0,0,0,0];
+  sorted.forEach(function(u){dowCounts[new Date(u.signed_in_at).getDay()]++;});
+  destroyChart('dowC');
+  var dwc=document.getElementById('dowC');
+  if(dwc){
+    chartInstances['dowC']=new Chart(dwc,{
+      type:'bar',
+      data:{labels:days,datasets:[{data:dowCounts,
+        backgroundColor:dowCounts.map(function(v){return v===Math.max.apply(null,dowCounts)?G+'0.85)':B+'0.5)';}),borderRadius:5}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:11}}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
+}
+
+// ── LOAD ANALYTICS ───────────────────────────────────────────────────
+function loadAnalytics(){
+  var B='rgba(59,130,246,',G='rgba(245,158,11,',Gr='rgba(16,185,129,',P='rgba(139,92,246,';
+  Chart.defaults.color='#8B9ABF';
+  Chart.defaults.borderColor='#2A3448';
+
+  fetch('/api/analytics')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      // KPIs
+      document.getElementById('an-total').textContent=d.totalEvents||0;
+      var mapTotal=d.listingBoard.reduce(function(s,l){return s+l.mapOpens;},0);
+      var phoneTotal=d.listingBoard.reduce(function(s,l){return s+l.phoneTaps;},0);
+      var filterTotal=Object.values(d.filterClicks||{}).reduce(function(s,v){return s+v;},0);
+      document.getElementById('an-maps').textContent=mapTotal;
+      document.getElementById('an-phones').textContent=phoneTotal;
+      document.getElementById('an-filters').textContent=filterTotal;
+
+      // Hourly chart
+      destroyChart('hourlyC');
+      var hc=document.getElementById('hourlyC');
+      if(hc&&d.hourly){
+        var hrs=d.hourly.map(function(_,i){return i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p';});
+        chartInstances['hourlyC']=new Chart(hc,{
+          type:'bar',
+          data:{labels:hrs,datasets:[{data:d.hourly,
+            backgroundColor:d.hourly.map(function(v){return v===Math.max.apply(null,d.hourly)?G+'0.85)':B+'0.5)';}),
+            borderRadius:3}]},
+          options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+        });
+      }
+
+      // Provider donut
+      destroyChart('providerC');
+      var pc=document.getElementById('providerC');
+      if(pc&&d.mapProviders){
+        var pKeys=Object.keys(d.mapProviders);
+        chartInstances['providerC']=new Chart(pc,{
+          type:'doughnut',
+          data:{labels:pKeys,datasets:[{data:pKeys.map(function(k){return d.mapProviders[k];}),
+            backgroundColor:['#3B82F6','#10B981','#F59E0B'],borderWidth:0}]},
+          options:{responsive:true,maintainAspectRatio:false,
+            plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}
+        });
+      }
+
+      // Tab popularity
+      destroyChart('tabPopC');
+      var tpc=document.getElementById('tabPopC');
+      if(tpc&&d.tabStats&&d.tabStats.length){
+        chartInstances['tabPopC']=new Chart(tpc,{
+          type:'bar',
+          data:{labels:d.tabStats.map(function(t){return t.tab;}),
+            datasets:[{data:d.tabStats.map(function(t){return t.visits;}),
+              backgroundColor:B+'0.75)',borderRadius:5}]},
+          options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+            plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}
+        });
+      }
+
+      // Dwell time
+      destroyChart('dwellC');
+      var dwc=document.getElementById('dwellC');
+      if(dwc&&d.tabStats&&d.tabStats.length){
+        chartInstances['dwellC']=new Chart(dwc,{
+          type:'bar',
+          data:{labels:d.tabStats.map(function(t){return t.tab;}),
+            datasets:[{data:d.tabStats.map(function(t){return t.avgDuration;}),
+              backgroundColor:Gr+'0.75)',borderRadius:5}]},
+          options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+            plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:10},callback:function(v){return v+'s';}}},y:{ticks:{font:{size:11}}}}}
+        });
+      }
+
+      // Listing table
+      var lt=document.getElementById('listing-tbl');
+      if(d.listingBoard&&d.listingBoard.length){
+        lt.innerHTML=d.listingBoard.slice(0,20).map(function(l){
+          var score=l.mapOpens*3+l.phoneTaps*5+l.views;
+          var badge=l.mapCtr>15?'<span class="badge gr">🔥 Hot</span>':l.mapCtr>8?'<span class="badge ac">Active</span>':'<span class="badge gy">Low</span>';
+          return '<tr><td class="nm">'+l.name+'</td>'
+            +'<td class="num">'+l.views+'</td>'
+            +'<td class="num">'+l.mapOpens+'</td>'
+            +'<td class="num">'+l.mapCtr+'%</td>'
+            +'<td class="num">'+l.phoneTaps+'</td>'
+            +'<td>'+badge+' <span style="font-size:11px;color:var(--t3)">'+score+'pts</span></td>'
+            +'</tr>';
+        }).join('');
+      } else {
+        lt.innerHTML='<tr><td colspan="6" class="loading">No listing data yet. Users need to interact with listings.</td></tr>';
+      }
+
+      // Filter clicks
+      var ft=document.getElementById('filter-tbl');
+      var fKeys=Object.keys(d.filterClicks||{}).sort(function(a,b){return d.filterClicks[b]-d.filterClicks[a];});
+      ft.innerHTML=fKeys.length?fKeys.map(function(k){
+        return '<tr><td class="nm">'+k+'</td><td class="num">'+d.filterClicks[k]+'</td></tr>';
+      }).join(''):'<tr><td colspan="2" class="loading">No filter clicks yet</td></tr>';
+
+      // Weather breakdown
+      var wt=document.getElementById('weather-tbl');
+      var wKeys=Object.keys(d.weatherEvents||{}).sort(function(a,b){return d.weatherEvents[b]-d.weatherEvents[a];});
+      wt.innerHTML=wKeys.length?wKeys.map(function(k){
+        return '<tr><td class="nm">'+k+'</td><td class="num">'+d.weatherEvents[k]+'</td></tr>';
+      }).join(''):'<tr><td colspan="2" class="loading">No weather data yet</td></tr>';
+
+      // Recent events
+      var et=document.getElementById('events-tbl');
+      var evtLabels={app_launch:'🚀 App Launch',tab_view:'📱 Tab View',map_open:'🗺️ Map Open',
+        map_choice:'📍 Map Choice',phone_tap:'📞 Phone Tap',filter_click:'🔍 Filter',
+        listing_view:'👁️ Listing View',search_query:'🔎 Search'};
+      if(d.recentEvents&&d.recentEvents.length){
+        et.innerHTML=d.recentEvents.slice(0,50).map(function(e){
+          var t=new Date(e.created_at);
+          var timeStr=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+          var detail=e.listing_name||e.tab_name||e.filter_value||e.map_provider||e.search_query||'—';
+          var wxLabel=e.weather_code!==null&&e.weather_code!==undefined?(e.weather_code<=1?'☀️':e.weather_code<=3?'⛅':e.weather_code<=67?'🌧️':'❄️'):'—';
+          return '<tr><td style="font-family:var(--fm2);font-size:11px;color:var(--t3)">'+timeStr+'</td>'
+            +'<td><span style="font-size:12px">'+(evtLabels[e.event_type]||e.event_type)+'</span></td>'
+            +'<td style="font-size:12px;color:var(--t2)">'+detail+'</td>'
+            +'<td><span class="badge ac">'+(e.city||'—')+'</span></td>'
+            +'<td style="font-size:14px">'+wxLabel+'</td>'
+            +'</tr>';
+        }).join('');
+      } else {
+        et.innerHTML='<tr><td colspan="5" class="loading">No events yet. Start using the app!</td></tr>';
+      }
+    })
+    .catch(function(err){
+      console.error('Analytics error:',err);
+    });
 }
 
 // ── STATIC BUSINESS DATA ──────────────────────────────────────────────
