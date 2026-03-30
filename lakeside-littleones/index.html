@@ -287,8 +287,7 @@ nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-w
       🎒 TCPUD camps &amp; programs
     </div>
     <button class="gbtn" id="signin-btn">
-      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.5 33.7 29.8 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 6 1.1 8.2 2.9l6-6C34.4 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.5 0 20-7.5 20-21 0-1.3-.2-2.7-.5-4z"/><path fill="#34A853" d="M6.3 14.7l7 5.1C15.1 17 19.2 14 24 14c3.1 0 6 1.1 8.2 2.9l6-6C34.4 5.1 29.5 3 24 3 16.3 3 9.7 7.9 6.3 14.7z"/><path fill="#FBBC05" d="M24 45c5.5 0 10.4-1.9 14.2-5.2l-6.6-5.5C29.6 36 26.9 37 24 37c-5.8 0-10.6-3.8-12.2-9l-6.9 5.4C8.2 40.5 15.5 45 24 45z"/><path fill="#EA4335" d="M44.5 20H24v8.5h11.7c-.7 2.8-2.4 5.2-4.8 6.8l6.6 5.5C41.8 37.5 45 31.2 45 24c0-1.3-.2-2.7-.5-4z"/></svg>
-      Continue with Google
+      🏔️ &nbsp; Explore Now →
     </button>
     <div class="sign-note">For North Shore families 🌲 · Free forever</div>
   </div>
@@ -1203,15 +1202,12 @@ function fetchAI(){
   var info=wxInfo(wx.weathercode),temp=Math.round(wx.temperature_2m),wind=Math.round(wx.windspeed_10m);
   var hr=new Date().getHours(),tl=hr<12?'morning':hr<17?'afternoon':'evening';
   var name=userName?userName+',':' ';
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-    model:'claude-sonnet-4-20250514',max_tokens:150,
-    system:'You are a friendly North Shore Lake Tahoe and Truckee local. The user has young kids (toddlers to early elementary). 2 short casual sentences max. Name ONE specific local spot. No Reno. Only use these: Kings Beach SRA, Carnelian Bay Beach, Tahoe City Commons Beach, William Kent Beach, Tahoe Vista Rec Area, Truckee River Regional Park, West End Beach Donner Lake, KidZone Museum, Woodward Tahoe, BridgeTender, Rosies Cafe, Fireside Pizza, Poppys Frozen Yogurt, Log Cabin Caffe, Squeeze In, Jax at the Tracks, Burger Me, Kings Beach Miniature Golf, Magic Carpet Golf, Truckee River Rafting.',
-    messages:[{role:'user',content:'Hi'+name+' Weather near '+userCity+': '+info.l+', '+temp+'F, wind '+wind+'mph. Its the '+tl+'. Best spot for a family with young kids?'}]
+  fetch('/api/suggest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    city:userCity,condition:info.l,temp:temp,wind:wind,timeOfDay:tl,name:userName
   })})
   .then(function(r){return r.json();})
   .then(function(d){
-    var txt='';if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
-    document.getElementById('ai-msg').textContent=txt||'Kings Beach SRA is calling — grab the towels and arrive before 10am for easy parking.';
+    document.getElementById('ai-msg').textContent=d.suggestion||'Kings Beach SRA is calling — grab the towels and arrive before 10am for easy parking.';
   })
   .catch(function(){document.getElementById('ai-msg').textContent='Kings Beach SRA is calling — grab the towels and arrive before 10am for easy parking.';});
 }
