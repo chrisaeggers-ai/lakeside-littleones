@@ -173,6 +173,11 @@ tr:hover td{background:var(--s2)}
       <div class="tab" id="tab-users">
         <div class="stitle">User Analytics</div>
         <div class="ssub">Who uses Lakeside + Little Ones and how they engage.</div>
+        <div class="tcard" style="margin-bottom:24px">
+          <div class="th"><div class="tt">✅ Real Sign-Ins — Live from Database</div><div class="ts" id="real-user-count">—</div></div>
+          <table><thead><tr><th>Name</th><th>Email</th><th>City</th><th>Date</th><th>Time</th></tr></thead>
+          <tbody id="real-user-tbl"><tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">Loading...</td></tr></tbody></table>
+        </div>
         <div class="kgrid">
           <div class="kcard ac"><div class="klbl">Total Signups</div><div class="kval">312</div><div class="kdlt up">↑ 23% WoW</div></div>
           <div class="kcard gr"><div class="klbl">7-Day Active</div><div class="kval">187</div><div class="kdlt n">60% of base</div></div>
@@ -349,6 +354,40 @@ document.getElementById('lo').addEventListener('click',function(){
 });
 
 // NAV
+// ── REAL USER DATA FROM SUPABASE ──────────────────────────────────────
+function fetchRealUsers(){
+  var tbl=document.getElementById('real-user-tbl');
+  var count=document.getElementById('real-user-count');
+  if(!tbl)return;
+  tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">Loading...</td></tr>';
+  fetch('/api/users')
+    .then(function(r){return r.json();})
+    .then(function(users){
+      if(!Array.isArray(users)||users.length===0){
+        tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">No sign-ins yet. Share the app!</td></tr>';
+        if(count)count.textContent='0';
+        return;
+      }
+      if(count)count.textContent=users.length;
+      tbl.innerHTML=users.map(function(u){
+        var d=new Date(u.signed_in_at);
+        var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        var timeStr=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+        return '<tr>'
+          +'<td>'+(u.photo?'<img src="'+u.photo+'" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">':'<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;margin-right:8px;vertical-align:middle">'+(u.name?u.name.charAt(0).toUpperCase():'?')+'</span>')
+          +'<span class="nm">'+(u.name||'—')+'</span></td>'
+          +'<td style="font-size:12px;color:var(--t2)">'+(u.email||'—')+'</td>'
+          +'<td><span class="badge ac">'+(u.city||'Unknown')+'</span></td>'
+          +'<td class="num">'+dateStr+'</td>'
+          +'<td style="font-size:11px;color:var(--t3)">'+timeStr+'</td>'
+          +'</tr>';
+      }).join('');
+    })
+    .catch(function(err){
+      tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--re);padding:20px">Error loading users: '+err.message+'</td></tr>';
+    });
+}
+
 document.querySelectorAll('.nb[data-tab]').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.nb').forEach(function(x){x.classList.remove('on');});
@@ -394,7 +433,9 @@ function initCharts(){
 }
 
 function renderTables(){
-  // City table
+  // Real users from database
+  fetchRealUsers();
+  // City table (mock)
   var ct=document.getElementById('cityTbl');
   CITIES.forEach(function(c){var sh=Math.round(c.u/312*100);ct.innerHTML+='<tr><td class="nm">'+c.c+'</td><td class="num">'+c.u+'</td><td class="num">'+sh+'%</td><td class="num">'+c.s+'</td><td><span class="badge ac">'+c.top+'</span></td><td class="num">'+c.a+'</td></tr>';});
   // Listings
