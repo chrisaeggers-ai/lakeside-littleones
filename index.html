@@ -1297,6 +1297,10 @@ function handleCredentialResponse(response){
   localStorage.setItem('llo_name',userName);
   localStorage.setItem('llo_email',userEmail);
   localStorage.setItem('llo_photo',userPhoto);
+  // Save to database
+  fetch('/api/signin',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:userName,email:userEmail,photo:userPhoto,city:userCity})
+  }).catch(function(){});
   updateAvatar();
   document.getElementById('page-signin').classList.remove('active');
   document.getElementById('page-onboard').classList.add('active');
@@ -1367,6 +1371,10 @@ document.getElementById('ob-confirm-btn').addEventListener('click',function(){
   userCity=selectedCity;
   var nameInput=document.getElementById('ob-name');
   if(nameInput&&nameInput.value.trim())userName=nameInput.value.trim();
+  // Update city in database
+  fetch('/api/signin',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:userName,email:userEmail,photo:userPhoto,city:userCity})
+  }).catch(function(){});
   launchApp();
 });
 
