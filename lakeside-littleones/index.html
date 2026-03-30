@@ -89,11 +89,11 @@ body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-con
 .wx-beta-note{margin:8px 16px 0;background:#FFF8E8;border:1px solid #F5D878;border-radius:12px;padding:8px 12px;font-size:11px;color:#8B6914;line-height:1.5}
 
 /* ── AI BANNER ── */
-.ai-wrap{margin:12px 16px 0;background:linear-gradient(135deg,#0D3B5E,#1A6B9A);border-radius:16px;padding:14px 16px;position:relative;overflow:hidden}
-.ai-bbl{position:absolute;top:-15px;right:-15px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.07)}
-.ai-row{display:flex;gap:10px;align-items:flex-start;position:relative}
-.ai-lbl{font-size:10px;font-weight:800;color:rgba(255,255,255,0.6);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
-.ai-txt{font-size:13px;color:rgba(255,255,255,0.9);line-height:1.6}
+
+
+
+
+
 
 /* ── FEATURED CARDS ── */
 .featured-section{padding:16px 16px 0}
@@ -333,10 +333,7 @@ nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-w
   <div id="s-home" class="screen active">
     <div id="wx-home"></div>
     <div id="wx-beta-note" class="wx-beta-note" style="display:none">ℹ️ <strong>Live weather</strong> loads in a real browser. Claude.ai preview sandboxes external API calls.</div>
-    <div id="ai-home" class="ai-wrap" style="display:none">
-      <div class="ai-bbl"></div>
-      <div class="ai-row"><span style="font-size:20px">🤖</span><div><div class="ai-lbl">Today's Pick</div><div class="ai-txt" id="ai-msg">Checking the lake conditions…</div></div></div>
-    </div>
+
     <div style="padding:14px 16px 2px;font-family:'Fraunces',serif;font-size:12px;font-weight:500;color:#A08060;letter-spacing:0.8px;text-transform:uppercase">Quick Nav</div>
     <div class="qcats">
       <div class="qcat" id="qc-beaches"><div class="qcat-ico">🏖️</div><div class="qcat-lbl">Beaches</div></div>
@@ -1196,21 +1193,9 @@ function fetchWeather(){
   });
 }
 
-function fetchAI(){
-  var banner=document.getElementById('ai-home');banner.style.display='block';
-  if(!wx){document.getElementById('ai-msg').textContent='Open in a real browser for live suggestions.';return;}
   var info=wxInfo(wx.weathercode),temp=Math.round(wx.temperature_2m),wind=Math.round(wx.windspeed_10m);
   var hr=new Date().getHours(),tl=hr<12?'morning':hr<17?'afternoon':'evening';
-  var name=userName?userName+',':' ';
-  fetch('/api/suggest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-    city:userCity,condition:info.l,temp:temp,wind:wind,timeOfDay:tl,name:userName
-  })})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    document.getElementById('ai-msg').textContent=d.suggestion||'Kings Beach SRA is calling — grab the towels and arrive before 10am for easy parking.';
-  })
-  .catch(function(){document.getElementById('ai-msg').textContent='Kings Beach SRA is calling — grab the towels and arrive before 10am for easy parking.';});
-}
+
 
 // ── SETTINGS ──────────────────────────────────────────────────────────
 function buildCityGrid(containerId,selectedVal,onSelect){
@@ -1243,7 +1228,7 @@ document.getElementById('settings-save-btn').addEventListener('click',function()
   if(selectedCity&&selectedCity!==userCity){
     userCity=selectedCity;
     updateHeader();
-    fetchWeather();setTimeout(fetchAI,600);
+    fetchWeather();
   }
   renderHome();closeSettings();
 });
@@ -1266,7 +1251,7 @@ function launchApp(){
   document.getElementById('page-main').classList.add('active');
   updateHeader();
   renderHome();renderKids();renderEvents();renderFree();
-  fetchWeather();setTimeout(fetchAI,800);
+  fetchWeather();
   setInterval(fetchWeather,600000);
 }
 
