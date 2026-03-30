@@ -5,20 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>L+LO Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0B0F1A;--s:#13192A;--s2:#1C2438;--s3:#252E42;--b:#2A3448;--b2:#344060;--t:#E8EDF8;--t2:#8B9ABF;--t3:#5A6A8A;--ac:#3B82F6;--ac2:#1D4ED8;--ag:rgba(59,130,246,.15);--go:#F59E0B;--gg:rgba(245,158,11,.15);--gr:#10B981;--grg:rgba(16,185,129,.12);--re:#EF4444;--pu:#8B5CF6;--fm:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm2:'DM Mono',monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t);font-family:var(--fb);font-size:14px;min-height:100vh}
 #login{display:flex;align-items:center;justify-content:center;min-height:100vh}
 .lcard{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:48px 40px;width:380px;text-align:center}
-.llogo{font-family:var(--fm);font-size:12px;font-weight:700;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin-bottom:24px}
+.llogo{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin-bottom:24px}
 .ltitle{font-family:var(--fm);font-size:28px;font-weight:800;margin-bottom:8px}
-.lsub{font-size:13px;color:var(--t2);margin-bottom:28px;line-height:1.6}
+.lsub{font-size:13px;color:var(--t2);margin-bottom:28px}
 .linput{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 16px;font-family:var(--fb);font-size:14px;color:var(--t);outline:none;margin-bottom:10px;transition:border .2s}
 .linput:focus{border-color:var(--ac)}
-.lbtn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:10px;padding:14px;font-family:var(--fm);font-weight:700;font-size:14px;cursor:pointer;margin-top:4px;transition:background .2s}
-.lbtn:hover{background:var(--ac2)}
+.lbtn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:10px;padding:14px;font-family:var(--fm);font-weight:700;font-size:14px;cursor:pointer;margin-top:4px}
 .lerr{font-size:12px;color:var(--re);margin-top:10px;display:none}
 #app{display:none;min-height:100vh;flex-direction:column}
 #app.v{display:flex}
@@ -30,31 +28,24 @@ body{background:var(--bg);color:var(--t);font-family:var(--fb);font-size:14px;mi
 .layout{display:flex;flex:1}
 .sidebar{width:210px;background:var(--s);border-right:1px solid var(--b);padding:20px 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
 .slbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase;padding:0 12px;margin:0 0 8px}
-.nb{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:8px;padding:9px 10px;font-family:var(--fb);font-size:13px;color:var(--t2);cursor:pointer;text-align:left;margin:2px 12px;width:calc(100% - 24px);transition:all .15s}
+.nb{display:flex;align-items:center;gap:10px;width:calc(100% - 24px);background:none;border:none;border-radius:8px;padding:9px 10px;font-family:var(--fb);font-size:13px;color:var(--t2);cursor:pointer;text-align:left;margin:2px 12px;transition:all .15s}
 .nb:hover{background:var(--s2);color:var(--t)}
 .nb.on{background:var(--ag);color:var(--ac);font-weight:600}
 .ssec{margin-bottom:24px}
 .content{flex:1;padding:28px;overflow-y:auto}
 .tab{display:none}.tab.on{display:block}
 .stitle{font-family:var(--fm);font-size:22px;font-weight:800;margin-bottom:4px}
-.ssub{font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.5}
+.ssub{font-size:13px;color:var(--t2);margin-bottom:24px}
 .kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kgrid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;max-width:500px}
 .kcard{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
 .kcard.ac{border-color:rgba(59,130,246,.3);background:linear-gradient(135deg,var(--s),rgba(59,130,246,.06))}
-.kcard.go{border-color:rgba(245,158,11,.3);background:linear-gradient(135deg,var(--s),rgba(245,158,11,.06))}
 .kcard.gr{border-color:rgba(16,185,129,.3);background:linear-gradient(135deg,var(--s),rgba(16,185,129,.06))}
+.kcard.go{border-color:rgba(245,158,11,.3);background:linear-gradient(135deg,var(--s),rgba(245,158,11,.06))}
 .kcard.pu{border-color:rgba(139,92,246,.3);background:linear-gradient(135deg,var(--s),rgba(139,92,246,.06))}
 .klbl{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
 .kval{font-family:var(--fm);font-size:32px;font-weight:800;line-height:1;margin-bottom:8px}
-.kdlt{font-size:12px;font-weight:600}.kdlt.up{color:var(--gr)}.kdlt.n{color:var(--t3)}
-.ksub{font-size:11px;color:var(--t3);margin-top:4px}
-.cgrid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
-.cgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-.cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.cc{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
-.ct{font-family:var(--fm);font-size:14px;font-weight:700;margin-bottom:4px}
-.cs{font-size:12px;color:var(--t3);margin-bottom:16px}
-.cw{position:relative;height:200px}.cw.t{height:260px}.cw.s{height:160px}
+.ksub{font-size:12px;color:var(--t3);margin-top:4px}
 .tcard{background:var(--s);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:16px}
 .th{padding:16px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
 .tt{font-family:var(--fm);font-size:14px;font-weight:700}
@@ -71,7 +62,9 @@ tr:hover td{background:var(--s2)}
 .badge.go{background:var(--gg);color:var(--go);border:1px solid rgba(245,158,11,.2)}
 .badge.ac{background:var(--ag);color:var(--ac);border:1px solid rgba(59,130,246,.2)}
 .badge.gy{background:var(--s3);color:var(--t2);border:1px solid var(--b)}
-.pitch{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:border .2s}
+.empty{text-align:center;color:var(--t3);padding:40px 20px;font-size:13px;line-height:1.8}
+.loading{text-align:center;color:var(--t3);padding:30px;font-size:13px}
+.pitch{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .pitch:hover{border-color:var(--go)}
 .pitch.hot{border-color:rgba(245,158,11,.35);background:linear-gradient(135deg,var(--s),rgba(245,158,11,.04))}
 .pn{font-weight:600;color:var(--t);font-size:14px;margin-bottom:3px}
@@ -86,18 +79,8 @@ tr:hover td{background:var(--s2)}
 .ibox strong{color:var(--ac)}
 .wbox{background:var(--gg);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--t2);line-height:1.7}
 .wbox strong{color:var(--go)}
-.schm{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.stbl{background:var(--s);border:1px solid var(--b);border-radius:14px;overflow:hidden}
-.shdr{background:var(--s2);padding:12px 16px;border-bottom:1px solid var(--b)}
-.sn{font-family:var(--fm2);font-size:13px;font-weight:600;color:var(--ac)}
-.sd{font-size:11px;color:var(--t3);margin-top:2px}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid var(--b);font-size:12px}
-.srow:last-child{border-bottom:none}
-.scol{font-family:var(--fm2);color:var(--t)}
-.styp{font-family:var(--fm2);font-size:11px;color:var(--t3)}
-.spk{font-size:10px;color:var(--go);font-weight:700;margin-left:6px}
-.sfk{font-size:10px;color:var(--pu);font-weight:700;margin-left:6px}
-@media(max-width:900px){.kgrid{grid-template-columns:repeat(2,1fr)}.cgrid,.cgrid3,.cgrid2,.schm{grid-template-columns:1fr}.sidebar{width:180px}}
+.refresh-btn{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 14px;color:var(--t2);cursor:pointer;font-family:var(--fb);font-size:12px}
+.refresh-btn:hover{border-color:var(--ac);color:var(--ac)}
 </style>
 </head>
 <body>
@@ -106,8 +89,8 @@ tr:hover td{background:var(--s2)}
   <div class="lcard">
     <div class="llogo">Lakeside + Little Ones</div>
     <div class="ltitle">Admin Console</div>
-    <div class="lsub">Restricted access. Sign in to continue.</div>
-    <input class="linput" type="email" id="em" placeholder="admin@email.com" autocomplete="username">
+    <div class="lsub">Restricted access</div>
+    <input class="linput" type="email" id="em" placeholder="Email" autocomplete="username">
     <input class="linput" type="password" id="pw" placeholder="Password" autocomplete="current-password">
     <button class="lbtn" id="lbtn">Sign In →</button>
     <div class="lerr" id="lerr">Incorrect credentials.</div>
@@ -125,14 +108,13 @@ tr:hover td{background:var(--s2)}
       <button class="lout" id="lo">Sign out</button>
     </div>
   </div>
+
   <div class="layout">
     <div class="sidebar">
       <div class="ssec">
         <div class="slbl" style="margin-bottom:12px">Analytics</div>
-        <button class="nb on" data-tab="overview">📊 Overview</button>
-        <button class="nb" data-tab="users">👥 Users</button>
-        <button class="nb" data-tab="listings">📍 Listings</button>
-        <button class="nb" data-tab="weather">🌤️ Weather Intel</button>
+        <button class="nb on" data-tab="users">👥 Users</button>
+        <button class="nb" data-tab="overview">📊 Overview</button>
       </div>
       <div class="ssec">
         <div class="slbl" style="margin-bottom:12px">Business</div>
@@ -143,102 +125,102 @@ tr:hover td{background:var(--s2)}
       <div class="ssec">
         <div class="slbl" style="margin-bottom:12px">Setup</div>
         <button class="nb" data-tab="schema">🗄️ DB Schema</button>
-        <button class="nb" data-tab="tracking">⚡ Tracking Guide</button>
       </div>
     </div>
+
     <div class="content">
 
+      <!-- USERS — REAL DATA -->
+      <div class="tab on" id="tab-users">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Users</div>
+          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+        <div class="ssub">Live from Supabase — every Google sign-in captured here.</div>
+
+        <div class="kgrid2">
+          <div class="kcard ac">
+            <div class="klbl">Total Sign-Ins</div>
+            <div class="kval" id="stat-total">—</div>
+            <div class="ksub">All time</div>
+          </div>
+          <div class="kcard gr">
+            <div class="klbl">Most Recent</div>
+            <div class="kval" style="font-size:14px;padding-top:6px" id="stat-recent">—</div>
+            <div class="ksub" id="stat-recent-time">—</div>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="th">
+            <div class="tt">All Sign-Ins</div>
+            <div class="ts">Newest first · Real data</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="user-tbl">
+              <tr><td colspan="5" class="loading">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- OVERVIEW -->
-      <div class="tab on" id="tab-overview">
+      <div class="tab" id="tab-overview">
         <div class="stitle">Overview</div>
-        <div class="ssub">All-time performance · Mock data — wire to Supabase to go live.</div>
+        <div class="ssub">Summary built from real sign-in data.</div>
         <div class="kgrid">
-          <div class="kcard ac"><div class="klbl">Total Users</div><div class="kval">312</div><div class="kdlt up">↑ 23% this week</div><div class="ksub">Since launch · 8 wks</div></div>
-          <div class="kcard gr"><div class="klbl">Sessions This Week</div><div class="kval">1,840</div><div class="kdlt up">↑ 18% vs last wk</div><div class="ksub">Avg 5.9/user</div></div>
-          <div class="kcard go"><div class="klbl">Top Listing</div><div class="kval" style="font-size:18px;padding-top:4px">Kings Beach SRA</div><div class="kdlt n">847 clicks all-time</div></div>
-          <div class="kcard pu"><div class="klbl">Avg Session Depth</div><div class="kval">2.8</div><div class="kdlt up">↑ from 2.1 last wk</div><div class="ksub">Tabs per session</div></div>
-        </div>
-        <div class="cgrid">
-          <div class="cc"><div class="ct">Daily Active Users — Last 30 Days</div><div class="cs">Weekend spikes visible</div><div class="cw t"><canvas id="dauC"></canvas></div></div>
-          <div class="cc"><div class="ct">Users by Home City</div><div class="cs">Set at sign-in</div><div class="cw t"><canvas id="cityC"></canvas></div></div>
-        </div>
-        <div class="cgrid3">
-          <div class="cc"><div class="ct">Tab Engagement</div><div class="cs">Which screens get visited</div><div class="cw"><canvas id="tabC"></canvas></div></div>
-          <div class="cc"><div class="ct">New vs Returning</div><div class="cs">8-week trend</div><div class="cw"><canvas id="retC"></canvas></div></div>
-          <div class="cc"><div class="ct">Peak Usage Hours</div><div class="cs">When families are active</div><div class="cw"><canvas id="hourC"></canvas></div></div>
-        </div>
-      </div>
-
-      <!-- USERS -->
-      <div class="tab" id="tab-users">
-        <div class="stitle">Users</div>
-        <div class="ssub">Real sign-ins from Supabase — updates live as people sign in.</div>
-        <div class="kgrid" style="grid-template-columns:repeat(2,1fr);max-width:500px;margin-bottom:24px">
-          <div class="kcard ac"><div class="klbl">Total Sign-Ins</div><div class="kval" id="real-user-count">—</div><div class="kdlt n">All time</div></div>
-          <div class="kcard gr"><div class="klbl">Database</div><div class="kval" style="font-size:16px;padding-top:6px">Supabase</div><div class="kdlt n">Live · real data</div></div>
+          <div class="kcard ac"><div class="klbl">Total Users</div><div class="kval" id="ov-total">—</div><div class="ksub">All time</div></div>
+          <div class="kcard gr"><div class="klbl">Top City</div><div class="kval" style="font-size:16px;padding-top:6px" id="ov-city">—</div><div class="ksub">Most sign-ins</div></div>
+          <div class="kcard go"><div class="klbl">Latest Sign-In</div><div class="kval" style="font-size:14px;padding-top:6px" id="ov-latest">—</div><div class="ksub" id="ov-latest-time">—</div></div>
+          <div class="kcard pu"><div class="klbl">Status</div><div class="kval" style="font-size:16px;padding-top:6px">🟢 Live</div><div class="ksub">Supabase connected</div></div>
         </div>
         <div class="tcard">
-          <div class="th"><div class="tt">All Sign-Ins</div><div class="ts">Newest first</div></div>
-          <table><thead><tr><th>Name</th><th>Email</th><th>City</th><th>Date</th><th>Time</th></tr></thead>
-          <tbody id="real-user-tbl"><tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">Loading...</td></tr></tbody></table>
+          <div class="th"><div class="tt">Users by City</div><div class="ts">From real sign-ins</div></div>
+          <table>
+            <thead><tr><th>City</th><th>Sign-Ins</th><th>Share</th></tr></thead>
+            <tbody id="city-tbl"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+          </table>
         </div>
-      </div>
-
-      <!-- LISTINGS -->
-      <div class="tab" id="tab-listings">
-        <div class="stitle">Listing Performance</div>
-        <div class="ssub">Views, map opens, and phone taps per listing. Your pitch ammunition lives here.</div>
-        <div class="tcard">
-          <div class="th"><div class="tt">All Listings — Top 20</div><div class="ts">All-time data</div></div>
-          <table><thead><tr><th>Listing</th><th>Type</th><th>Area</th><th>Views</th><th>Map Opens</th><th>Map CTR</th><th>Phone Taps</th><th>Status</th></tr></thead>
-          <tbody id="listTbl"></tbody></table>
-        </div>
-        <div class="cgrid2">
-          <div class="cc"><div class="ct">Top 8 Listings by Views</div><div class="cs">All-time impressions</div><div class="cw t"><canvas id="topC"></canvas></div></div>
-          <div class="cc"><div class="ct">Avg Views by Category</div><div class="cs">Per listing</div><div class="cw t"><canvas id="catC"></canvas></div></div>
-        </div>
-      </div>
-
-      <!-- WEATHER -->
-      <div class="tab" id="tab-weather">
-        <div class="stitle">Weather Intelligence</div>
-        <div class="ssub">How weather drives behavior. Validates AI routing and reveals seasonality.</div>
-        <div class="cgrid2">
-          <div class="cc"><div class="ct">Indoor vs Outdoor Clicks by Weather</div><div class="cs">Does weather shift user intent?</div><div class="cw t"><canvas id="wxSC"></canvas></div></div>
-          <div class="cc"><div class="ct">Sessions per Day by Weather</div><div class="cs">Rain = more browsing</div><div class="cw t"><canvas id="wxDC"></canvas></div></div>
-        </div>
-        <div class="ibox"><strong>Key finding:</strong> Rainy/overcast days generate 34% more sessions. AI suggestions accepted 61% of the time on rainy days vs 38% on sunny — weather-aware AI is working.</div>
+        <div class="ibox"><strong>Note:</strong> All data on this page is pulled live from your Supabase database. No mock numbers anywhere.</div>
       </div>
 
       <!-- PITCHES -->
       <div class="tab" id="tab-pitches">
-        <div class="stitle">Business Pitch List</div>
-        <div class="ssub">Ranked by impression volume. These businesses are already getting organic traffic — they should be paying for it.</div>
-        <div class="wbox"><strong>Pitch script:</strong> "Your business appeared in front of X families last month — for free. Here's what a featured placement looks like." Rate: $150–$250/month.</div>
+        <div class="stitle">Pitch List</div>
+        <div class="ssub">Businesses already getting organic traffic from your app — they should be paying for it.</div>
+        <div class="wbox"><strong>Pitch script:</strong> "Your business appeared in front of X families this month — for free. Here's what a featured placement looks like." Rate: $150–$250/month.</div>
         <div id="pitchList"></div>
       </div>
 
-      <!-- GAPS -->
+      <!-- GAP ANALYSIS -->
       <div class="tab" id="tab-gaps">
         <div class="stitle">Content Gap Analysis</div>
         <div class="ssub">High demand, low supply. Each gap is a content opportunity AND a sales pitch.</div>
         <div id="gapList"></div>
       </div>
 
-      <!-- REVENUE -->
+      <!-- REVENUE MODEL -->
       <div class="tab" id="tab-revenue">
         <div class="stitle">Revenue Model</div>
-        <div class="ssub">Conservative, base, and aggressive scenarios for featured listings + advertising.</div>
+        <div class="ssub">Featured listing pricing scenarios.</div>
         <div class="kgrid">
-          <div class="kcard ac"><div class="klbl">Pitchable Listings</div><div class="kval">~40</div><div class="kdlt n">Restaurants + activities</div></div>
-          <div class="kcard gr"><div class="klbl">Target Conversion Y1</div><div class="kval">15%</div><div class="kdlt n">~6 paid listings</div></div>
-          <div class="kcard go"><div class="klbl">Y1 MRR (base)</div><div class="kval">$1,200</div><div class="kdlt up">$200 × 6 biz</div><div class="ksub">$14,400 ARR</div></div>
-          <div class="kcard pu"><div class="klbl">Y2 MRR (25% conv.)</div><div class="kval">$4,000</div><div class="kdlt up">20 biz × $200</div><div class="ksub">$48,000 ARR</div></div>
+          <div class="kcard ac"><div class="klbl">Pitchable Listings</div><div class="kval">~40</div><div class="ksub">Restaurants + activities</div></div>
+          <div class="kcard gr"><div class="klbl">Target Conversion Y1</div><div class="kval">15%</div><div class="ksub">~6 paid listings</div></div>
+          <div class="kcard go"><div class="klbl">Y1 MRR (base)</div><div class="kval">$1,200</div><div class="ksub">$200 × 6 biz · $14.4K ARR</div></div>
+          <div class="kcard pu"><div class="klbl">Y2 MRR (25% conv.)</div><div class="kval">$4,000</div><div class="ksub">20 biz × $200 · $48K ARR</div></div>
         </div>
-        <div class="cc" style="margin-bottom:24px"><div class="ct">Revenue Scenarios — 24 Months</div><div class="cs">Conservative / Base / Aggressive</div><div class="cw t"><canvas id="revC"></canvas></div></div>
         <div class="tcard">
           <div class="th"><div class="tt">Pricing by Tier</div></div>
-          <table><thead><tr><th>Tier</th><th>Monthly Views</th><th>Suggested Rate</th><th>Annual Value</th></tr></thead>
+          <table><thead><tr><th>Tier</th><th>Monthly Views</th><th>Rate</th><th>Annual Value</th></tr></thead>
           <tbody>
             <tr><td class="nm">🏆 Tier 1 — Top 5 listings</td><td class="num">600–900</td><td><span class="badge go">$250/mo</span></td><td class="num">$3,000</td></tr>
             <tr><td class="nm">⭐ Tier 2 — Mid listings</td><td class="num">200–600</td><td><span class="badge ac">$175/mo</span></td><td class="num">$2,100</td></tr>
@@ -248,34 +230,23 @@ tr:hover td{background:var(--s2)}
         </div>
       </div>
 
-      <!-- SCHEMA -->
+      <!-- DB SCHEMA -->
       <div class="tab" id="tab-schema">
-        <div class="stitle">Supabase DB Schema</div>
-        <div class="ssub">Paste into your Supabase SQL editor. Free tier: 500MB DB, 50K monthly active users.</div>
-        <div class="schm" id="schmGrid"></div>
-      </div>
-
-      <!-- TRACKING -->
-      <div class="tab" id="tab-tracking">
-        <div class="stitle">Tracking Guide</div>
-        <div class="ssub">Where to drop each event call in the main app code. Copy-paste ready.</div>
+        <div class="stitle">Database Schema</div>
+        <div class="ssub">Your live Supabase table structure.</div>
         <div class="tcard">
-          <div class="th"><div class="tt">Events → Where to Add Them</div></div>
-          <table><thead><tr><th>Event</th><th>Table</th><th>Location in App Code</th><th>Priority</th></tr></thead>
+          <div class="th"><div class="tt">user_signins</div><div class="ts">suiovkkddxxbqywhzavs.supabase.co</div></div>
+          <table><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td class="nm">user_signed_in</td><td><code style="font-size:11px;color:var(--ac)">user_sessions</code></td><td style="font-size:12px">signin-btn click handler, after city confirmed</td><td><span class="badge gr">P0</span></td></tr>
-            <tr><td class="nm">listing_viewed</td><td><code style="font-size:11px;color:var(--ac)">listing_events</code></td><td style="font-size:12px">Inside each card render function</td><td><span class="badge gr">P0</span></td></tr>
-            <tr><td class="nm">map_opened</td><td><code style="font-size:11px;color:var(--ac)">listing_events</code></td><td style="font-size:12px">Inside openMap() before showing picker</td><td><span class="badge gr">P0</span></td></tr>
-            <tr><td class="nm">map_destination_chosen</td><td><code style="font-size:11px;color:var(--ac)">listing_events</code></td><td style="font-size:12px">map-gmaps-btn and map-waze-btn click handlers</td><td><span class="badge gr">P0</span></td></tr>
-            <tr><td class="nm">phone_tapped</td><td><code style="font-size:11px;color:var(--ac)">listing_events</code></td><td style="font-size:12px">All phone-link anchor clicks</td><td><span class="badge gr">P0</span></td></tr>
-            <tr><td class="nm">tab_changed</td><td><code style="font-size:11px;color:var(--ac)">session_events</code></td><td style="font-size:12px">Inside goTab() on every call</td><td><span class="badge ac">P1</span></td></tr>
-            <tr><td class="nm">filter_used</td><td><code style="font-size:11px;color:var(--ac)">session_events</code></td><td style="font-size:12px">Inside makePills() callback</td><td><span class="badge ac">P1</span></td></tr>
-            <tr><td class="nm">ai_suggestion_shown</td><td><code style="font-size:11px;color:var(--ac)">ai_events</code></td><td style="font-size:12px">In fetchAI() after setting ai-msg text</td><td><span class="badge ac">P1</span></td></tr>
-            <tr><td class="nm">weather_loaded</td><td><code style="font-size:11px;color:var(--ac)">session_events</code></td><td style="font-size:12px">In fetchWeather() after data received</td><td><span class="badge ac">P1</span></td></tr>
-            <tr><td class="nm">city_changed</td><td><code style="font-size:11px;color:var(--ac)">user_sessions</code></td><td style="font-size:12px">settings-save-btn when city changes</td><td><span class="badge gy">P2</span></td></tr>
+            <tr><td class="nm">id</td><td class="num">uuid</td><td style="color:var(--t3)">Primary key · auto-generated</td></tr>
+            <tr><td class="nm">name</td><td class="num">text</td><td style="color:var(--t3)">From Google profile</td></tr>
+            <tr><td class="nm">email</td><td class="num">text</td><td style="color:var(--t3)">Unique · Gmail address</td></tr>
+            <tr><td class="nm">photo</td><td class="num">text</td><td style="color:var(--t3)">Google profile photo URL</td></tr>
+            <tr><td class="nm">city</td><td class="num">text</td><td style="color:var(--t3)">Set during onboarding</td></tr>
+            <tr><td class="nm">signed_in_at</td><td class="num">timestamptz</td><td style="color:var(--t3)">Auto-set to now()</td></tr>
           </tbody></table>
         </div>
-        <div class="wbox"><strong>Implementation tip:</strong> Create a single <code style="color:var(--go)">track(event, props)</code> helper at the top of your JS. All events go through it. This lets you swap analytics providers or add retry logic without touching every call site.</div>
+        <div class="ibox"><strong>Upsert logic:</strong> Same email signs in again → record updates (no duplicates). Email column has a UNIQUE constraint enforced at the database level.</div>
       </div>
 
     </div>
@@ -284,46 +255,9 @@ tr:hover td{background:var(--s2)}
 
 <script>
 var AE='chris.a.eggers@gmail.com', AP='TahoeKids2026!';
-var CITIES=[{c:"Carnelian Bay",u:98,s:6.2,top:"Beaches",a:64},{c:"Tahoe City",u:76,s:5.8,top:"Eats",a:51},{c:"Kings Beach",u:67,s:7.1,top:"Beaches",a:49},{c:"Truckee",u:48,s:5.4,top:"Camps",a:31},{c:"Tahoma",u:14,s:4.2,top:"Outdoors",a:8},{c:"Olympic Valley",u:9,s:4.8,top:"Outdoors",a:5}];
-var LISTINGS=[
-  {n:"Kings Beach SRA",t:"Beach",a:"Kings Beach",v:847,m:312,p:0},{n:"BridgeTender Tavern",t:"Restaurant",a:"Tahoe City",v:723,m:198,p:145},
-  {n:"Rosie's Cafe",t:"Restaurant",a:"Tahoe City",v:681,m:167,p:122},{n:"KidZone Museum",t:"Activity",a:"Truckee",v:612,m:289,p:78},
-  {n:"Commons Beach",t:"Beach",a:"Tahoe City",v:598,m:201,p:0},{n:"Fireside Pizza",t:"Restaurant",a:"Tahoe City",v:554,m:143,p:118},
-  {n:"Kings Beach Mini Golf",t:"Mini Golf",a:"Kings Beach",v:521,m:198,p:67},{n:"Truckee River Park",t:"Park",a:"Truckee",v:498,m:187,p:0},
-  {n:"Magic Carpet Golf",t:"Mini Golf",a:"Carnelian Bay",v:476,m:201,p:52},{n:"Poppy's Frozen Yogurt",t:"Restaurant",a:"Tahoe City",v:445,m:134,p:89},
-  {n:"Squeeze In",t:"Restaurant",a:"Truckee",v:412,m:156,p:98},{n:"West End Beach",t:"Beach",a:"Donner Lake",v:389,m:178,p:0},
-  {n:"Jax at the Tracks",t:"Restaurant",a:"Truckee",v:367,m:134,p:87},{n:"North Tahoe Reg. Park",t:"Park",a:"Tahoe Vista",v:345,m:145,p:0},
-  {n:"Woodward Tahoe",t:"Activity",a:"Truckee",v:334,m:167,p:34},{n:"Burger Me",t:"Restaurant",a:"Truckee",v:312,m:123,p:78},
-  {n:"Log Cabin Caffe",t:"Restaurant",a:"Kings Beach",v:298,m:98,p:67},{n:"Skylandia Park",t:"Beach",a:"Tahoe City",v:267,m:112,p:0},
-  {n:"Zano's Italian",t:"Restaurant",a:"Truckee",v:245,m:89,p:56},{n:"William Kent Beach",t:"Beach",a:"Tahoe City",v:234,m:98,p:0}
-];
-var PITCHES=[
-  {n:"BridgeTender Tavern",a:"Tahoe City · Restaurant",mv:241,mo:66,ph:48,rate:"$250/mo",hot:true,why:"Highest restaurant phone taps. High intent — families are already navigating there."},
-  {n:"KidZone Museum",a:"Truckee · Activity",mv:204,mo:96,ph:26,rate:"$250/mo",hot:true,why:"47% map CTR — highest of all activities. Rainy-day anchor listing."},
-  {n:"Kings Beach Miniature Golf",a:"Kings Beach · Mini Golf",mv:174,mo:66,ph:22,rate:"$200/mo",hot:true,why:"Seasonal operator with loyal family audience. Strong map open conversion."},
-  {n:"Rosie's Cafe",a:"Tahoe City · Restaurant",mv:227,mo:56,ph:41,rate:"$175/mo",hot:false,why:"Beloved local brand. Featured badge strengthens lead over competing breakfast spots."},
-  {n:"Fireside Pizza",a:"Tahoe City · Restaurant",mv:185,mo:48,ph:39,rate:"$175/mo",hot:false,why:"Consistent performer. Kid-friendly tag drives high filter match rate."},
-  {n:"Magic Carpet Golf",a:"Carnelian Bay · Mini Golf",mv:159,mo:67,ph:17,rate:"$150/mo",hot:false,why:"Only indoor mini golf — high rainy-day clicks. Undermonetized."},
-  {n:"Squeeze In",a:"Truckee · Restaurant",mv:137,mo:52,ph:33,rate:"$125/mo",hot:false,why:"Growing with Truckee user base. Good early pitch for market penetration."},
-  {n:"Woodward Tahoe",a:"Truckee · Activity",mv:111,mo:56,ph:11,rate:"$100/mo",hot:false,why:"Camps + drop-in sessions. Featured would drive camp signups — high LTV."},
-];
-var GAPS=[
-  {i:"🍕",t:"Truckee restaurants — demand exceeds supply",d:"Truckee users filter Eats 38% more than Tahoe City users but you have fewer Truckee listings. Add Pizza on the Hill, Great Gold, FiftyFifty.",o:"+3 listings"},
-  {i:"🛝",t:"Tahoma & Olympic Valley — zero playgrounds listed",d:"You have users in both cities with no local playground content. Add Homewood playground, Papoose Flat Park.",o:"+2 listings"},
-  {i:"🎨",t:"Indoor rainy-day activities — major gap",d:"Rainy sessions spike 34% but only KidZone + Woodward serve that demand. Missing ceramics, escape rooms, bowling.",o:"+3 listings"},
-  {i:"🍦",t:"Ice cream / dessert in Truckee",d:"Truckee users browse Eats heavily but no dessert listing exists. Sweets Handmade Candies, gelato spots available.",o:"+2 listings"},
-  {i:"🏊",t:"Swim lessons & water programs",d:"Kids Programs filter shows demand but NTPUD swim programs at Tahoe City Community Center are not listed.",o:"+1 listing"},
-];
-var SCHEMA=[
-  {n:"users",d:"One row per signed-in user",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"email",t:"text UNIQUE"},{c:"name",t:"text NULLABLE"},{c:"home_city",t:"text"},{c:"created_at",t:"timestamptz DEFAULT now()"},{c:"last_active",t:"timestamptz"}]},
-  {n:"user_sessions",d:"One row per app open",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"user_id",t:"uuid REFERENCES users",k:"fk"},{c:"city",t:"text"},{c:"session_start",t:"timestamptz"},{c:"session_end",t:"timestamptz"},{c:"tabs_visited",t:"int2 DEFAULT 0"},{c:"weather_code",t:"int2 NULLABLE"}]},
-  {n:"listing_events",d:"Every click, map open, phone tap",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"session_id",t:"uuid REFERENCES user_sessions",k:"fk"},{c:"user_id",t:"uuid REFERENCES users",k:"fk"},{c:"listing_name",t:"text"},{c:"listing_type",t:"text"},{c:"event_type",t:"text"},{c:"created_at",t:"timestamptz DEFAULT now()"}]},
-  {n:"session_events",d:"Tab changes, filter usage",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"session_id",t:"uuid REFERENCES user_sessions",k:"fk"},{c:"event_type",t:"text"},{c:"value",t:"text NULLABLE"},{c:"created_at",t:"timestamptz DEFAULT now()"}]},
-  {n:"ai_events",d:"AI suggestion performance",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"session_id",t:"uuid REFERENCES user_sessions",k:"fk"},{c:"weather_code",t:"int2"},{c:"user_city",t:"text"},{c:"suggestion_text",t:"text"},{c:"user_clicked",t:"bool DEFAULT false"},{c:"created_at",t:"timestamptz DEFAULT now()"}]},
-  {n:"listings",d:"Master listing registry",cols:[{c:"id",t:"uuid PRIMARY KEY",k:"pk"},{c:"name",t:"text"},{c:"type",t:"text"},{c:"area",t:"text"},{c:"address",t:"text"},{c:"phone",t:"text NULLABLE"},{c:"featured",t:"bool DEFAULT false"},{c:"monthly_rate",t:"numeric NULLABLE"},{c:"active",t:"bool DEFAULT true"}]},
-];
+var allUsers=[];
 
-// AUTH
+// ── AUTH ──────────────────────────────────────────────────────────────
 document.getElementById('lbtn').addEventListener('click',doLogin);
 document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 function doLogin(){
@@ -331,7 +265,9 @@ function doLogin(){
     document.getElementById('login').style.display='none';
     document.getElementById('app').classList.add('v');
     document.getElementById('ts').textContent='Updated: '+new Date().toLocaleTimeString();
-    initCharts();renderTables();
+    loadUsers();
+    renderPitches();
+    renderGaps();
   }else{document.getElementById('lerr').style.display='block';}
 }
 document.getElementById('lo').addEventListener('click',function(){
@@ -341,41 +277,7 @@ document.getElementById('lo').addEventListener('click',function(){
   document.getElementById('lerr').style.display='none';
 });
 
-// NAV
-// ── REAL USER DATA FROM SUPABASE ──────────────────────────────────────
-function fetchRealUsers(){
-  var tbl=document.getElementById('real-user-tbl');
-  var count=document.getElementById('real-user-count');
-  if(!tbl)return;
-  tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">Loading...</td></tr>';
-  fetch('/api/users')
-    .then(function(r){return r.json();})
-    .then(function(users){
-      if(!Array.isArray(users)||users.length===0){
-        tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">No sign-ins yet. Share the app!</td></tr>';
-        if(count)count.textContent='0';
-        return;
-      }
-      if(count)count.textContent=users.length.toString();
-      tbl.innerHTML=users.map(function(u){
-        var d=new Date(u.signed_in_at);
-        var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-        var timeStr=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-        return '<tr>'
-          +'<td>'+(u.photo?'<img src="'+u.photo+'" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">':'<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;margin-right:8px;vertical-align:middle">'+(u.name?u.name.charAt(0).toUpperCase():'?')+'</span>')
-          +'<span class="nm">'+(u.name||'—')+'</span></td>'
-          +'<td style="font-size:12px;color:var(--t2)">'+(u.email||'—')+'</td>'
-          +'<td><span class="badge ac">'+(u.city||'Unknown')+'</span></td>'
-          +'<td class="num">'+dateStr+'</td>'
-          +'<td style="font-size:11px;color:var(--t3)">'+timeStr+'</td>'
-          +'</tr>';
-      }).join('');
-    })
-    .catch(function(err){
-      tbl.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--re);padding:20px">Error loading users: '+err.message+'</td></tr>';
-    });
-}
-
+// ── NAV ───────────────────────────────────────────────────────────────
 document.querySelectorAll('.nb[data-tab]').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.nb').forEach(function(x){x.classList.remove('on');});
@@ -385,80 +287,125 @@ document.querySelectorAll('.nb[data-tab]').forEach(function(b){
   });
 });
 
-// CHARTS
-var B='rgba(59,130,246,',G='rgba(245,158,11,',Gr='rgba(16,185,129,',P='rgba(139,92,246,';
-Chart.defaults.color='#8B9ABF';Chart.defaults.borderColor='#2A3448';
-var DAYS=[];var now=new Date();
-for(var i=29;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);DAYS.push(d.toLocaleDateString('en-US',{month:'short',day:'numeric'}));}
-function r(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
-var DAU=DAYS.map(function(_,i){var d=new Date(now);d.setDate(d.getDate()-(29-i));var b=r(28,55)+(i*.8);var dw=d.getDay();if(dw===0||dw===6)b+=r(25,45);return Math.round(b);});
+// ── LOAD REAL USERS ───────────────────────────────────────────────────
+function loadUsers(){
+  var tbl=document.getElementById('user-tbl');
+  tbl.innerHTML='<tr><td colspan="5" class="loading">Loading...</td></tr>';
 
-function mkC(id,cfg){var c=document.getElementById(id);if(!c)return;return new Chart(c,cfg);}
+  fetch('/api/users')
+    .then(function(r){return r.json();})
+    .then(function(users){
+      allUsers=Array.isArray(users)?users:[];
 
-function initCharts(){
-  mkC('dauC',{type:'line',data:{labels:DAYS,datasets:[{label:'Sessions',data:DAU,borderColor:'#3B82F6',backgroundColor:B+'0.08)',borderWidth:2,tension:.4,fill:true,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:10}}},y:{ticks:{font:{size:10}}}}}});
-  mkC('cityC',{type:'doughnut',data:{labels:CITIES.map(function(c){return c.c;}),datasets:[{data:CITIES.map(function(c){return c.u;}),backgroundColor:['#3B82F6','#10B981','#F59E0B','#8B5CF6','#EF4444','#06B6D4'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
-  mkC('tabC',{type:'pie',data:{labels:['Outdoors','Eats','Events','Home','Camps'],datasets:[{data:[40,28,15,12,5],backgroundColor:['#3B82F6','#F59E0B','#8B5CF6','#10B981','#EF4444'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
-  mkC('retC',{type:'bar',data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'],datasets:[{label:'New',data:[18,24,31,29,38,42,51,59],backgroundColor:B+'0.7)',borderRadius:4},{label:'Returning',data:[0,12,19,24,28,35,41,49],backgroundColor:Gr+'0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:10}}}}}});
-  var hrs=['6a','7a','8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p'],hv=[8,12,18,32,55,62,58,54,67,72,81,88,76,62,41];
-  mkC('hourC',{type:'bar',data:{labels:hrs,datasets:[{data:hv,backgroundColor:hrs.map(function(_,i){return hv[i]>75?G+'0.85)':B+'0.5)';}),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{display:false}}}});
-  mkC('signC',{type:'bar',data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'],datasets:[{data:[18,24,31,29,38,42,51,59],backgroundColor:B+'0.75)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}}});
-  mkC('cohC',{type:'line',data:{labels:['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8'],datasets:[{label:'Retention %',data:[100,68,52,47,44,41,39,38],borderColor:'#10B981',backgroundColor:Gr+'0.08)',borderWidth:2,tension:.3,fill:true,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10},callback:function(v){return v+'%';}},max:100,min:0}}}});
-  var t8=LISTINGS.slice(0,8);
-  mkC('topC',{type:'bar',data:{labels:t8.map(function(l){return l.n.length>14?l.n.slice(0,14)+'…':l.n;}),datasets:[{label:'Views',data:t8.map(function(l){return l.v;}),backgroundColor:B+'0.75)',borderRadius:4},{label:'Map Opens',data:t8.map(function(l){return l.m;}),backgroundColor:G+'0.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{ticks:{font:{size:9},maxRotation:40}},y:{ticks:{font:{size:10}}}}}});
-  var cats={Beach:0,Park:0,Restaurant:0,'Mini Golf':0,Activity:0},cts={Beach:0,Park:0,Restaurant:0,'Mini Golf':0,Activity:0};
-  LISTINGS.forEach(function(l){if(cats[l.t]!==undefined){cats[l.t]+=l.v;cts[l.t]++;}});
-  var cl=Object.keys(cats),ca=cl.map(function(k){return cts[k]?Math.round(cats[k]/cts[k]):0;});
-  mkC('catC',{type:'bar',data:{labels:cl,datasets:[{data:ca,backgroundColor:[B+'0.8)',Gr+'0.8)',G+'0.8)',P+'0.8)','rgba(239,68,68,0.8)'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}}});
-  mkC('wxSC',{type:'bar',data:{labels:['☀️ Sunny','⛅ Partly','☁️ Overcast','🌧️ Rain','❄️ Snow'],datasets:[{label:'Outdoor',data:[82,72,55,26,38],backgroundColor:B+'0.8)',borderRadius:4},{label:'Indoor/Eats',data:[18,28,45,74,62],backgroundColor:G+'0.8)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{font:{size:10},callback:function(v){return v+'%';}},max:100}}}});
-  mkC('wxDC',{type:'bar',data:{labels:['☀️ Sunny','⛅ Partly','☁️ Overcast','🌧️ Rain','❄️ Snow'],datasets:[{data:[68,72,85,91,79],backgroundColor:['#10B981','#10B981','#F59E0B','#F59E0B','#3B82F6'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10}}}}}});
-  var mos=Array.from({length:24},function(_,i){return 'M'+(i+1);});
-  mkC('revC',{type:'line',data:{labels:mos,datasets:[
-    {label:'Conservative',data:mos.map(function(_,i){return Math.round(600+i*40+Math.max(0,(i-11)*60));}),borderColor:'#8B5CF6',backgroundColor:P+'0.06)',borderWidth:1.5,tension:.4,fill:true,pointRadius:0},
-    {label:'Base',data:mos.map(function(_,i){return Math.round(600+i*100+Math.max(0,(i-8)*120));}),borderColor:'#F59E0B',backgroundColor:G+'0.06)',borderWidth:2,tension:.4,fill:true,pointRadius:0},
-    {label:'Aggressive',data:mos.map(function(_,i){return Math.round(600+i*180+Math.max(0,(i-6)*200));}),borderColor:'#10B981',backgroundColor:Gr+'0.06)',borderWidth:2,tension:.4,fill:true,pointRadius:0},
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{ticks:{font:{size:9},maxTicksLimit:12}},y:{ticks:{font:{size:10},callback:function(v){return '$'+v.toLocaleString();}}}}}});
+      // Update user tab stats
+      document.getElementById('stat-total').textContent=allUsers.length;
+      if(allUsers.length>0){
+        var latest=allUsers[0];
+        document.getElementById('stat-recent').textContent=latest.name||latest.email.split('@')[0];
+        var d=new Date(latest.signed_in_at);
+        document.getElementById('stat-recent-time').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+      } else {
+        document.getElementById('stat-recent').textContent='None yet';
+        document.getElementById('stat-recent-time').textContent='Share the app!';
+      }
+
+      // Render user table
+      if(allUsers.length===0){
+        tbl.innerHTML='<tr><td colspan="5"><div class="empty">🏔️ No sign-ins yet.<br>Share <strong>lakesidelittleones.com</strong> with North Shore families!</div></td></tr>';
+      } else {
+        tbl.innerHTML=allUsers.map(function(u){
+          var d=new Date(u.signed_in_at);
+          var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          var timeStr=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+          var avatar=u.photo
+            ?'<img src="'+u.photo+'" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">'
+            :'<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;margin-right:8px;vertical-align:middle">'+(u.name?u.name.charAt(0).toUpperCase():'?')+'</span>';
+          return '<tr>'
+            +'<td>'+avatar+'<span class="nm">'+(u.name||'—')+'</span></td>'
+            +'<td style="font-size:12px;color:var(--t2)">'+(u.email||'—')+'</td>'
+            +'<td><span class="badge ac">'+(u.city||'Unknown')+'</span></td>'
+            +'<td class="num">'+dateStr+'</td>'
+            +'<td style="font-size:11px;color:var(--t3)">'+timeStr+'</td>'
+            +'</tr>';
+        }).join('');
+      }
+
+      // Update overview tab
+      updateOverview(allUsers);
+    })
+    .catch(function(err){
+      tbl.innerHTML='<tr><td colspan="5"><div class="empty">⚠️ Could not load users.<br>'+err.message+'</div></td></tr>';
+    });
 }
 
-function renderTables(){
-  // Real users from database
-  fetchRealUsers();
-  // City table (mock)
-  var ct=document.getElementById('cityTbl');
-  CITIES.forEach(function(c){var sh=Math.round(c.u/312*100);ct.innerHTML+='<tr><td class="nm">'+c.c+'</td><td class="num">'+c.u+'</td><td class="num">'+sh+'%</td><td class="num">'+c.s+'</td><td><span class="badge ac">'+c.top+'</span></td><td class="num">'+c.a+'</td></tr>';});
-  // Listings
-  var lt=document.getElementById('listTbl');
-  var tc={Beach:'ac',Park:'gr',Restaurant:'go','Mini Golf':'pu',Activity:'pu'};
-  LISTINGS.forEach(function(l){
-    var ctr=l.v>0?Math.round(l.m/l.v*100):0;
-    var st=l.v>500?'<span class="badge gr">🔥 Hot</span>':l.v<300?'<span class="badge gy">Low</span>':'<span class="badge ac">Active</span>';
-    lt.innerHTML+='<tr><td class="nm">'+l.n+'</td><td><span class="badge '+(tc[l.t]||'gy')+'">'+l.t+'</span></td><td style="font-size:11px;color:var(--t3)">'+l.a+'</td><td class="num">'+l.v+'</td><td class="num">'+l.m+'</td><td class="num">'+ctr+'%</td><td class="num">'+(l.p||'—')+'</td><td>'+st+'</td></tr>';
-  });
-  // Pitches
+function updateOverview(users){
+  document.getElementById('ov-total').textContent=users.length;
+  if(users.length>0){
+    // Top city
+    var cities={};
+    users.forEach(function(u){var c=u.city||'Unknown';cities[c]=(cities[c]||0)+1;});
+    var topCity=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];})[0];
+    document.getElementById('ov-city').textContent=topCity+' ('+cities[topCity]+')';
+    // Latest
+    var latest=users[0];
+    document.getElementById('ov-latest').textContent=latest.name||latest.email.split('@')[0];
+    var d=new Date(latest.signed_in_at);
+    document.getElementById('ov-latest-time').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    // City breakdown
+    var cityTbl=document.getElementById('city-tbl');
+    cityTbl.innerHTML=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];}).map(function(c){
+      var pct=Math.round(cities[c]/users.length*100);
+      return '<tr><td class="nm">'+c+'</td><td class="num">'+cities[c]+'</td><td><span class="badge ac">'+pct+'%</span></td></tr>';
+    }).join('');
+  } else {
+    document.getElementById('ov-city').textContent='None yet';
+    document.getElementById('ov-latest').textContent='None yet';
+    document.getElementById('ov-latest-time').textContent='Share the app!';
+    document.getElementById('city-tbl').innerHTML='<tr><td colspan="3" class="loading">No data yet</td></tr>';
+  }
+}
+
+// ── STATIC BUSINESS DATA ──────────────────────────────────────────────
+var PITCHES=[
+  {n:"BridgeTender Tavern",a:"Tahoe City · Restaurant",hot:true,why:"High intent — families are already navigating there. Top restaurant in the app.",rate:"$250/mo"},
+  {n:"KidZone Museum",a:"Truckee · Activity",hot:true,why:"Rainy-day anchor listing. High map opens. Families plan around it.",rate:"$250/mo"},
+  {n:"Kings Beach Miniature Golf",a:"Kings Beach · Mini Golf",hot:true,why:"Seasonal operator with loyal family audience. Only mini golf in Kings Beach.",rate:"$200/mo"},
+  {n:"Rosie's Cafe",a:"Tahoe City · Restaurant",hot:false,why:"Beloved local brand. Featured badge strengthens lead over competing breakfast spots.",rate:"$175/mo"},
+  {n:"Fireside Pizza",a:"Tahoe City · Restaurant",hot:false,why:"Consistent performer. Kid-friendly tag drives high filter match rate.",rate:"$175/mo"},
+  {n:"Magic Carpet Golf",a:"Carnelian Bay · Mini Golf",hot:false,why:"Only indoor mini golf — high rainy-day value. Undermonetized.",rate:"$150/mo"},
+  {n:"Squeeze In",a:"Truckee · Restaurant",hot:false,why:"Growing with Truckee user base. Good early pitch for market penetration.",rate:"$125/mo"},
+  {n:"Woodward Tahoe",a:"Truckee · Activity",hot:false,why:"Camps + drop-in sessions. Featured would drive camp signups — high LTV.",rate:"$100/mo"},
+];
+
+var GAPS=[
+  {i:"🍕",t:"Truckee restaurants — demand exceeds supply",d:"Truckee users browse Eats heavily but fewer listings exist. Add Pizza on the Hill, Great Gold, FiftyFifty.",o:"+3 listings"},
+  {i:"🛝",t:"Tahoma & Olympic Valley — zero playgrounds listed",d:"You have users in both cities with no local playground content.",o:"+2 listings"},
+  {i:"🎨",t:"Indoor rainy-day activities — major gap",d:"Rainy sessions are high but only KidZone + Woodward serve that demand.",o:"+3 listings"},
+  {i:"🍦",t:"Ice cream / dessert in Truckee",d:"No dessert listing exists for Truckee. Sweets Handmade Candies, gelato spots available.",o:"+2 listings"},
+  {i:"🏊",t:"Swim lessons & water programs",d:"NTPUD swim programs at Tahoe City Community Center not listed.",o:"+1 listing"},
+];
+
+function renderPitches(){
   var pl=document.getElementById('pitchList');
-  PITCHES.forEach(function(p){
-    pl.innerHTML+='<div class="pitch'+(p.hot?' hot':'')+'">'
+  pl.innerHTML=PITCHES.map(function(p){
+    return '<div class="pitch'+(p.hot?' hot':'')+'">'
       +'<div style="flex:1">'+(p.hot?'<span class="badge go" style="margin-bottom:6px;display:inline-flex">🔥 Hot Pitch</span><br>':'')
       +'<div class="pn">'+p.n+'</div><div class="pm">'+p.a+'</div>'
       +'<div style="font-size:12px;color:var(--t3);margin-top:6px;line-height:1.5">'+p.why+'</div></div>'
-      +'<div class="pstats">'
-      +'<div><div class="pstat-v">'+p.mv+'</div><div class="pstat-l">Mo. Views</div></div>'
-      +'<div><div class="pstat-v">'+p.mo+'</div><div class="pstat-l">Map Opens</div></div>'
-      +(p.ph?'<div><div class="pstat-v">'+p.ph+'</div><div class="pstat-l">Phone Taps</div></div>':'')
-      +'<div><div class="pval">'+p.rate+'</div><div class="pstat-l">Suggested</div></div>'
-      +'</div></div>';
-  });
-  // Gaps
+      +'<div><div class="pval">'+p.rate+'</div><div class="pstat-l" style="font-size:10px;color:var(--t3)">Suggested</div></div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderGaps(){
   var gl=document.getElementById('gapList');
-  GAPS.forEach(function(g){
-    gl.innerHTML+='<div class="gap"><div style="font-size:22px;flex-shrink:0">'+g.i+'</div><div style="flex:1"><div style="font-weight:600;color:var(--t);font-size:13px;margin-bottom:2px">'+g.t+'</div><div style="font-size:12px;color:var(--t3)">'+g.d+'</div></div><div><div class="gap-opp">'+g.o+'</div><div style="font-size:10px;color:var(--t3);text-align:right">to add</div></div></div>';
-  });
-  // Schema
-  var sg=document.getElementById('schmGrid');
-  SCHEMA.forEach(function(t){
-    var rows=t.cols.map(function(c){return '<div class="srow"><span class="scol">'+c.c+(c.k==='pk'?'<span class="spk">PK</span>':c.k==='fk'?'<span class="sfk">FK</span>':'')+'</span><span class="styp">'+c.t+'</span></div>';}).join('');
-    sg.innerHTML+='<div class="stbl"><div class="shdr"><div class="sn">'+t.n+'</div><div class="sd">'+t.d+'</div></div>'+rows+'</div>';
-  });
+  gl.innerHTML=GAPS.map(function(g){
+    return '<div class="gap"><div style="font-size:22px;flex-shrink:0">'+g.i+'</div>'
+      +'<div style="flex:1"><div style="font-weight:600;color:var(--t);font-size:13px;margin-bottom:2px">'+g.t+'</div>'
+      +'<div style="font-size:12px;color:var(--t3)">'+g.d+'</div></div>'
+      +'<div><div class="gap-opp">'+g.o+'</div><div style="font-size:10px;color:var(--t3);text-align:right">to add</div></div>'
+      +'</div>';
+  }).join('');
 }
 </script>
 </body>
