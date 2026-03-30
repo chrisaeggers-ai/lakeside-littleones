@@ -1,13 +1,11 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-// Serve the static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve ALL files from the root directory (index.html, admin.html, etc.)
+app.use(express.static(__dirname));
 
 // AI suggestion proxy — keeps your API key safe on the server
 app.post('/api/suggest', async (req, res) => {
@@ -41,10 +39,10 @@ app.post('/api/suggest', async (req, res) => {
   }
 });
 
-// All other routes serve the app
+// Fallback — serve index.html for any unknown route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Lakeside + Little Ones running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Lakeside + Little Ones live on port ${PORT}`));
