@@ -171,29 +171,17 @@ tr:hover td{background:var(--s2)}
 
       <!-- USERS -->
       <div class="tab" id="tab-users">
-        <div class="stitle">User Analytics</div>
-        <div class="ssub">Who uses Lakeside + Little Ones and how they engage.</div>
-        <div class="tcard" style="margin-bottom:24px">
-          <div class="th"><div class="tt">✅ Real Sign-Ins — Live from Database</div><div class="ts" id="real-user-count">—</div></div>
+        <div class="stitle">Users</div>
+        <div class="ssub">Real sign-ins from Supabase — updates live as people sign in.</div>
+        <div class="kgrid" style="grid-template-columns:repeat(2,1fr);max-width:500px;margin-bottom:24px">
+          <div class="kcard ac"><div class="klbl">Total Sign-Ins</div><div class="kval" id="real-user-count">—</div><div class="kdlt n">All time</div></div>
+          <div class="kcard gr"><div class="klbl">Database</div><div class="kval" style="font-size:16px;padding-top:6px">Supabase</div><div class="kdlt n">Live · real data</div></div>
+        </div>
+        <div class="tcard">
+          <div class="th"><div class="tt">All Sign-Ins</div><div class="ts">Newest first</div></div>
           <table><thead><tr><th>Name</th><th>Email</th><th>City</th><th>Date</th><th>Time</th></tr></thead>
           <tbody id="real-user-tbl"><tr><td colspan="5" style="text-align:center;color:var(--t3);padding:20px">Loading...</td></tr></tbody></table>
         </div>
-        <div class="kgrid">
-          <div class="kcard ac"><div class="klbl">Total Signups</div><div class="kval">312</div><div class="kdlt up">↑ 23% WoW</div></div>
-          <div class="kcard gr"><div class="klbl">7-Day Active</div><div class="kval">187</div><div class="kdlt n">60% of base</div></div>
-          <div class="kcard go"><div class="klbl">30-Day Active</div><div class="kval">271</div><div class="kdlt n">DAU/MAU: 22%</div><div class="ksub">Target 25%+ = strong</div></div>
-          <div class="kcard pu"><div class="klbl">Avg Sessions/User</div><div class="kval">11.4</div><div class="kdlt n">Since signup</div></div>
-        </div>
-        <div class="cgrid2">
-          <div class="cc"><div class="ct">Weekly New Signups</div><div class="cs">8-week growth</div><div class="cw t"><canvas id="signC"></canvas></div></div>
-          <div class="cc"><div class="ct">Week 1 Retention Rate</div><div class="cs">% returning the next week</div><div class="cw t"><canvas id="cohC"></canvas></div></div>
-        </div>
-        <div class="tcard">
-          <div class="th"><div class="tt">Users by City</div><div class="ts">Sorted by count</div></div>
-          <table><thead><tr><th>City</th><th>Users</th><th>Share</th><th>Avg Sessions</th><th>Top Category</th><th>7-Day Active</th></tr></thead>
-          <tbody id="cityTbl"></tbody></table>
-        </div>
-        <div class="ibox"><strong>Insight:</strong> Carnelian Bay leads in users but Kings Beach users are 34% more active per session. Truckee users visit the Camps tab 2× more than other cities.</div>
       </div>
 
       <!-- LISTINGS -->
@@ -368,7 +356,7 @@ function fetchRealUsers(){
         if(count)count.textContent='0';
         return;
       }
-      if(count)count.textContent=users.length;
+      if(count)count.textContent=users.length.toString();
       tbl.innerHTML=users.map(function(u){
         var d=new Date(u.signed_in_at);
         var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
