@@ -2,1401 +2,742 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Lakeside + Little Ones</title>
-<!-- PWA / Home Screen Install -->
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lakeside + Little Ones">
-<meta name="theme-color" content="#FDFAF3">
-<meta name="description" content="North Shore Lake Tahoe family activity guide — beaches, parks, eats, and kid programs for families with young kids.">
-<!-- Social share -->
-<meta property="og:title" content="Lakeside + Little Ones">
-<meta property="og:description" content="North Shore family activity guide — find beaches, parks, kid-friendly eats & programs near you.">
-<meta property="og:type" content="website">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L+LO Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
-#app{width:100%;max-width:430px;min-height:100vh;background:#FDFAF3;position:relative;overflow-x:hidden;box-shadow:0 0 60px rgba(0,0,0,0.2)}
-.page{display:none;min-height:100vh}.page.active{display:block}
-.screen{display:none;padding-bottom:90px}.screen.active{display:block}
-
-/* ── SIGN IN ── */
-.sign{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px;background:linear-gradient(180deg,#F5E6C8 0%,#FDFAF3 100%)}
-.sign-logo{font-family:'Fraunces',serif;font-size:34px;font-weight:500;color:#2C1A0E;line-height:1.2;margin:14px 0 8px;text-align:center}
-.sign-sub{font-size:14px;color:#6B4C2A;line-height:1.6;text-align:center;max-width:260px}
-.sign-features{background:#fff;border:1px solid #F0DFB8;border-radius:18px;padding:20px 24px;margin:22px 0;width:100%;max-width:300px;font-size:13px;color:#6B4C2A;line-height:2.1}
-.gbtn{width:100%;max-width:300px;background:#fff;border:1.5px solid #E8C87A;border-radius:14px;padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;color:#2C1A0E;box-shadow:0 4px 16px rgba(0,0,0,0.08);transition:transform 0.1s,box-shadow 0.1s}
-.gbtn:active{transform:scale(0.98);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.sign-note{text-align:center;margin-top:12px;font-size:11px;color:#A08060}
-.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #F0DFB8}
-.user-avatar-placeholder{width:30px;height:30px;border-radius:50%;background:#1A6B9A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid #F0DFB8}
-.sign-note{text-align:center;margin-top:12px;font-size:11px;color:#A08060}
-
-
-/* ── ONBOARDING ── */
-.onboard{display:flex;flex-direction:column;min-height:100vh;padding:36px 24px 32px;background:#FDFAF3}
-.ob-step{font-size:11px;font-weight:700;color:#A08060;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
-.ob-title{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#2C1A0E;margin-bottom:6px;line-height:1.2}
-.ob-sub{font-size:14px;color:#6B4C2A;margin-bottom:20px;line-height:1.5}
-.ob-input{background:#fff;border:1.5px solid #F0DFB8;border-radius:12px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:15px;color:#2C1A0E;width:100%;margin-bottom:14px;outline:none;transition:border 0.2s}
-.ob-input:focus{border-color:#5AADD0}
-.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.city-btn{background:#fff;border:1.5px solid #F0DFB8;border-radius:14px;padding:14px 12px;text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
-.city-btn.selected{border-color:#1A6B9A;background:#EEF6FF}
-.city-ico{font-size:26px;margin-bottom:5px}.city-lbl{font-size:13px;font-weight:700;color:#2C1A0E}.city-desc{font-size:10px;color:#A08060;margin-top:2px}
-.ob-btn{width:100%;background:#1A6B9A;color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:16px;cursor:pointer;opacity:0.35;transition:opacity 0.2s,transform 0.1s}
-.ob-btn.ready{opacity:1}.ob-btn.ready:active{transform:scale(0.98)}
-.ob-skip{text-align:center;margin-top:14px;font-size:12px;color:#A08060;cursor:pointer;text-decoration:underline}
-
-/* ── HEADER ── */
-.sticky-header{position:sticky;top:0;z-index:50;background:rgba(253,250,243,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F0DFB8}
-.h-title{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:#2C1A0E;line-height:1}
-.h-sub{font-size:11px;color:#A08060;font-weight:600;letter-spacing:0.5px;margin-top:1px}
-.header-right{display:flex;align-items:center;gap:8px}
-.search-toggle{width:34px;height:34px;border-radius:50%;background:#F5E6C8;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background 0.15s}
-.search-toggle:active{background:#E8C87A}
-.settings-btn{width:34px;height:34px;border-radius:50%;background:#F5E6C8;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background 0.15s}
-.settings-btn:active{background:#E8C87A}
-
-/* ── SEARCH BAR ── */
-.search-bar{background:#fff;border-bottom:1px solid #F0DFB8;padding:10px 16px;display:none}
-.search-bar.open{display:block}
-.search-input{width:100%;background:#F5E6C8;border:none;border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;color:#2C1A0E;outline:none}
-.search-input::placeholder{color:#A08060}
-.search-results{padding:0 16px;padding-bottom:90px}
-.search-result-item{background:#fff;border:1px solid #F0DFB8;border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px}
-.search-result-item:active{background:#F5F0E8}
-.sr-ico{font-size:22px;flex-shrink:0}
-.sr-name{font-weight:700;font-size:14px;color:#2C1A0E}
-.sr-meta{font-size:12px;color:#A08060}
-.sr-type{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:#F5E6C8;color:#8B5E1A}
-
-/* ── WEATHER ── */
-.wx-banner{padding:24px 20px 20px;position:relative;overflow:hidden;cursor:pointer}
-.wx-b1{position:absolute;top:-20px;right:-20px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.12);pointer-events:none}
-.wx-b2{position:absolute;bottom:-30px;left:10px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.08);pointer-events:none}
-.wx-inner{position:relative}
-.wx-loc{font-size:11px;font-weight:800;color:rgba(255,255,255,0.75);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
-.wx-row{display:flex;align-items:flex-end;gap:8px}
-.wx-temp{font-family:'Fraunces',serif;font-size:60px;font-weight:300;color:#fff;line-height:1}
-.wx-dets{padding-bottom:8px}
-.wx-cond{font-size:13px;color:rgba(255,255,255,0.9);font-weight:700}
-.wx-feels{font-size:12px;color:rgba(255,255,255,0.65)}
-.wx-ico{font-size:48px;line-height:1;margin-top:4px}
-.wx-tags{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.wx-tag{background:rgba(255,255,255,0.2);border-radius:10px;padding:4px 11px;font-size:12px;color:#fff;font-weight:600}
-.wx-tag.alert{background:rgba(255,160,0,0.35);border:1px solid rgba(255,200,0,0.4)}
-.wx-updated{font-size:10px;color:rgba(255,255,255,0.5);margin-top:5px}
-.wx-beta-note{margin:8px 16px 0;background:#FFF8E8;border:1px solid #F5D878;border-radius:12px;padding:8px 12px;font-size:11px;color:#8B6914;line-height:1.5}
-
-/* ── AI BANNER ── */
-
-
-
-
-
-
-/* ── FEATURED CARDS ── */
-.featured-section{padding:16px 16px 0}
-.featured-label{font-size:11px;font-weight:800;color:#A08060;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
-.feat-card{border-radius:18px;padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
-.feat-card.raft{background:linear-gradient(135deg,#1A5F8A,#0D3B5E)}
-.feat-card.bridge{background:linear-gradient(135deg,#8B5E1A,#C4913A)}
-.feat-card.poppys{background:linear-gradient(135deg,#C4356A,#E8943A)}
-.feat-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.2);color:#fff;letter-spacing:0.5px;margin-bottom:10px}
-.feat-name{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:#fff;line-height:1.1;margin-bottom:3px}
-.feat-tagline{font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:10px}
-.feat-note{font-size:13px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px}
-.feat-pricing{background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 12px;margin-bottom:12px}
-.feat-price-row{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.9);padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.1)}
-.feat-price-row:last-child{border-bottom:none}
-.feat-price-val{font-weight:800;color:#fff}
-.feat-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.feat-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.9)}
-.feat-actions{display:flex;gap:8px}
-.feat-btn{flex:1;border:none;border-radius:11px;padding:11px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-align:center;text-decoration:none;display:block;transition:opacity 0.15s}
-.feat-btn:active{opacity:0.8}
-.feat-btn.primary{background:#fff;color:#1A6B9A}
-.feat-btn.secondary{background:rgba(255,255,255,0.2);color:#fff}
-.feat-seasonal{font-size:11px;color:rgba(255,255,255,0.6);text-align:center;margin-top:8px}
-
-/* ── SECTIONS ── */
-.sec-hdr{padding:18px 16px 8px;display:flex;align-items:center;gap:8px}
-.sec-ico{font-size:18px}
-.sec-ttl{font-family:'Fraunces',serif;font-size:19px;font-weight:500;color:#2C1A0E}
-.filters{display:flex;gap:8px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}
-.pill{background:#fff;color:#6B4C2A;border:1px solid #F0DFB8;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;flex-shrink:0}
-.pill.on{background:#1A6B9A;color:#fff;border-color:#1A6B9A}
-.cw{padding:0 16px}
-
-/* ── CARDS ── */
-.card{background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;border:1px solid #F0DFB8;transition:border-color 0.15s}
-.card.featured-listing{border-color:#E8C87A;box-shadow:0 2px 12px rgba(232,200,122,0.25)}
-.c-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
-.c-name-row{display:flex;align-items:center;gap:6px;flex:1;flex-wrap:wrap}
-.c-name{font-weight:800;font-size:15px;color:#2C1A0E}
-.c-featured-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;background:#FFF0C8;color:#8B5E1A;border:1px solid #E8C87A}
-.c-open-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;white-space:nowrap}
-.c-open-badge.open{background:#E8F5EE;color:#2E7D52}
-.c-open-badge.closed{background:#F5F0E8;color:#A08060}
-.c-meta{font-size:12px;color:#6B4C2A;margin:3px 0 6px}
-.c-note{font-size:13px;color:#6B4C2A;line-height:1.5;margin-bottom:8px}
-.tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:#F5E6C8;color:#8B5E1A}
-.tag.b{background:#C8E4F0;color:#0D3B5E}
-.tag.g{background:#E8F5EE;color:#2E7D52}
-.tag.o{background:#FFE4C8;color:#8B3A0A}
-.tag.p{background:#F3EEFF;color:#4A1FA0}
-.tag.free-badge{background:#E8F5EE;color:#1A6B3A;border:1.5px solid #A8D8BE;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px}
-.free-pill{display:inline-flex;align-items:center;gap:3px;background:#E8F5EE;color:#1A6B3A;border:1.5px solid #A8D8BE;font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
-.tag.playground{background:#E8F5EE;color:#2E7D52}
-.pricing-inline{background:#F5E6C8;border-radius:10px;padding:8px 12px;margin-bottom:8px}
-.pricing-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid rgba(139,94,26,0.12)}
-.pricing-row:last-child{border-bottom:none}
-.pricing-label{color:#6B4C2A;font-weight:600}
-.pricing-val{font-weight:800;color:#8B5E1A}
-.stars{color:#D4650A;font-size:13px}
-.addr-row{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
-.addr-txt{font-size:11px;color:#6B4C2A;flex:1}
-.map-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;background:#E8F0FE;color:#1A56DB;white-space:nowrap;flex-shrink:0}
-.card-actions{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
-.phone-link{font-size:12px;color:#1A6B9A;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:3px}
-.book-link{font-size:12px;color:#2E7D52;font-weight:700;text-decoration:none;background:#E8F5EE;padding:4px 10px;border-radius:10px}
-.share-btn{font-size:11px;color:#A08060;background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;padding:2px 6px;margin-left:auto}
-
-/* ── ACTIVITY CARD (richer) ── */
-.act-card{background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;border:1px solid #F0DFB8}
-
-/* ── SEE ALL ── */
-.see-all{width:100%;background:none;border:1px solid #5AADD0;border-radius:12px;padding:10px;color:#1A6B9A;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:4px;font-family:'Nunito',sans-serif;transition:background 0.15s}
-.see-all:active{background:#EEF6FF}
-
-/* ── PROGRAM CARDS ── */
-.prog-card{border-radius:16px;padding:14px 16px;margin-bottom:10px;border:1px solid}
-.prog-link{font-size:12px;font-weight:700;color:#1A6B9A;text-decoration:none}
-
-/* ── QUICK CATS ── */
-.qcats{display:flex;gap:8px;padding:10px 16px 4px;overflow-x:auto;scrollbar-width:none}
-.qcats::-webkit-scrollbar{display:none}
-.qcat{background:#fff;border:1px solid #F0DFB8;border-radius:13px;padding:9px 13px;text-align:center;min-width:70px;cursor:pointer;flex-shrink:0;transition:background 0.15s}
-.qcat:active{background:#F5F0E8}
-.qcat-ico{font-size:20px}.qcat-lbl{font-size:10px;font-weight:700;color:#6B4C2A;margin-top:3px}
-
-/* ── NAV ── */
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid #F0DFB8;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,8px)}
-.nb{flex:1;background:none;border:none;padding:7px 0 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',sans-serif;-webkit-tap-highlight-color:transparent}
-.nb-ico{font-size:22px;line-height:1}.nb-lbl{font-size:9px;font-weight:700;letter-spacing:0.3px;color:#A08060}
-.nb-lbl.on{color:#1A6B9A}.nb-dot{width:4px;height:4px;border-radius:50%;background:#1A6B9A;display:none}
-
-/* ── RAIN BAR ── */
-.rain-bar{margin:10px 16px 0;background:#FFF0E8;border:1px solid #F5C0A0;border-radius:14px;padding:10px 14px;font-size:13px;color:#8B3A14;font-weight:600}
-
-/* ── AREA BADGE ── */
-.ab{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:9px;background:#E8F5EE;color:#2E7D52;margin-left:4px;vertical-align:middle}
-.ab.truckee{background:#F3EEFF;color:#4A1FA0}
-.ab.donner{background:#EEF6FF;color:#1A56DB}
-
-/* ── SETTINGS OVERLAY ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center}
-.overlay.show{display:flex}
-.sheet{background:#FDFAF3;border-radius:22px 22px 0 0;padding:0 0 40px;width:100%;max-width:430px;max-height:92vh;overflow-y:auto;position:relative}
-.sheet-handle{width:36px;height:4px;background:#D4B896;border-radius:2px;margin:12px auto 18px}
-.sheet-title{font-family:'Fraunces',serif;font-size:21px;font-weight:500;color:#2C1A0E;padding:0 20px 14px;border-bottom:1px solid #F0DFB8}
-.sheet-close{position:absolute;top:14px;right:18px;background:none;border:none;font-size:20px;cursor:pointer;color:#A08060;padding:4px}
-.sheet-sec{padding:16px 20px 0}
-.sheet-lbl{font-size:10px;font-weight:800;color:#A08060;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px}
-.sheet-input{background:#fff;border:1.5px solid #F0DFB8;border-radius:11px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:15px;color:#2C1A0E;width:100%;margin-bottom:12px;outline:none;transition:border 0.2s}
-.sheet-input:focus{border-color:#5AADD0}
-.city-grid-sm{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
-.city-btn-sm{background:#fff;border:1.5px solid #F0DFB8;border-radius:12px;padding:11px 10px;text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s}
-.city-btn-sm.selected{border-color:#1A6B9A;background:#EEF6FF}
-.save-btn{width:100%;background:#1A6B9A;color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:opacity 0.15s}
-.save-btn:active{opacity:0.85}
-
-/* ── MAP PICKER ── */
-.map-sheet-title{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#2C1A0E;margin-bottom:4px}
-.map-sheet-addr{font-size:13px;color:#6B4C2A;margin-bottom:18px}
-.map-choices{display:flex;gap:10px}
-.map-choice{flex:1;border:none;border-radius:14px;padding:14px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:opacity 0.15s}
-.map-choice:active{opacity:0.8}
-.map-choice.gm{background:#E8F0FE;color:#1A56DB}.map-choice.wz{background:#E8F5E3;color:#1A7A1A}
-.map-cancel{width:100%;margin-top:10px;background:none;border:1px solid #F0DFB8;border-radius:12px;padding:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;color:#6B4C2A;cursor:pointer}
-
-/* ── SECTION DIVIDER ── */
-.divider{height:1px;background:#F0DFB8;margin:4px 16px}
+:root{--bg:#0B0F1A;--s:#13192A;--s2:#1C2438;--s3:#252E42;--b:#2A3448;--b2:#344060;--t:#E8EDF8;--t2:#8B9ABF;--t3:#5A6A8A;--ac:#3B82F6;--ac2:#1D4ED8;--ag:rgba(59,130,246,.15);--go:#F59E0B;--gg:rgba(245,158,11,.15);--gr:#10B981;--grg:rgba(16,185,129,.12);--re:#EF4444;--pu:#8B5CF6;--fm:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm2:'DM Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t);font-family:var(--fb);font-size:14px;min-height:100vh}
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.lcard{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:48px 40px;width:380px;text-align:center}
+.llogo{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--t3);text-transform:uppercase;margin-bottom:24px}
+.ltitle{font-family:var(--fm);font-size:28px;font-weight:800;margin-bottom:8px}
+.lsub{font-size:13px;color:var(--t2);margin-bottom:28px}
+.linput{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 16px;font-family:var(--fb);font-size:14px;color:var(--t);outline:none;margin-bottom:10px;transition:border .2s}
+.linput:focus{border-color:var(--ac)}
+.lbtn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:10px;padding:14px;font-family:var(--fm);font-weight:700;font-size:14px;cursor:pointer;margin-top:4px}
+.lerr{font-size:12px;color:var(--re);margin-top:10px;display:none}
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.v{display:flex}
+.topbar{background:var(--s);border-bottom:1px solid var(--b);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.brand{font-family:var(--fm);font-size:15px;font-weight:800}.brand span{color:var(--ac)}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.lout{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 14px;color:var(--t2);cursor:pointer;font-family:var(--fb);font-size:12px}
+.layout{display:flex;flex:1}
+.sidebar{width:210px;background:var(--s);border-right:1px solid var(--b);padding:20px 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.slbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase;padding:0 12px;margin:0 0 8px}
+.nb{display:flex;align-items:center;gap:10px;width:calc(100% - 24px);background:none;border:none;border-radius:8px;padding:9px 10px;font-family:var(--fb);font-size:13px;color:var(--t2);cursor:pointer;text-align:left;margin:2px 12px;transition:all .15s}
+.nb:hover{background:var(--s2);color:var(--t)}
+.nb.on{background:var(--ag);color:var(--ac);font-weight:600}
+.ssec{margin-bottom:24px}
+.content{flex:1;padding:28px;overflow-y:auto}
+.tab{display:none}.tab.on{display:block}
+.stitle{font-family:var(--fm);font-size:22px;font-weight:800;margin-bottom:4px}
+.ssub{font-size:13px;color:var(--t2);margin-bottom:24px}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kgrid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;max-width:500px}
+.kcard{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
+.kcard.ac{border-color:rgba(59,130,246,.3);background:linear-gradient(135deg,var(--s),rgba(59,130,246,.06))}
+.kcard.gr{border-color:rgba(16,185,129,.3);background:linear-gradient(135deg,var(--s),rgba(16,185,129,.06))}
+.kcard.go{border-color:rgba(245,158,11,.3);background:linear-gradient(135deg,var(--s),rgba(245,158,11,.06))}
+.kcard.pu{border-color:rgba(139,92,246,.3);background:linear-gradient(135deg,var(--s),rgba(139,92,246,.06))}
+.klbl{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--t3);text-transform:uppercase;margin-bottom:10px}
+.kval{font-family:var(--fm);font-size:32px;font-weight:800;line-height:1;margin-bottom:8px}
+.ksub{font-size:12px;color:var(--t3);margin-top:4px}
+.tcard{background:var(--s);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.th{padding:16px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+.tt{font-family:var(--fm);font-size:14px;font-weight:700}
+.ts{font-size:11px;color:var(--t3)}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--t3);text-transform:uppercase;padding:10px 20px;text-align:left;border-bottom:1px solid var(--b);background:var(--s2)}
+td{padding:11px 20px;border-bottom:1px solid var(--b);font-size:13px;color:var(--t2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--s2)}
+.num{font-family:var(--fm2);font-size:13px;color:var(--t)}
+.nm{font-weight:600;color:var(--t)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.badge.gr{background:var(--grg);color:var(--gr);border:1px solid rgba(16,185,129,.2)}
+.badge.go{background:var(--gg);color:var(--go);border:1px solid rgba(245,158,11,.2)}
+.badge.ac{background:var(--ag);color:var(--ac);border:1px solid rgba(59,130,246,.2)}
+.badge.gy{background:var(--s3);color:var(--t2);border:1px solid var(--b)}
+.empty{text-align:center;color:var(--t3);padding:40px 20px;font-size:13px;line-height:1.8}
+.loading{text-align:center;color:var(--t3);padding:30px;font-size:13px}
+.pitch{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.pitch:hover{border-color:var(--go)}
+.pitch.hot{border-color:rgba(245,158,11,.35);background:linear-gradient(135deg,var(--s),rgba(245,158,11,.04))}
+.pn{font-weight:600;color:var(--t);font-size:14px;margin-bottom:3px}
+.pm{font-size:12px;color:var(--t3)}
+.pstats{display:flex;gap:20px;flex-shrink:0}
+.pstat-v{font-family:var(--fm);font-size:18px;font-weight:800}
+.pstat-l{font-size:10px;color:var(--t3);letter-spacing:.5px}
+.pval{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--go)}
+.gap{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.gap-opp{font-family:var(--fm);font-size:16px;font-weight:800;color:var(--go);flex-shrink:0}
+.ibox{background:var(--ag);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--t2);line-height:1.7}
+.ibox strong{color:var(--ac)}
+.wbox{background:var(--gg);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--t2);line-height:1.7}
+.wbox strong{color:var(--go)}
+.refresh-btn{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 14px;color:var(--t2);cursor:pointer;font-family:var(--fb);font-size:12px}
+.refresh-btn:hover{border-color:var(--ac);color:var(--ac)}
+.cgrid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.cgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.cc{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:20px}
+.ct{font-family:var(--fm);font-size:14px;font-weight:700;margin-bottom:4px}
+.cs{font-size:12px;color:var(--t3);margin-bottom:16px}
+.cw{position:relative;height:220px}
+.cw.t{height:260px}
 </style>
 </head>
 <body>
+
+<div id="login">
+  <div class="lcard">
+    <div class="llogo">Lakeside + Little Ones</div>
+    <div class="ltitle">Admin Console</div>
+    <div class="lsub">Restricted access</div>
+    <input class="linput" type="email" id="em" placeholder="Email" autocomplete="username">
+    <input class="linput" type="password" id="pw" placeholder="Password" autocomplete="current-password">
+    <button class="lbtn" id="lbtn">Sign In →</button>
+    <div class="lerr" id="lerr">Incorrect credentials.</div>
+  </div>
+</div>
+
 <div id="app">
-
-<!-- ───── MAP PICKER OVERLAY ───── -->
-<div class="overlay" id="map-overlay">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div style="padding:0 20px 20px">
-      <div class="map-sheet-title" id="map-place-name"></div>
-      <div class="map-sheet-addr" id="map-place-addr"></div>
-      <div class="map-choices">
-        <button class="map-choice gm" id="map-gmaps-btn"><span style="font-size:26px">🗺️</span>Google Maps</button>
-        <button class="map-choice wz" id="map-waze-btn"><span style="font-size:26px">🚗</span>Waze</button>
-      </div>
-      <button class="map-cancel" id="map-cancel-btn">Cancel</button>
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="brand">L+LO <span>Admin</span></div>
+      <div class="ldot"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:var(--fm2);font-size:11px;color:var(--t3)" id="ts"></span>
+      <button class="lout" id="lo">Sign out</button>
     </div>
   </div>
-</div>
 
-<!-- ───── SETTINGS OVERLAY ───── -->
-<div class="overlay" id="settings-overlay">
-  <div class="sheet">
-    <button class="sheet-close" id="settings-close-btn">✕</button>
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">⚙️ Settings</div>
-    <div class="sheet-sec">
-      <div class="sheet-lbl">Account</div>
-      <input class="sheet-input" type="text" id="s-name" placeholder="Your name (optional)">
-      <input class="sheet-input" type="email" id="s-email" placeholder="your@email.com">
-    </div>
-    <div class="sheet-sec">
-      <div class="sheet-lbl" style="margin-bottom:12px">Your Home Base</div>
-      <div class="city-grid-sm" id="settings-city-grid"></div>
-    </div>
-    <div style="padding:4px 20px">
-      <button class="save-btn" id="settings-save-btn">Save Changes</button>
-    </div>
-    <div style="padding:12px 20px 0">
-      <button onclick="signOut()" style="width:100%;background:none;border:1px solid #F0DFB8;border-radius:14px;padding:13px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;color:#A08060;cursor:pointer">Sign Out</button>
-    </div>
-    <div class="sheet-sec" style="padding-top:18px">
-      <div style="font-size:11px;color:#A08060;line-height:1.7">
-        ⚠️ <strong style="color:#8B6914">Live weather</strong> requires opening in a real browser — Claude's preview sandbox blocks external API calls.<br><br>
-        Weather data: <strong style="color:#6B4C2A">Open-Meteo API</strong> · AI: <strong style="color:#6B4C2A">Claude Sonnet</strong><br>
-        Version: <strong style="color:#6B4C2A">1.0 · LakesideLittleOnes.com</strong>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="ssec">
+        <div class="slbl" style="margin-bottom:12px">Analytics</div>
+        <button class="nb on" data-tab="users">👥 Users</button>
+        <button class="nb" data-tab="overview">📊 Overview</button>
+        <button class="nb" data-tab="analytics">⚡ Behavior</button>
+      </div>
+      <div class="ssec">
+        <div class="slbl" style="margin-bottom:12px">Business</div>
+        <button class="nb" data-tab="pitches">💰 Pitch List</button>
+        <button class="nb" data-tab="gaps">🔍 Gap Analysis</button>
+        <button class="nb" data-tab="revenue">📈 Revenue Model</button>
+      </div>
+      <div class="ssec">
+        <div class="slbl" style="margin-bottom:12px">Setup</div>
+        <button class="nb" data-tab="schema">🗄️ DB Schema</button>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ───── PAGE 1: SIGN IN ───── -->
-<div id="page-signin" class="page active">
-  <div class="sign">
-    <div style="font-size:52px">🏔️</div>
-    <div class="sign-logo">Lakeside<br><em>+ Little Ones</em></div>
-    <div class="sign-sub">The North Shore's family activity guide for the littlest adventurers</div>
-    <div class="sign-features">
-      🏖️ Beaches, parks &amp; playgrounds<br>
-      🎯 Activities for every age &amp; weather<br>
-      🍔 Kid-friendly eats — Tahoe &amp; Truckee<br>
-      🚣 Rafting, mini golf, KidZone &amp; more<br>
-      🎒 TCPUD camps &amp; programs
-    </div>
-    <div id="g_id_onload"
-      data-client_id="842780486437-8jm02c15dlj9ld9bijlplp6osa2n1upf.apps.googleusercontent.com"
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="continue_with"
-      data-shape="rectangular"
-      data-logo_alignment="left"
-      data-width="300">
-    </div>
-    <div id="signin-error" style="display:none;font-size:12px;color:#c0392b;margin-top:8px;text-align:center">Sign-in failed. Please try again.</div>
-    <div class="sign-note">For North Shore families 🌲 · Free forever</div>
-  </div>
-</div>
+    <div class="content">
 
-<!-- ───── PAGE 2: ONBOARDING ───── -->
-<div id="page-onboard" class="page">
-  <div class="onboard">
-    <div class="ob-step">Step 1 of 2 — Quick Setup</div>
-    <div class="ob-title">What should we call you?</div>
-    <div class="ob-sub">Optional — makes the AI suggestions feel a little more personal.</div>
-    <input class="ob-input" type="text" id="ob-name" placeholder="First name (optional)" autocomplete="given-name">
-    <div style="height:20px"></div>
-    <div class="ob-step">Step 2 of 2 — Your Location</div>
-    <div class="ob-title">Where are you based?</div>
-    <div class="ob-sub">Drive times and suggestions are tailored to your area.</div>
-    <div class="city-grid" id="ob-city-grid"></div>
-    <button class="ob-btn" id="ob-confirm-btn" disabled>Let's Go →</button>
-    <div class="ob-skip" id="ob-skip">Skip — use default</div>
-  </div>
-</div>
+      <!-- USERS — REAL DATA -->
+      <div class="tab on" id="tab-users">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Users</div>
+          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+        <div class="ssub">Live from Supabase — every Google sign-in captured here.</div>
 
-<!-- ───── PAGE 3: MAIN APP ───── -->
-<div id="page-main" class="page">
+        <div class="kgrid2">
+          <div class="kcard ac">
+            <div class="klbl">Total Sign-Ins</div>
+            <div class="kval" id="stat-total">—</div>
+            <div class="ksub">All time</div>
+          </div>
+          <div class="kcard gr">
+            <div class="klbl">Most Recent</div>
+            <div class="kval" style="font-size:14px;padding-top:6px" id="stat-recent">—</div>
+            <div class="ksub" id="stat-recent-time">—</div>
+          </div>
+        </div>
 
-  <div class="sticky-header">
-    <div>
-      <div class="h-title">Lakeside <em>+ Little Ones</em></div>
-      <div class="h-sub" id="hdate">NORTH SHORE</div>
-    </div>
-    <div class="header-right">
-      <button class="search-toggle" id="search-toggle-btn">🔍</button>
-      <div id="user-avatar-wrap" style="cursor:pointer" id="settings-btn-wrap">
-        <div class="user-avatar-placeholder" id="user-avatar-placeholder">?</div>
+        <div class="tcard">
+          <div class="th">
+            <div class="tt">All Sign-Ins</div>
+            <div class="ts">Newest first · Real data</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="user-tbl">
+              <tr><td colspan="5" class="loading">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <button class="settings-btn" id="settings-btn">⚙️</button>
+
+      <!-- OVERVIEW -->
+      <div class="tab" id="tab-overview">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Overview</div>
+          <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+        <div class="ssub">All data is real — pulled live from Supabase on every load.</div>
+
+        <div class="kgrid">
+          <div class="kcard ac"><div class="klbl">Total Users</div><div class="kval" id="ov-total">—</div><div class="ksub">All time</div></div>
+          <div class="kcard gr"><div class="klbl">Top City</div><div class="kval" style="font-size:18px;padding-top:4px" id="ov-city">—</div><div class="ksub">Most sign-ins</div></div>
+          <div class="kcard go"><div class="klbl">Latest Sign-In</div><div class="kval" style="font-size:16px;padding-top:4px" id="ov-latest">—</div><div class="ksub" id="ov-latest-time">—</div></div>
+          <div class="kcard pu"><div class="klbl">Database</div><div class="kval" style="font-size:16px;padding-top:4px">🟢 Live</div><div class="ksub">Supabase connected</div></div>
+        </div>
+
+        <div class="cgrid">
+          <div class="cc">
+            <div class="ct">Sign-Ins Over Time</div>
+            <div class="cs">Cumulative user growth</div>
+            <div class="cw t"><canvas id="growthC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Users by City</div>
+            <div class="cs">From onboarding</div>
+            <div class="cw t"><canvas id="cityC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Daily Sign-Ins</div>
+            <div class="cs">New users per day</div>
+            <div class="cw"><canvas id="dailyC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Sign-Ins by Day of Week</div>
+            <div class="cs">When families discover the app</div>
+            <div class="cw"><canvas id="dowC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="th"><div class="tt">Users by City</div><div class="ts">Real breakdown</div></div>
+          <table>
+            <thead><tr><th>City</th><th>Sign-Ins</th><th>Share</th></tr></thead>
+            <tbody id="city-tbl"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BEHAVIOR ANALYTICS -->
+      <div class="tab" id="tab-analytics">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="stitle">Behavior Analytics</div>
+          <button class="refresh-btn" onclick="loadAnalytics()">↻ Refresh</button>
+        </div>
+        <div class="ssub">Every tap, map open, phone call, and category click — tracked in real time.</div>
+
+        <div class="kgrid" id="an-kpis">
+          <div class="kcard ac"><div class="klbl">Total Events</div><div class="kval" id="an-total">—</div><div class="ksub">All interactions</div></div>
+          <div class="kcard gr"><div class="klbl">Map Opens</div><div class="kval" id="an-maps">—</div><div class="ksub">Highest intent signal</div></div>
+          <div class="kcard go"><div class="klbl">Phone Taps</div><div class="kval" id="an-phones">—</div><div class="ksub">Near-certain customers</div></div>
+          <div class="kcard pu"><div class="klbl">Filter Clicks</div><div class="kval" id="an-filters">—</div><div class="ksub">Category interest</div></div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Events by Hour</div>
+            <div class="cs">When families are most active</div>
+            <div class="cw"><canvas id="hourlyC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Map Provider Split</div>
+            <div class="cs">Google Maps vs Waze</div>
+            <div class="cw"><canvas id="providerC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="cgrid2">
+          <div class="cc">
+            <div class="ct">Tab Popularity</div>
+            <div class="cs">Visits per tab</div>
+            <div class="cw"><canvas id="tabPopC"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ct">Avg Dwell Time per Tab</div>
+            <div class="cs">Seconds spent on each screen</div>
+            <div class="cw"><canvas id="dwellC"></canvas></div>
+          </div>
+        </div>
+
+        <div class="tcard" style="margin-bottom:16px">
+          <div class="th"><div class="tt">🏆 Listing Performance</div><div class="ts">Views · Map Opens · Phone Taps · Conversion Rate</div></div>
+          <table>
+            <thead><tr><th>Listing</th><th>Views</th><th>Map Opens</th><th>Map CTR</th><th>Phone Taps</th><th>Intent Score</th></tr></thead>
+            <tbody id="listing-tbl"><tr><td colspan="6" class="loading">Loading...</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="cgrid2">
+          <div class="tcard">
+            <div class="th"><div class="tt">🔍 Top Filter Clicks</div></div>
+            <table><thead><tr><th>Filter</th><th>Clicks</th></tr></thead>
+            <tbody id="filter-tbl"><tr><td colspan="2" class="loading">Loading...</td></tr></tbody></table>
+          </div>
+          <div class="tcard">
+            <div class="th"><div class="tt">🌤️ Weather × Usage</div></div>
+            <table><thead><tr><th>Weather</th><th>Events</th></tr></thead>
+            <tbody id="weather-tbl"><tr><td colspan="2" class="loading">Loading...</td></tr></tbody></table>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="th"><div class="tt">📋 Recent Events</div><div class="ts">Last 50 interactions</div></div>
+          <table>
+            <thead><tr><th>Time</th><th>Event</th><th>Detail</th><th>City</th><th>Weather</th></tr></thead>
+            <tbody id="events-tbl"><tr><td colspan="5" class="loading">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PITCHES -->
+      <div class="tab" id="tab-pitches">
+        <div class="stitle">Pitch List</div>
+        <div class="ssub">Businesses already getting organic traffic from your app — they should be paying for it.</div>
+        <div class="wbox"><strong>Pitch script:</strong> "Your business appeared in front of X families this month — for free. Here's what a featured placement looks like." Rate: $150–$250/month.</div>
+        <div id="pitchList"></div>
+      </div>
+
+      <!-- GAP ANALYSIS -->
+      <div class="tab" id="tab-gaps">
+        <div class="stitle">Content Gap Analysis</div>
+        <div class="ssub">High demand, low supply. Each gap is a content opportunity AND a sales pitch.</div>
+        <div id="gapList"></div>
+      </div>
+
+      <!-- REVENUE MODEL -->
+      <div class="tab" id="tab-revenue">
+        <div class="stitle">Revenue Model</div>
+        <div class="ssub">Featured listing pricing scenarios.</div>
+        <div class="kgrid">
+          <div class="kcard ac"><div class="klbl">Pitchable Listings</div><div class="kval">~40</div><div class="ksub">Restaurants + activities</div></div>
+          <div class="kcard gr"><div class="klbl">Target Conversion Y1</div><div class="kval">15%</div><div class="ksub">~6 paid listings</div></div>
+          <div class="kcard go"><div class="klbl">Y1 MRR (base)</div><div class="kval">$1,200</div><div class="ksub">$200 × 6 biz · $14.4K ARR</div></div>
+          <div class="kcard pu"><div class="klbl">Y2 MRR (25% conv.)</div><div class="kval">$4,000</div><div class="ksub">20 biz × $200 · $48K ARR</div></div>
+        </div>
+        <div class="tcard">
+          <div class="th"><div class="tt">Pricing by Tier</div></div>
+          <table><thead><tr><th>Tier</th><th>Monthly Views</th><th>Rate</th><th>Annual Value</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">🏆 Tier 1 — Top 5 listings</td><td class="num">600–900</td><td><span class="badge go">$250/mo</span></td><td class="num">$3,000</td></tr>
+            <tr><td class="nm">⭐ Tier 2 — Mid listings</td><td class="num">200–600</td><td><span class="badge ac">$175/mo</span></td><td class="num">$2,100</td></tr>
+            <tr><td class="nm">📍 Tier 3 — New additions</td><td class="num">50–200</td><td><span class="badge gy">$100/mo</span></td><td class="num">$1,200</td></tr>
+            <tr><td class="nm">🎯 Brand sponsorship</td><td class="num">Full app</td><td><span class="badge go">$500/mo</span></td><td class="num">$6,000</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- DB SCHEMA -->
+      <div class="tab" id="tab-schema">
+        <div class="stitle">Database Schema</div>
+        <div class="ssub">Your live Supabase table structure.</div>
+        <div class="tcard">
+          <div class="th"><div class="tt">user_signins</div><div class="ts">suiovkkddxxbqywhzavs.supabase.co</div></div>
+          <table><thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">id</td><td class="num">uuid</td><td style="color:var(--t3)">Primary key · auto-generated</td></tr>
+            <tr><td class="nm">name</td><td class="num">text</td><td style="color:var(--t3)">From Google profile</td></tr>
+            <tr><td class="nm">email</td><td class="num">text</td><td style="color:var(--t3)">Unique · Gmail address</td></tr>
+            <tr><td class="nm">photo</td><td class="num">text</td><td style="color:var(--t3)">Google profile photo URL</td></tr>
+            <tr><td class="nm">city</td><td class="num">text</td><td style="color:var(--t3)">Set during onboarding</td></tr>
+            <tr><td class="nm">signed_in_at</td><td class="num">timestamptz</td><td style="color:var(--t3)">Auto-set to now()</td></tr>
+          </tbody></table>
+        </div>
+        <div class="ibox"><strong>Upsert logic:</strong> Same email signs in again → record updates (no duplicates). Email column has a UNIQUE constraint enforced at the database level.</div>
+      </div>
+
     </div>
   </div>
-
-  <!-- Search Bar (hidden by default) -->
-  <div class="search-bar" id="search-bar">
-    <input class="search-input" id="search-input" type="search" placeholder="Search beaches, parks, restaurants…" autocomplete="off">
-  </div>
-
-  <!-- HOME -->
-  <div id="s-home" class="screen active">
-    <div id="wx-home"></div>
-    <div id="wx-beta-note" class="wx-beta-note" style="display:none">ℹ️ <strong>Live weather</strong> loads in a real browser. Claude.ai preview sandboxes external API calls.</div>
-
-    <div style="padding:14px 16px 2px;font-family:'Fraunces',serif;font-size:12px;font-weight:500;color:#A08060;letter-spacing:0.8px;text-transform:uppercase">Quick Nav</div>
-    <div class="qcats">
-      <div class="qcat" id="qc-beaches"><div class="qcat-ico">🏖️</div><div class="qcat-lbl">Beaches</div></div>
-      <div class="qcat" id="qc-parks"><div class="qcat-ico">🌳</div><div class="qcat-lbl">Parks</div></div>
-      <div class="qcat" id="qc-activities"><div class="qcat-ico">🎯</div><div class="qcat-lbl">Activities</div></div>
-      <div class="qcat" id="qc-eats"><div class="qcat-ico">🍔</div><div class="qcat-lbl">Eats</div></div>
-      <div class="qcat" id="qc-kids"><div class="qcat-ico">🎒</div><div class="qcat-lbl">Camps</div></div>
-      <div class="qcat" id="qc-events"><div class="qcat-ico">📅</div><div class="qcat-lbl">Events</div></div>
-      <div class="qcat" id="qc-free" style="background:#E8F5EE;border-color:#A8D8BE"><div class="qcat-ico">🆓</div><div class="qcat-lbl" style="color:#1A6B3A;font-weight:800">Free</div></div>
-    </div>
-
-    <!-- Featured -->
-    <div class="featured-section">
-      <div class="featured-label">⭐ Featured</div>
-      <div id="home-featured"></div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="sec-hdr"><span class="sec-ico">🏖️</span><span class="sec-ttl" id="home-beach-ttl">Beaches</span></div>
-    <div class="cw" id="home-beaches"></div>
-    <div style="padding:0 16px"><button class="see-all" id="sa-beaches">See all beaches &amp; parks →</button></div>
-
-    <div class="sec-hdr"><span class="sec-ico">🍔</span><span class="sec-ttl">Kid-Friendly Eats</span></div>
-    <div class="cw" id="home-eats"></div>
-    <div style="padding:0 16px"><button class="see-all" id="sa-eats">See all restaurants →</button></div>
-
-    <div class="sec-hdr"><span class="sec-ico">🎒</span><span class="sec-ttl">Camps &amp; Programs</span></div>
-    <div class="cw" id="home-kids"></div>
-    <div style="padding:0 16px"><button class="see-all" id="sa-kids">See all camps &amp; programs →</button></div>
-
-    <div class="sec-hdr"><span class="sec-ico">📅</span><span class="sec-ttl">Community Events</span></div>
-    <div class="cw" id="home-events"></div>
-    <div style="padding:0 16px"><button class="see-all" id="sa-events">See all events →</button></div>
-  </div>
-
-  <!-- OUTDOORS (Beaches + Parks + Activities combined) -->
-  <div id="s-outdoors" class="screen">
-    <div id="wx-outdoors"></div>
-    <div id="rain-notice" class="rain-bar" style="display:none">🌧️ Rain or overcast — indoor spots and covered parks shown first</div>
-    <div class="sec-hdr"><span class="sec-ico">🏔️</span><span class="sec-ttl">Outdoors &amp; Activities</span></div>
-    <div class="filters" id="outdoor-pills"></div>
-    <div class="filters" id="age-pills"></div>
-    <div class="cw" id="all-outdoors"></div>
-  </div>
-
-  <!-- EATS -->
-  <div id="s-eats" class="screen">
-    <div class="sec-hdr"><span class="sec-ico">🍽️</span><span class="sec-ttl">Kid-Friendly Eats</span></div>
-    <div style="padding:2px 16px 6px;font-size:13px;color:#6B4C2A">Family-approved spots across the North Shore and Truckee. 👶</div>
-    <div class="filters" id="eat-pills"></div>
-    <div class="cw" id="all-eats"></div>
-  </div>
-
-  <!-- CAMPS -->
-  <div id="s-kids" class="screen">
-    <div class="sec-hdr"><span class="sec-ico">🎒</span><span class="sec-ttl">Camps &amp; Programs</span></div>
-    <div style="padding:0 16px 12px;font-size:13px;color:#6B4C2A;line-height:1.6">TCPUD camps, activities &amp; programs. <strong>Summer 2026 registration opens May 5.</strong></div>
-    <div class="filters" id="kids-pills"></div>
-    <div class="cw" id="all-kids"></div>
-  </div>
-
-  <!-- EVENTS -->
-  <div id="s-events" class="screen">
-    <div class="sec-hdr"><span class="sec-ico">📅</span><span class="sec-ttl">Community Events</span></div>
-    <div style="padding:0 16px 12px;font-size:13px;color:#6B4C2A;line-height:1.6">Free markets, live music, movies, and festivals across the North Shore and Truckee — all summer long.</div>
-    <div class="filters" id="events-pills"></div>
-    <div class="cw" id="all-events"></div>
-  </div>
-
-  <!-- FREE THINGS -->
-  <div id="s-free" class="screen">
-    <div style="background:linear-gradient(135deg,#1A6B3A,#2E9B5A);padding:20px 16px 16px;margin-bottom:4px">
-      <button onclick="goTab('home')" style="background:rgba(255,255,255,0.2);border:none;border-radius:10px;padding:5px 12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;color:#fff;cursor:pointer;margin-bottom:12px">← Home</button>
-      <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.7);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">North Shore · Truckee</div>
-      <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#fff;line-height:1.2;margin-bottom:4px">🆓 Free Things</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.8)">Everything that costs nothing — beaches, parks, events &amp; programs</div>
-    </div>
-    <div class="sec-hdr"><span class="sec-ico">🏖️</span><span class="sec-ttl">Beaches</span></div>
-    <div class="cw" id="free-beaches"></div>
-    <div class="sec-hdr"><span class="sec-ico">🌳</span><span class="sec-ttl">Parks &amp; Playgrounds</span></div>
-    <div class="cw" id="free-parks"></div>
-    <div class="sec-hdr"><span class="sec-ico">📅</span><span class="sec-ttl">Free Events</span></div>
-    <div class="cw" id="free-events"></div>
-    <div class="sec-hdr"><span class="sec-ico">🎒</span><span class="sec-ttl">Free Programs</span></div>
-    <div class="cw" id="free-kids"></div>
-  </div>
-    <button class="nb" id="nb-home"><span class="nb-ico">🏠</span><span class="nb-lbl on" id="nl-home">Home</span><div class="nb-dot" id="nd-home" style="display:block"></div></button>
-    <button class="nb" id="nb-outdoors"><span class="nb-ico">🏖️</span><span class="nb-lbl" id="nl-outdoors">Outdoors</span><div class="nb-dot" id="nd-outdoors"></div></button>
-    <button class="nb" id="nb-eats"><span class="nb-ico">🍔</span><span class="nb-lbl" id="nl-eats">Eats</span><div class="nb-dot" id="nd-eats"></div></button>
-    <button class="nb" id="nb-kids"><span class="nb-ico">🎒</span><span class="nb-lbl" id="nl-kids">Camps</span><div class="nb-dot" id="nd-kids"></div></button>
-    <button class="nb" id="nb-events"><span class="nb-ico">📅</span><span class="nb-lbl" id="nl-events">Events</span><div class="nb-dot" id="nd-events"></div></button>
-  </nav>
-</div><!-- /page-main -->
-
-<!-- SEARCH RESULTS (full-screen, above nav) -->
-<div id="search-results-page" style="display:none;position:fixed;inset:0;background:#FDFAF3;z-index:150;padding-top:56px">
-  <div class="search-results" id="search-results-list"></div>
 </div>
-
-</div><!-- /app -->
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────
+var AE='chris.a.eggers@gmail.com', AP='TahoeKids2026!';
+var allUsers=[];
 
-var CITIES={
-  "Tahoe City":    {ico:"🏡",lat:39.1678,lon:-120.1454,desc:"Town center"},
-  "Carnelian Bay": {ico:"🌲",lat:39.2465,lon:-120.0927,desc:"North Shore quiet"},
-  "Kings Beach":   {ico:"🏖️",lat:39.2373,lon:-120.0269,desc:"Busy beach town"},
-  "Truckee":       {ico:"🚂",lat:39.3280,lon:-120.1833,desc:"Mountain town"},
-  "Tahoma":        {ico:"⛵",lat:39.0823,lon:-120.1343,desc:"West Shore"},
-  "Olympic Valley":{ico:"⛷️",lat:39.1970,lon:-120.2358,desc:"Palisades area"}
-};
+// ── AUTH ──────────────────────────────────────────────────────────────
+document.getElementById('lbtn').addEventListener('click',doLogin);
+document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+function doLogin(){
+  if(document.getElementById('em').value.trim()===AE&&document.getElementById('pw').value===AP){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').classList.add('v');
+    document.getElementById('ts').textContent='Updated: '+new Date().toLocaleTimeString();
+    loadUsers();
+    renderPitches();
+    renderGaps();
+  }else{document.getElementById('lerr').style.display='block';}
+}
+document.getElementById('lo').addEventListener('click',function(){
+  document.getElementById('app').classList.remove('v');
+  document.getElementById('login').style.display='flex';
+  document.getElementById('pw').value='';
+  document.getElementById('lerr').style.display='none';
+});
 
-var DIST={
-  "Tahoe City":    {"Tahoe City":3,"Carnelian Bay":7,"Kings Beach":10,"Tahoe Vista":14,"Truckee":20,"Olympic Valley":12,"Tahoma":14,"Donner Lake":22},
-  "Carnelian Bay": {"Tahoe City":8,"Carnelian Bay":2,"Kings Beach":5,"Tahoe Vista":8,"Truckee":18,"Olympic Valley":20,"Tahoma":22,"Donner Lake":20},
-  "Kings Beach":   {"Tahoe City":10,"Carnelian Bay":5,"Kings Beach":2,"Tahoe Vista":5,"Truckee":15,"Olympic Valley":25,"Tahoma":28,"Donner Lake":17},
-  "Truckee":       {"Tahoe City":20,"Carnelian Bay":18,"Kings Beach":15,"Tahoe Vista":18,"Truckee":5,"Olympic Valley":15,"Tahoma":30,"Donner Lake":8},
-  "Tahoma":        {"Tahoe City":14,"Carnelian Bay":22,"Kings Beach":28,"Tahoe Vista":32,"Truckee":30,"Olympic Valley":10,"Tahoma":2,"Donner Lake":32},
-  "Olympic Valley":{"Tahoe City":12,"Carnelian Bay":20,"Kings Beach":25,"Tahoe Vista":28,"Truckee":15,"Olympic Valley":2,"Tahoma":10,"Donner Lake":17}
-};
+// ── NAV ───────────────────────────────────────────────────────────────
+document.querySelectorAll('.nb[data-tab]').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.nb').forEach(function(x){x.classList.remove('on');});
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var t=b.getAttribute('data-tab');
+    document.getElementById('tab-'+t).classList.add('on');
+    if(t==='analytics')loadAnalytics();
+  });
+});
 
-var WX={0:{l:"Clear & Sunny",i:"☀️",bg:["#F5C842","#E8943A"],out:true,tip:"Perfect beach day"},1:{l:"Mostly Clear",i:"🌤️",bg:["#F5C842","#8BC4E8"],out:true,tip:"Great day outside"},2:{l:"Partly Cloudy",i:"⛅",bg:["#A8C8E0","#C4B080"],out:true,tip:"Nice day out"},3:{l:"Overcast",i:"☁️",bg:["#8AAABB","#6B8FA0"],out:"maybe",tip:"Good for a stroll"},45:{l:"Foggy",i:"🌫️",bg:["#9AABB5","#7A8E96"],out:false,tip:"Indoor activities today"},51:{l:"Light Drizzle",i:"🌦️",bg:["#6A9EBB","#4A7A99"],out:false,tip:"Great day for eats!"},61:{l:"Rain",i:"🌧️",bg:["#5080A0","#305070"],out:false,tip:"KidZone or restaurant day"},71:{l:"Snow",i:"❄️",bg:["#A0C0D8","#7090B0"],out:"snow",tip:"Snow day adventure!"},80:{l:"Showers",i:"🌦️",bg:["#6A9EBB","#4A7A99"],out:false,tip:"Perfect indoor day"},95:{l:"Thunderstorm",i:"⛈️",bg:["#4A6070","#304050"],out:false,tip:"Stay cozy inside"}};
+// ── LOAD REAL USERS ───────────────────────────────────────────────────
+function loadUsers(){
+  var tbl=document.getElementById('user-tbl');
+  tbl.innerHTML='<tr><td colspan="5" class="loading">Loading...</td></tr>';
 
-// ── FEATURED (hero cards) ──────────────────────────────────────────────
-var FEATURED=[
-  {id:"raft",style:"raft",badge:"🚣 North Shore Classic",name:"Truckee River Rafting",tagline:"Tahoe City → River Ranch · Est. 1973",
-   note:"Self-guided float down the scenic Truckee River. 2–3 hours of gentle rapids, mountain views, and pure Tahoe magic. Tots age 2–5 ride FREE. Bring a soft cooler with snacks. Dogs welcome!",
-   pricing:[{l:"Adults (13+)",v:"$72"},{l:"Kids (6–12)",v:"$40"},{l:"Tots (2–5)",v:"FREE 🎉"}],
-   tags:["Dogs Welcome","Tots 2+","Snacks OK","Parking + Shuttle Included","Summer Only"],
-   addr:"175 River Rd, Tahoe City, CA 96145",ph:"(530) 583-1111",
-   book:"https://www.truckeeriverrafting.com/reservations",
-   website:"https://www.truckeeriverrafting.com",
-   seasonal:"Open July 1 – Sept 7, 2026 · Reservations open now",a:"Tahoe City"},
-  {id:"bridge",style:"bridge",badge:"🌟 Featured Restaurant",name:"BridgeTender Tavern",tagline:"Outdoor Patio Over the Truckee River",
-   note:"The classic Tahoe City spot. Patio sits directly over the river — kids love watching the water. Big burgers, cold drinks, completely family-friendly vibes.",
-   pricing:null,
-   tags:["River Patio","Burgers","Kid-Friendly","Outdoor Seating"],
-   addr:"30 W Lake Blvd, Tahoe City, CA 96145",ph:"(530) 583-3342",
-   book:null,website:null,seasonal:"Open Daily 11am – 10pm",a:"Tahoe City"},
-  {id:"poppys",style:"poppys",badge:"🍦 Kid Magnet",name:"Poppy's Frozen Yogurt & Ice Cream",tagline:"Best Scoops on the North Shore",
-   note:"Walk-up window, outdoor courtyard with lawn games, legendary waffle cones. Frozen yogurt, scooped ice cream, shakes, acai bowls. Dogs welcome on the patio.",
-   pricing:null,
-   tags:["Walk-Up Window","Lawn Games","Dogs OK","Waffle Cones","Acai Bowls"],
-   addr:"521 N Lake Blvd, Tahoe City, CA 96145",ph:"(530) 581-0885",
-   book:null,website:null,seasonal:"Daily 2pm – 7pm (seasonal)",a:"Tahoe City"},
-];
+  fetch('/api/users')
+    .then(function(r){return r.json();})
+    .then(function(users){
+      allUsers=Array.isArray(users)?users:[];
 
-// ── OUTDOORS (Beaches + Parks + Activities) ────────────────────────────
-// type: Beach | Park | Activity
-// kidAges: "all" | "toddler" | "elementary" | "both"
-var OUTDOORS=[
-  // ── BEACHES ──
-  {n:"Kings Beach SRA",t:"Beach",a:"Kings Beach",e:"🏖️",hasPlayground:true,hasDogs:false,
-   tags:["Sandy Beach","Lifeguards (summer)","Restrooms","Picnic","Playground on-site"],h:"Sunrise–Sunset",age:"All ages",
-   note:"The North Shore's biggest sandy beach. Lifeguards in summer, a playground right on the beach, and 1,700 ft of shoreline. Arrive before 10am on weekends — parking fills fast.",
-   addr:"6318 N Lake Blvd, Kings Beach, CA 96143",ph:null,kidAges:"all"},
-  {n:"Tahoe City Commons Beach",t:"Beach",a:"Tahoe City",e:"🏖️",hasPlayground:true,hasDogs:false,
-   tags:["Swimming","Pier","Playground Nearby","Restrooms","Central Location"],h:"Sunrise–Sunset",age:"All ages",
-   note:"Right in the heart of Tahoe City with a pier, grass lawn, and a playground steps away. Walk to BridgeTender or Poppy's after — perfect day.",
-   addr:"400 N Lake Blvd, Tahoe City, CA 96145",ph:null,kidAges:"all"},
-  {n:"Carnelian Bay Beach",t:"Beach",a:"Carnelian Bay",e:"🌊",hasPlayground:false,hasDogs:false,
-   tags:["Quiet","Local Spot","Shallow Entry","No Lifeguard"],h:"Always open",age:"All ages",
-   note:"A quieter locals beach with calm, shallow water — great for little ones. Street parking, low traffic, and an easy entry into the lake.",
-   addr:"N Lake Blvd & Carnelian Ave, Carnelian Bay, CA 96140",ph:null,kidAges:"toddler"},
-  {n:"William Kent Beach",t:"Beach",a:"Tahoe City",e:"🏄",hasPlayground:false,hasDogs:false,
-   tags:["Calm Water","Shallow Entry","USFS Beach","Easy Parking"],h:"Sunrise–Sunset",age:"Little ones",
-   note:"Small Forest Service beach with the gentlest lake entry on the North Shore — ideal for toddlers. Less crowded than Kings Beach.",
-   addr:"5185 W Lake Blvd, Tahoe City, CA 96145",ph:null,kidAges:"toddler"},
-  {n:"Tahoe Vista Rec Area",t:"Beach",a:"Tahoe Vista",e:"🌅",hasPlayground:false,hasDogs:false,
-   tags:["Swimming","Fishing Pier","Picnic Tables","Restrooms"],h:"Sunrise–Sunset",age:"All ages",
-   note:"Fishing pier, sandy beach, and stunning sunset views. Pack dinner and stay for the golden hour.",
-   addr:"7010 N Lake Blvd, Tahoe Vista, CA 96148",ph:null,kidAges:"all"},
-  {n:"Skylandia Park & Beach",t:"Beach",a:"Tahoe City",e:"🌲",hasPlayground:false,hasDogs:true,
-   tags:["Wooded Park","Pier","Hiking Trails","Local Vibe","Dogs in Park (not beach)"],h:"Dawn–Dusk (May–Oct)",age:"All ages",
-   note:"24-acre state park on Lake Forest Rd with stunning lake views, a pier, sandy beach, and hiking/biking trails. Locals-only feel, zero crowds. Dogs allowed in the park but not on the beach.",
-   addr:"Lake Forest Rd, Tahoe City, CA 96145",ph:"(530) 583-5544",kidAges:"all"},
-  {n:"Secline Beach",t:"Beach",a:"Kings Beach",e:"🌊",hasPlayground:false,hasDogs:false,
-   tags:["Free","Quiet","Picnic Tables","BBQ Grills","No Gate","Locals Only"],h:"Sunrise–Sunset",age:"All ages",
-   note:"Tiny 300-ft locals beach tucked behind the gas station on Secline St. No fee, no crowds — easy to keep an eye on toddlers. Picnic tables and BBQ grills.",
-   addr:"141 Secline St, Kings Beach, CA 96143",ph:null,kidAges:"toddler"},
-  {n:"North Tahoe Beach",t:"Beach",a:"Kings Beach",e:"🏐",hasPlayground:true,hasDogs:false,
-   tags:["Free","Playground","Volleyball","Free Movies Wed","Free Concerts Sun","Farmers Market Thu"],h:"Always open",age:"All ages",
-   note:"Across from Safeway in Kings Beach — playground, volleyball court, picnic tables, fire pits. Free outdoor movies Wednesday evenings at dusk. Free concerts Sundays at 4pm.",
-   addr:"N Lake Blvd & Secline Ave, Kings Beach, CA 96143",ph:null,kidAges:"all"},
-  {n:"Coon Street Beach",t:"Beach",a:"Kings Beach",e:"🐾",hasPlayground:true,hasDogs:true,
-   tags:["Dogs Welcome","Playground","Free","Picnic Area","Fire Pits"],h:"Sunrise–Sunset",age:"All ages",
-   note:"One of the only public lake beaches where dogs are welcome. Small playground on-site, picnic area, and fire pits. Casual and low-key.",
-   addr:"Coon St, Kings Beach, CA 96143",ph:null,kidAges:"all"},
-  {n:"Lake Forest Beach",t:"Beach",a:"Tahoe City",e:"⛵",hasPlayground:false,hasDogs:false,
-   tags:["Boat Ramp","Views","Uncrowded","Easy Access"],h:"Sunrise–10pm",age:"All ages",
-   note:"Low-key local beach with a boat ramp and great Sierra views. Typically far less crowded than the major public beaches.",
-   addr:"6900 Lake Forest Rd, Tahoe City, CA 96145",ph:null,kidAges:"all"},
-  {n:"West End Beach — Donner Lake",t:"Beach",a:"Donner Lake",e:"🏔️",hasPlayground:true,hasDogs:false,
-   tags:["Sandy Beach","Lifeguards","2 Playgrounds","Kayak Rentals","Snack Bar","Swim Area"],h:"Summer daily (fee in summer)",age:"All ages",
-   note:"Truckee's best beach — 10 scenic acres on Donner Lake with lifeguards, two playgrounds, paddleboard/kayak rentals, volleyball, horseshoe pits, and a snack bar. A full family day.",
-   addr:"15 Donner Pass Rd, Truckee, CA 96161",ph:null,kidAges:"all"},
-  // ── PARKS ──
-  {n:"Tahoe City Community Park",t:"Park",a:"Tahoe City",e:"🛝",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Restrooms","Grass Field","Picnic Tables","River Views"],h:"Always open",age:"2–12",
-   note:"Well-maintained playground with a big grass field near the Truckee River outlet. Classic neighborhood park — great for burning off energy before or after the beach.",
-   addr:"251 N Lake Blvd, Tahoe City, CA 96145",ph:null,kidAges:"toddler"},
-  {n:"Pomin Park",t:"Park",a:"Tahoe City",e:"⚾",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Batting Cage","Athletic Field","Picnic Area","Restrooms"],h:"Always open",age:"All ages",
-   note:"Next to Lake Forest Campground — athletic field, playground, and a batting cage. Popular for youth baseball and soccer. Easy parking.",
-   addr:"Pomin Way & Lake Forest Dr, Tahoe City, CA 96145",ph:null,kidAges:"all"},
-  {n:"Ferrari Playground",t:"Park",a:"Kings Beach",e:"🛝",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Slides","Jungle Gym","Near Beach"],h:"Always open",age:"2–12",
-   note:"Classic playground in Kings Beach with slides and a jungle gym. Convenient before or after the beach — great for all ages.",
-   addr:"8318 N Lake Blvd, Kings Beach, CA 96143",ph:null,kidAges:"all"},
-  {n:"Cedar Flat Playground",t:"Park",a:"Kings Beach",e:"🛝",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Shaded","Quiet","Easy Parking"],h:"Always open",age:"2–10",
-   note:"Shaded neighborhood playground that stays cooler on hot summer days. Low traffic, easy parking — solid backup when Kings Beach is packed.",
-   addr:"390 Bear St, Kings Beach, CA 96143",ph:null,kidAges:"toddler"},
-  {n:"North Tahoe Regional Park",t:"Park",a:"Tahoe Vista",e:"🏕️",hasPlayground:true,hasDogs:true,
-   tags:["2 Playgrounds","Hiking Trails","Tennis","Fitness Course","TreeTop Adventure","124 Acres","Dogs OK"],h:"Always open",age:"All ages",
-   note:"124-acre park in Tahoe Vista with two playgrounds, hiking and biking trails, tennis courts, an 18-station fitness course, and the Treetop Adventure Course. Stunning lake views.",
-   addr:"6600 Donner Rd, Tahoe Vista, CA 96148",ph:null,kidAges:"all"},
-  {n:"Truckee River Regional Park",t:"Park",a:"Truckee",e:"🌳",hasPlayground:true,hasDogs:false,
-   tags:["2 Playgrounds","Skate Park","Disc Golf","Steam Train (summer Sats)","Amphitheater","Pickleball","Free"],h:"Dawn–Dusk",age:"All ages",
-   note:"Truckee's crown jewel — 62 acres with two playgrounds (toddler + big kid), sandbox, skate park, disc golf, and pickleball. Summer bonus: mini steam train runs select Saturdays. Adjacent to KidZone Museum.",
-   addr:"10500 Brockway Rd, Truckee, CA 96161",ph:null,kidAges:"all"},
-  {n:"Riverview Sports Park",t:"Park",a:"Truckee",e:"🚲",hasPlayground:true,hasDogs:false,
-   tags:["Pump Track","Dirt Jumps","5 Sports Fields","Bocce Ball","Legacy Trail","Free"],h:"Always open",age:"5+",
-   note:"Bike pump track, dirt jumps, five multi-sport fields, and bocce ball courts. Connects to the paved Legacy Trail. A local favorite for active families.",
-   addr:"Joerger Dr, Truckee, CA 96161",ph:null,kidAges:"elementary"},
-  {n:"Olympic Valley Park",t:"Park",a:"Olympic Valley",e:"⛷️",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Soccer","Pickleball","Bike Trail Access","Snow Play (winter)","Free"],h:"Always open",age:"All ages",
-   note:"Year-round community park at the entrance to Olympic Valley. Playground, soccer, pickleball, and bike trail access in summer. Transforms into a snow play area in winter.",
-   addr:"1750 Squaw Valley Rd, Olympic Valley, CA 96146",ph:null,kidAges:"all"},
-  {n:"Katie's Playground",t:"Park",a:"Truckee",e:"✈️",hasPlayground:true,hasDogs:false,
-   tags:["Plane Watching","Unique Experience","Easy Parking","Free"],h:"Always open",age:"2–10",
-   note:"One of Truckee's most unique spots — a full playground right next to the airport where kids can watch small planes take off and land. A genuine hidden gem.",
-   addr:"10356 Truckee Airport Rd, Truckee, CA 96161",ph:null,kidAges:"toddler"},
-  {n:"Downtown Truckee Park",t:"Park",a:"Truckee",e:"🎪",hasPlayground:true,hasDogs:false,
-   tags:["Natural Playscape","Amphitheater","Picnic Tables","Local Mural","Summer Events"],h:"Always open",age:"2–10",
-   note:"In the heart of downtown Truckee — natural playscape, outdoor amphitheater, picnic tables, and a student-made local mural. Food trucks and summer concerts happen here.",
-   addr:"10046 Church St, Truckee, CA 96161",ph:null,kidAges:"toddler"},
-  {n:"Meadow Park",t:"Park",a:"Truckee",e:"⚽",hasPlayground:true,hasDogs:false,
-   tags:["Playground","Ball Fields","Picnic Area","Restrooms","Youth Sports"],h:"Always open",age:"2–12",
-   note:"Neighborhood park popular for youth sports. Two ball fields, open grassy areas, a playground, and restrooms. Relaxed atmosphere.",
-   addr:"10620 Donner Pass Rd, Truckee, CA 96161",ph:null,kidAges:"all"},
-  {n:"Donner Memorial State Park",t:"Park",a:"Donner Lake",e:"⛺",hasPlayground:false,hasDogs:true,
-   tags:["State Park","Hiking","Kayaking","Camping","History Museum","Year-Round","Dogs OK"],h:"Year-round (hours vary)",age:"All ages",
-   note:"Legendary state park on scenic Donner Lake. Summer: camping, picnicking, hiking, kayaking. Winter: cross-country skiing and snowshoeing. The Visitor Center has compelling history exhibits.",
-   addr:"12593 Donner Pass Rd, Truckee, CA 96161",ph:"(530) 582-7892",kidAges:"all"},
-  // ── ACTIVITIES ──
-  {n:"KidZone Museum",t:"Activity",a:"Truckee",e:"🎨",hasPlayground:false,hasDogs:false,
-   tags:["Indoor","Rainy Day","Ages Under 7","Art Studio","Science Lab","Play Structure"],h:"Tue–Sat 10:30am–3pm",age:"Under 7",
-   note:"Truckee's beloved children's museum — hands-on exhibits, art studio, science lab, toddler area, and outdoor nature play zone. The ultimate rainy/snow day destination. Optimal for under 7s.",
-   addr:"11711 Donner Pass Rd, Truckee, CA 96161",ph:"(530) 587-5437",
-   pricing:[{l:"Kids (1+) & Adults",v:"$13"},{l:"Under 1",v:"Free"},{l:"Seniors 65+",v:"$5"}],
-   priceNote:"ACM member? Get 50% off. Free for active military.",kidAges:"toddler"},
-  {n:"Kings Beach Miniature Golf",t:"Activity",a:"Kings Beach",e:"⛳",hasPlayground:false,hasDogs:false,
-   tags:["2 Courses · 36 Holes","Family-Owned","Since 1957","Cash Only","Party Rentals"],h:"Mon–Thu 12–6pm · Fri 12–8pm · Sat 10–8pm · Sun 10–6pm",age:"All ages",
-   note:"Lake Tahoe's oldest mini golf — a true North Shore institution since 1957. Two creative 19-hole courses with fun obstacles. Rustic, charming, and just right for families. Cash only.",
-   addr:"8693 N Lake Blvd, Kings Beach, CA 96143",ph:"(530) 546-3196",
-   pricing:[{l:"1st Round (19 holes)",v:"$15"},{l:"2nd Round",v:"$8"},{l:"Super Size (both)",v:"$18"},{l:"Day Pass",v:"$30"}],
-   priceNote:"Cash only. Party rentals for groups up to 50.",kidAges:"elementary"},
-  {n:"Magic Carpet Golf & Arcade",t:"Activity",a:"Carnelian Bay",e:"🎠",hasPlayground:false,hasDogs:false,
-   tags:["3 Courses · 66 Holes","Indoor Arcade","All-Weather","Themed Courses","Pinball"],h:"Summer: Daily · Spring/Fall: Sat–Sun 11am–6pm",age:"All ages",
-   note:"66 holes across three themed courses (pirate, dinosaur, storybook) plus a full indoor arcade with pinball. Great when weather turns. A North Shore classic.",
-   addr:"5167 N Lake Blvd, Carnelian Bay, CA 96140",ph:"(530) 546-4279",
-   pricing:[{l:"28-hole course",v:"~$18"},{l:"19-hole course",v:"~$12–15"},{l:"Arcade",v:"Tokens"}],
-   priceNote:"Prices approximate — verify on-site.",kidAges:"all"},
-  {n:"Truckee Community Pool",t:"Activity",a:"Truckee",e:"🏊",hasPlayground:false,hasDogs:false,
-   tags:["Indoor Pool","Open Swim","Swim Lessons","Diving Board","Rope Climb","Birthday Parties","Year-Round"],
-   h:"Rec Pool Open Swim: M–F 10am–12pm & 3–7pm · Sat–Sun 1–6pm",age:"All ages",
-   note:"Full indoor aquatic center run by Truckee-Donner Rec — lap pool, rec pool, diving board, rope climb, and open swim sessions. Swim lessons for all ages from infant to adult. Swim diapers required for all kids under 4. Great rainy-day or cold-weather option. Birthday party rentals available on weekends.",
-   addr:"10939 Truckee Way, Truckee, CA 96161",ph:"(530) 582-7720",
-   pricing:[{l:"Youth (2–17) Resident",v:"$7.50"},{l:"Youth Non-Resident",v:"$10.50"},{l:"Adult (18–62) Resident",v:"$9.50"},{l:"Adult Non-Resident",v:"$12.50"},{l:"Non-Swimmer",v:"$6.00"}],
-   priceNote:"Season passes, monthly & quarterly memberships available. Swim diapers required for all under 4.",
-   link:"https://www.tdrpd.org/157/Community-Swimming-Pool",kidAges:"all"},
-  {n:"Woodward Tahoe at Boreal",t:"Activity",a:"Truckee",e:"🛹",hasPlayground:false,hasDogs:false,
-   tags:["Indoor","Trampolines","Foam Pits","Skate Park","Ages 7+","Year-Round","Coaching"],h:"Mon–Tue 12–8pm · Wed–Fri 2–8pm · Sat–Sun 10am–8pm",age:"7–17",
-   note:"33,000 sq ft action sports facility at Boreal Mountain. Olympic trampolines, foam pits, skate park, and professional coaching. Drop-in Bunker Sessions available daily. Summer camps too.",
-   addr:"19749 Boreal Ridge Rd, Soda Springs, CA 95728",ph:null,
-   pricing:[{l:"2-Hr Bunker Session",v:"~$35–$45"},{l:"Week-long Camp",v:"See website"}],
-   priceNote:"Reserve in advance at rideboreal.com.",kidAges:"elementary"},
-];
+      // Update user tab stats
+      document.getElementById('stat-total').textContent=allUsers.length;
+      if(allUsers.length>0){
+        var latest=allUsers[0];
+        document.getElementById('stat-recent').textContent=latest.name||latest.email.split('@')[0];
+        var d=new Date(latest.signed_in_at);
+        document.getElementById('stat-recent-time').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+      } else {
+        document.getElementById('stat-recent').textContent='None yet';
+        document.getElementById('stat-recent-time').textContent='Share the app!';
+      }
 
-// ── EATS ──────────────────────────────────────────────────────────────
-var EATS=[
-  // TAHOE CITY
-  {n:"BridgeTender Tavern",a:"Tahoe City",e:"🍔",s:5,p:"$$",h:"11am–10pm",featured:true,
-   note:"Tahoe City institution. Outdoor patio directly over the Truckee River — kids love watching the water flow. Big burgers, casual vibe, completely family-friendly.",
-   ph:"(530) 583-3342",tags:["Outdoor Patio","River Views","Burgers","Kid-Friendly"],addr:"30 W Lake Blvd, Tahoe City, CA 96145"},
-  {n:"Rosie's Cafe",a:"Tahoe City",e:"🥞",s:5,p:"$$",h:"7am–3pm",featured:false,
-   note:"Beloved North Shore breakfast staple since forever. The pancakes are legendary. Expect a wait on weekends — worth every minute.",
-   ph:"(530) 583-8504",tags:["Breakfast","Local Favorite","Pancakes"],addr:"571 N Lake Blvd, Tahoe City, CA 96145"},
-  {n:"Fireside Pizza",a:"Tahoe City",e:"🍕",s:5,p:"$$",h:"11:30am–9pm",featured:false,
-   note:"Wood-fired pizza with a casual, family-friendly atmosphere. An easy crowd-pleaser for picky eaters of all ages.",
-   ph:"(530) 583-0529",tags:["Pizza","Wood-Fired","Kid-Friendly"],addr:"515 N Lake Blvd, Tahoe City, CA 96145"},
-  {n:"Poppy's Frozen Yogurt & Ice Cream",a:"Tahoe City",e:"🍦",s:5,p:"$",h:"Daily 2pm–7pm+ (seasonal)",featured:true,
-   note:"Family-owned walk-up shop with frozen yogurt, scooped ice cream, waffle cones, shakes, and acai bowls. Outdoor courtyard with lawn games. Dogs welcome.",
-   ph:"(530) 581-0885",tags:["Ice Cream","Frozen Yogurt","Lawn Games","Dogs OK"],addr:"521 N Lake Blvd, Tahoe City, CA 96145"},
-  {n:"Tahoe House Bakery",a:"Tahoe City",e:"🥐",s:4,p:"$",h:"8am–3pm",featured:false,
-   note:"Fresh-baked pastries, sandwiches, and coffee. Perfect grab-and-go before hitting the beach.",
-   ph:"(530) 583-1377",tags:["Bakery","Grab & Go","Pastries"],addr:"625 W Lake Blvd, Tahoe City, CA 96145"},
-  {n:"Sunnyside Restaurant & Lodge",a:"Tahoe City",e:"🦞",s:4,p:"$$$",h:"11am–9pm",featured:false,
-   note:"Stunning lakefront deck with boat dock access. Great for a slightly special occasion — still very family-friendly.",
-   ph:"(530) 583-7200",tags:["Lakefront","Views","Special Occasion"],addr:"1850 W Lake Blvd, Tahoe City, CA 96145"},
-  // CARNELIAN BAY
-  {n:"Old Post Office Coffee",a:"Carnelian Bay",e:"☕",s:4,p:"$",h:"7am–3pm",featured:false,
-   note:"Cozy neighborhood coffee shop with great espresso, fresh muffins, and pastries. Popular with locals starting their mornings.",
-   ph:"(530) 546-3205",tags:["Coffee","Pastries","Casual","Local"],addr:"5245 N Lake Blvd, Carnelian Bay, CA 96140"},
-  // KINGS BEACH
-  {n:"Log Cabin Caffe",a:"Kings Beach",e:"🧇",s:5,p:"$",h:"7am–2pm",featured:false,
-   note:"Tiny, no-frills, and outstanding. Widely considered the best breakfast in Kings Beach. Grab outdoor seats when weather allows.",
-   ph:"(530) 546-7109",tags:["Breakfast","Local Gem","Affordable"],addr:"8692 N Lake Blvd, Kings Beach, CA 96143"},
-  {n:"Java Hut",a:"Kings Beach",e:"☕",s:4,p:"$",h:"6am–3pm",featured:false,
-   note:"Drive-through coffee, hot dogs, and quick bites. Fast and convenient when you need fuel before the beach.",
-   ph:null,tags:["Drive-Through","Coffee","Fast"],addr:"8651 N Lake Blvd, Kings Beach, CA 96143"},
-  // TRUCKEE
-  {n:"Squeeze In",a:"Truckee",e:"🥚",s:5,p:"$$",h:"Daily 7:30am–2pm",featured:false,
-   note:"Truckee's original breakfast legend since 1974. 60+ omelets — the 'Racy Tracy' was on Food Network's Throwdown with Bobby Flay. Toy baskets for kids. Expect a weekend wait.",
-   ph:"(530) 587-9814",tags:["Breakfast","Food Network","60+ Omelets","Kid-Friendly"],addr:"10060 Donner Pass Rd, Truckee, CA 96161"},
-  {n:"Jax at the Tracks",a:"Truckee",e:"🍽️",s:5,p:"$$",h:"Daily 7am–9pm",featured:false,
-   note:"Classic American diner in an original 1940s railcar next to Truckee's train tracks. Featured on Food Network's Diners, Drive-Ins and Dives. Milkshakes and burgers are a must.",
-   ph:"(530) 550-7450",tags:["Diner","Food Network","Milkshakes","All-Day"],addr:"10144 W River St, Truckee, CA 96161"},
-  {n:"Burger Me",a:"Truckee",e:"🍔",s:5,p:"$$",h:"Lunch & Dinner daily",featured:false,
-   note:"Gourmet burgers with all-natural, locally sourced beef, bison, ahi, and veggie patties. Guy Fieri named it one of the top 10 burgers in the country. Arcade games inside.",
-   ph:"(530) 587-8852",tags:["Burgers","All-Natural","Bison","Guy Fieri Pick"],addr:"10418 Donner Pass Rd, Truckee, CA 96161"},
-  {n:"Zano's Family Italian",a:"Truckee",e:"🍕",s:4,p:"$$",h:"Lunch & Dinner",featured:false,
-   note:"Classic family Italian in Tahoe Donner. Hand-tossed pizzas, pasta, lasagna. Kids menu available. Warm, casual atmosphere — feels like home.",
-   ph:"(530) 587-7411",tags:["Pizza","Italian","Kids Menu","Family-Friendly"],addr:"11401 Donner Pass Rd, Truckee, CA 96161"},
-];
+      // Render user table
+      if(allUsers.length===0){
+        tbl.innerHTML='<tr><td colspan="5"><div class="empty">🏔️ No sign-ins yet.<br>Share <strong>lakesidelittleones.com</strong> with North Shore families!</div></td></tr>';
+      } else {
+        tbl.innerHTML=allUsers.map(function(u){
+          var d=new Date(u.signed_in_at);
+          var dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          var timeStr=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+          var avatar=u.photo
+            ?'<img src="'+u.photo+'" style="width:28px;height:28px;border-radius:50%;margin-right:8px;vertical-align:middle">'
+            :'<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;text-align:center;line-height:28px;font-size:12px;font-weight:700;margin-right:8px;vertical-align:middle">'+(u.name?u.name.charAt(0).toUpperCase():'?')+'</span>';
+          return '<tr>'
+            +'<td>'+avatar+'<span class="nm">'+(u.name||'—')+'</span></td>'
+            +'<td style="font-size:12px;color:var(--t2)">'+(u.email||'—')+'</td>'
+            +'<td><span class="badge ac">'+(u.city||'Unknown')+'</span></td>'
+            +'<td class="num">'+dateStr+'</td>'
+            +'<td style="font-size:11px;color:var(--t3)">'+timeStr+'</td>'
+            +'</tr>';
+        }).join('');
+      }
 
-// ── KIDS PROGRAMS ─────────────────────────────────────────────────────
-var KIDS=[
-  {title:"Camp Skylandia — Lil' Pines",icon:"⛺",ages:"Ages 3.5–5.5",cat:"Camp",detail:"TCPUD's outdoor day camp for preschoolers and incoming kindergartners. Songs, arts & crafts, water play, games, field trips. Held at Tahoe City Community Center.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/camp-skylandia",bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-  {title:"Camp Skylandia — Campers",icon:"🏕️",ages:"Grades 1–6",cat:"Camp",detail:"The full Skylandia experience — capture the flag, dress-up events, water play, arts & crafts, and field trips all summer long.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/camp-skylandia",bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-  {title:"Tahoe Community Sailing",icon:"⛵",ages:"Youth",cat:"Outdoor",detail:"Learn to sail on Lake Tahoe through TCPUD. 2026 details now available.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/parks-recreation-department/recreation-program/youth-programs/tahoe-community-sailing",bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-  {title:"Youth Golf Camp",icon:"⛳",ages:"Youth",cat:"Sport",detail:"Introduction to golf at Tahoe City Golf Course through TCPUD.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/youth-golf",bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-  {title:"Summer Art Camp with Sona Knox",icon:"🎨",ages:"Youth",cat:"Arts",detail:"Painting, drawing, clay and more outdoors in Lake Tahoe with local artist Sona Knox through TCPUD.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/recreation/recreation-programs/youth-programs/summer-art-camp-sona-knox",bg:"#FFF0E8",bc:"#F5C0A0",tc:"#8B3A14"},
-  {title:"Broadway Bootcamp Summer Camp",icon:"🎭",ages:"Youth",cat:"Arts",detail:"Performing arts camp teaching kids to sing, act, and shine. Summer fun with a theatrical twist through TCPUD.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/recreation/recreation-programs/youth-programs/broadway-bootcamp",bg:"#FFF0E8",bc:"#F5C0A0",tc:"#8B3A14"},
-  {title:"Chess Wizards Camp",icon:"♟️",ages:"Youth",cat:"Academic",detail:"Strategy and friendly competition through TCPUD's Chess Wizards summer program.",date:"Summer 2026 · Reg. opens May 5",link:"https://www.tcpud.org/chess-wizards-camp",bg:"#F3EEFF",bc:"#C8ADF0",tc:"#4A1FA0"},
-  {title:"Library Story Time",icon:"📚",ages:"Ages 2–5",cat:"Free",detail:"Free weekly storytime at North Lake Tahoe Library in Tahoe City. No registration required.",date:"Wednesdays · 10:30am · Free",link:"https://www.northlaketahoelibrary.org",bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-  {title:"Kings Beach Farmers Market",icon:"🥕",ages:"All ages",cat:"Event",detail:"Fresh produce, local vendors, baked goods, and live music. Free entry. Runs Memorial Day through October.",date:"Saturdays 8am–1pm · Free",link:null,bg:"#FFF8E8",bc:"#F5D878",tc:"#8B6914"},
-  {title:"TCPUD Summer 2026 Registration",icon:"📋",ages:"All programs",cat:"Info",detail:"Resident registration opens May 5, 2026 at 10am. Non-residents same day at 12pm. Register via CivicRec.",date:"Opens May 5, 2026",link:"https://secure.rec1.com/CA/tahoe-city-public-utility-district-ca/catalog",bg:"#F3EEFF",bc:"#C8ADF0",tc:"#4A1FA0"},
-];
+      // Update overview tab
+      updateOverview(allUsers);
+    })
+    .catch(function(err){
+      tbl.innerHTML='<tr><td colspan="5"><div class="empty">⚠️ Could not load users.<br>'+err.message+'</div></td></tr>';
+    });
+}
 
-// ── COMMUNITY EVENTS ──────────────────────────────────────────────────
-// cat: Market | Live Music | Movies & Shows | Street Festival | Year-Round
-var EVENTS=[
-  // ── STREET FESTIVALS ──
-  {name:"Truckee Thursdays",cat:"Street Festival",icon:"🎉",area:"Truckee",
-   day:"Thursdays",time:"5pm – 8:30pm",
-   dates:"Mid-June – mid-August (est. late June – Aug 14, 2026)",
-   free:true,dogFriendly:false,kidsArea:true,
-   detail:"The biggest summer event on the North Shore — Historic Downtown Truckee's entire main drag shuts down for a weekly block party. Live music, food trucks, artisan vendors, kids activities area, beer garden, and the Foothills Farmers Market all in one. A summer tradition for 20+ years.",
-   tips:"Parking is extremely tight. Take the free shuttle or arrive by 4:30pm. No event on July 4th.",
-   link:"https://www.truckeethursdays.com",
-   addr:"Commercial Row (Donner Pass Rd), Truckee, CA 96161",
-   bg:"#F3EEFF",bc:"#C8ADF0",tc:"#4A1FA0"},
+var chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
 
-  // ── FARMERS MARKETS ──
-  {name:"Tahoe City Farmers Market",cat:"Market",icon:"🥦",area:"Tahoe City",
-   day:"Thursdays",time:"8am – 1pm",
-   dates:"May – Oct 2026 at Commons Beach · Oct–Dec indoors at Boatworks Mall (8:30am–1pm)",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"22 weeks of fresh organic produce, pastured meats, honey, artisan goods, and food trucks — right at Commons Beach with Lake Tahoe as the backdrop. Moves indoors to Boatworks Mall in the fall.",
-   tips:"Commons Beach parking lot closes during market hours (8am–1pm). Arrive early or bike in. No dogs inside market area.",
-   link:null,
-   addr:"Commons Beach, 400 N Lake Blvd, Tahoe City, CA 96145",
-   bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
+function updateOverview(users){
+  document.getElementById('ov-total').textContent=users.length;
 
-  {name:"Truckee Certified Farmers Market",cat:"Market",icon:"🥕",area:"Truckee",
-   day:"Tuesdays",time:"8am – 1pm",
-   dates:"May – October 2026 (weather permitting)",
-   free:true,dogFriendly:true,kidsArea:false,
-   detail:"The best outdoor market in the mountains — locally grown produce, artisan goods, baked bread, olive oils, sheepskin, and local crafts along the Truckee River at Regional Park. Bring a cooler.",
-   tips:"Grab breakfast at the food trucks then walk the Legacy Trail afterward — perfect Tuesday morning combo.",
-   link:null,
-   addr:"Truckee River Regional Park, 10050 Brockway Rd, Truckee, CA 96161",
-   bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-
-  {name:"Kings Beach Farmers Market",cat:"Market",icon:"🫐",area:"Kings Beach",
-   day:"Saturdays",time:"8am – 1pm",
-   dates:"Memorial Day – October 2026",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"Fresh produce, local vendors, baked goods, and live music every Saturday morning right in Kings Beach. Easy to combine with a morning beach visit.",
-   tips:"Go early — the best produce and pastries sell out fast.",
-   link:null,
-   addr:"Kings Beach SRA area, Kings Beach, CA 96143",
-   bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-
-  // ── LIVE MUSIC ──
-  {name:"Concerts at Commons Beach",cat:"Live Music",icon:"🎸",area:"Tahoe City",
-   day:"Sundays",time:"4:30pm – 7pm",
-   dates:"June 15 – September 7, 2026 (est.) · 12-week series",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"The beloved free lakeside concert series — 20th anniversary in 2025. Bluegrass, funk, soul, rock, jazz, and Americana every Sunday evening at Commons Beach with Lake Tahoe as the stage backdrop. Bring blankets, low chairs, and a picnic. Food and drink vendors on-site.",
-   tips:"Arrive by 3:30pm for good spots. Bring a light layer — it gets breezy as the sun goes down.",
-   link:"https://concertsatcommonsbeach.com",
-   addr:"Commons Beach, 400 N Lake Blvd, Tahoe City, CA 96145",
-   bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-
-  {name:"Kings Beach Live Music on the Beach",cat:"Live Music",icon:"🎵",area:"Kings Beach",
-   day:"Fridays",time:"6pm – 8:30pm",
-   dates:"June 13 – August 29, 2026 (est.) · Ends with drone light show!",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"Free weekly live music right on the sand at Kings Beach. The final show of the season closes with a 'Lights in the Sky' drone show — a can't-miss summer finale.",
-   tips:"No show on July 4th. July 3rd show moves to Thursday for Kings Beach Day. Bring chairs and blankets.",
-   link:null,
-   addr:"Kings Beach State Recreation Area, 6318 N Lake Blvd, Kings Beach, CA 96143",
-   bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-
-  {name:"Truckee Concerts in the Park",cat:"Live Music",icon:"🎶",area:"Truckee",
-   day:"Varies (Wednesdays / select evenings)",
-   time:"6pm – 8:30pm",
-   dates:"June – August 2026 (est.)",
-   free:true,dogFriendly:true,kidsArea:false,
-   detail:"Free outdoor concerts at Truckee River Regional Park through the summer. Various genres — a great reason to spend the evening at the park after a day outdoors.",
-   tips:"Bring a blanket and dinner. The park has BBQ tables if you want to cook before the show.",
-   link:null,
-   addr:"Truckee River Regional Park, 10500 Brockway Rd, Truckee, CA 96161",
-   bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-
-  {name:"Bluesdays at Palisades Tahoe Village",cat:"Live Music",icon:"🎺",area:"Olympic Valley",
-   day:"Tuesdays",time:"6pm – 8:30pm",
-   dates:"June 24 – August 26, 2026 (est.)",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"Free live blues, jazz, and rock in the heart of Palisades Tahoe Village. A great evening option if you're already out in Olympic Valley — plenty of restaurants nearby.",
-   tips:"Pair with dinner at one of the village restaurants before or after.",
-   link:null,
-   addr:"Palisades Tahoe Village, 1960 Squaw Valley Rd, Olympic Valley, CA 96146",
-   bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-
-  // ── MOVIES & SHOWS ──
-  {name:"Movies on the Beach — Tahoe City",cat:"Movies & Shows",icon:"🎬",area:"Tahoe City",
-   day:"Wednesdays",time:"Dusk (approx 8:30–9pm)",
-   dates:"June 25 – August 13, 2026 (est.)",
-   free:false,dogFriendly:false,kidsArea:false,
-   detail:"Outdoor movie nights on Commons Beach — big inflatable screen right on the lakeshore. Watch a movie while the stars come out over Lake Tahoe. Bring snacks, blankets, and the little ones.",
-   tips:"Only $1 per person. Arrive early for Waterfront Wednesdays (noon–9pm) and make a full day of it. Bring a flashlight for the walk back.",
-   link:null,
-   addr:"Commons Beach, 400 N Lake Blvd, Tahoe City, CA 96145",
-   bg:"#FFF8E8",bc:"#F5D878",tc:"#8B6914"},
-
-  {name:"Waterfront Wednesdays",cat:"Movies & Shows",icon:"🌊",area:"Tahoe City",
-   day:"Wednesdays",time:"Noon – 9pm",
-   dates:"June 25 – August 13, 2026 (est.)",
-   free:true,dogFriendly:false,kidsArea:false,
-   detail:"Full day of fun at Commons Beach — food vendors, activities, and the evening movie. The whole day has a festival feel. Movies begin at dusk; $1/person for the film.",
-   tips:"The best full-day family beach event of the summer. Combine with the Thursday morning Farmers Market for a two-day Tahoe City staycation.",
-   link:null,
-   addr:"Commons Beach, 400 N Lake Blvd, Tahoe City, CA 96145",
-   bg:"#FFF8E8",bc:"#F5D878",tc:"#8B6914"},
-
-  // ── YEAR-ROUND ──
-  {name:"Toddler Time",cat:"Year-Round",icon:"🧸",area:"Kings Beach",
-   day:"Tuesdays (year-round) + Thursdays (Sept–May)",time:"10am – 12pm",
-   dates:"Year-round · No registration needed",
-   free:true,dogFriendly:false,kidsArea:true,
-   detail:"Wide-open indoor space at the North Tahoe Event Center filled with tumble mats, toys, and play supplies for toddlers to explore, develop, and socialize. Coffee, tea, and snacks provided for caregivers. 'Social & Celebration Lunches' every 1st and 3rd Tuesday. Caregivers must be present at all times.",
-   tips:"Tuesdays run year-round. Thursday sessions run September 9 – May 1 only. Walk-ins welcome — no RSVP needed.",
-   link:"https://northtahoeevents.com/event/toddler-time-29/",
-   addr:"North Tahoe Event Center, 8318 N Lake Blvd, Kings Beach, CA 96143",
-   bg:"#EEF6FF",bc:"#B8DFEF",tc:"#0D3B5E"},
-
-  {name:"The Family Room / El Cuartito Familiar",cat:"Year-Round",icon:"🏠",area:"Kings Beach + Truckee",
-   day:"Mon–Wed (Kings Beach) · Tue–Thu (Truckee)",time:"10am – 12pm",
-   dates:"Ongoing weekly · Two locations · Free drop-in",
-   free:true,dogFriendly:false,kidsArea:true,
-   detail:"Free bilingual (English/Spanish) drop-in family play space run by Sierra Community House — a warm, welcoming room where caregivers and young children can play, connect, and get support. Two locations: Kings Beach (Mon/Tue/Wed) and Truckee next to KidZone Museum (Tue/Wed/Thu). No registration, no cost.",
-   tips:"Kings Beach location: 265 Bear St. Truckee location: 11695 Donner Pass Rd (right next to KidZone Museum). Both run 10am–12pm on their respective days.",
-   link:"https://sierracommunityhouse.org/series/the-family-room-el-cuartito-familiar/",
-   addr:"265 Bear St, Kings Beach, CA 96143  ·  11695 Donner Pass Rd, Truckee, CA 96161",
-   bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-
-  {name:"Library Story Time",cat:"Year-Round",icon:"📚",area:"Tahoe City",
-   day:"Wednesdays",time:"10:30am",
-   dates:"Year-round · Free · No registration needed",
-   free:true,dogFriendly:false,kidsArea:true,
-   detail:"Free weekly storytime for ages 2–5 at North Lake Tahoe Library in Tahoe City. Shows up, reads books, sings songs. No RSVP, just walk in.",
-   tips:"Gets full in peak summer — arrive 5–10 minutes early to grab a spot.",
-   link:"https://www.northlaketahoelibrary.org",
-   addr:"281 N Lake Blvd, Tahoe City, CA 96145",
-   bg:"#E8F5EE",bc:"#A8D8BE",tc:"#2E7D52"},
-
-  {name:"Kona Ice Shave Ice Truck",cat:"Year-Round",icon:"🍧",area:"Kings Beach",
-   day:"Weekends",time:"Afternoons",
-   dates:"Summer weekends at Kings Beach",
-   free:false,dogFriendly:false,kidsArea:false,
-   detail:"Shave ice truck parked near the main Kings Beach lot on summer weekend afternoons. Cash and card accepted. The kids will find it whether you want them to or not.",
-   tips:"Look for the truck near the main beach parking lot.",
-   link:null,
-   addr:"Kings Beach SRA parking area, Kings Beach, CA 96143",
-   bg:"#FFF0E8",bc:"#F5C0A0",tc:"#8B3A14"},
-];
-
-var wx=null,outdoor=true,tab='home',outFilter='All',ageFilter='All',eFilter='All',kFilter='All',evFilter='All';
-var userCity='Carnelian Bay',userName='',userEmail='',selectedCity=null;
-var mapAddr='',mapName='';
-
-// ── HELPERS ───────────────────────────────────────────────────────────
-function getDist(a){var d=DIST[userCity];return d&&d[a]?d[a]+'min':null;}
-function wxInfo(c){var k=Object.keys(WX).map(Number).sort(function(a,b){return a-b;});for(var i=k.length-1;i>=0;i--){if(c>=k[i])return WX[k[i]];}return WX[0];}
-
-function isOpenNow(hoursStr){
-  if(!hoursStr||hoursStr==='Always open')return true;
-  if(hoursStr.indexOf('Sunrise')>-1)return true;
-  if(hoursStr.indexOf('seasonal')>-1||hoursStr.indexOf('Summer')>-1)return null; // unknown/seasonal
-  var now=new Date();
-  var hr=now.getHours(),mn=now.getMinutes();
-  var cur=hr*60+mn;
-  function parseTime(s){
-    s=s.trim();
-    var pm=s.indexOf('pm')>-1,am=s.indexOf('am')>-1;
-    s=s.replace(/[apm]/gi,'').trim();
-    var parts=s.split(':');
-    var h=parseInt(parts[0]),m=parts[1]?parseInt(parts[1]):0;
-    if(pm&&h<12)h+=12;
-    if(am&&h===12)h=0;
-    return h*60+m;
+  if(users.length===0){
+    document.getElementById('ov-city').textContent='None yet';
+    document.getElementById('ov-latest').textContent='None yet';
+    document.getElementById('ov-latest-time').textContent='Share the app!';
+    document.getElementById('city-tbl').innerHTML='<tr><td colspan="3" class="loading">No sign-ins yet</td></tr>';
+    return;
   }
-  // Parse "7am–3pm" or "Daily 7:30am–2pm" style
-  var match=hoursStr.match(/(\d+(?::\d+)?(?:am|pm))\s*[–\-]\s*(\d+(?::\d+)?(?:am|pm))/i);
-  if(!match)return null;
-  try{var open=parseTime(match[1]),close=parseTime(match[2]);return cur>=open&&cur<close;}
-  catch(e){return null;}
-}
 
-function openBadge(hoursStr){
-  var result=isOpenNow(hoursStr);
-  if(result===null)return '';
-  if(result)return '<span class="c-open-badge open">● Open now</span>';
-  return '<span class="c-open-badge closed">● Closed</span>';
-}
+  Chart.defaults.color='#8B9ABF';
+  Chart.defaults.borderColor='#2A3448';
+  var B='rgba(59,130,246,',G='rgba(245,158,11,',Gr='rgba(16,185,129,';
 
-function areaLabel(a){
-  var isTruck=(a==='Truckee'||a==='Donner Lake'||a==='Olympic Valley'||a==='Soda Springs');
-  if(a==='Donner Lake')return '<span class="ab">Donner Lake</span>';
-  if(isTruck)return '<span class="ab truckee">'+a+'</span>';
-  return '<span class="ab">'+a+'</span>';
-}
+  // Top city
+  var cities={};
+  users.forEach(function(u){var c=u.city||'Unknown';cities[c]=(cities[c]||0)+1;});
+  var sortedCities=Object.keys(cities).sort(function(a,b){return cities[b]-cities[a];});
+  var topCity=sortedCities[0];
+  document.getElementById('ov-city').textContent=topCity;
 
-function shareItem(name){
-  if(navigator.share){navigator.share({title:'Lakeside + Little Ones',text:'Check out '+name+' — perfect for families on the North Shore!',url:window.location.href});}
-  else{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);}
-}
+  // Latest
+  var latest=users[0];
+  document.getElementById('ov-latest').textContent=latest.name||latest.email.split('@')[0];
+  var ld=new Date(latest.signed_in_at);
+  document.getElementById('ov-latest-time').textContent=ld.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
-// ── WEATHER HTML ──────────────────────────────────────────────────────
-function wxHTML(w){
-  var info=w?wxInfo(w.weathercode):WX[1];
-  var temp=w?Math.round(w.temperature_2m):'--',feels=w?Math.round(w.apparent_temperature):'--',wind=w?Math.round(w.windspeed_10m):'--';
-  var alert=w&&wind>20?'<span class="wx-tag alert">⚠️ Wind Advisory</span>':'';
-  return '<div class="wx-banner" style="background:linear-gradient(135deg,'+info.bg[0]+','+info.bg[1]+')">'
-    +'<div class="wx-b1"></div><div class="wx-b2"></div><div class="wx-inner">'
-    +'<div style="display:flex;align-items:flex-start;justify-content:space-between">'
-    +'<div><div class="wx-loc">North Shore · '+userCity+'</div>'
-    +'<div class="wx-row"><span class="wx-temp">'+temp+'°</span>'
-    +'<div class="wx-dets"><div class="wx-cond">'+info.l+'</div><div class="wx-feels">Feels like '+feels+'°</div></div></div></div>'
-    +'<span class="wx-ico">'+info.i+'</span></div>'
-    +'<div class="wx-tags"><span class="wx-tag">💨 '+wind+' mph</span><span class="wx-tag">'+info.tip+'</span>'+alert+'</div>'
-    +'<div class="wx-updated">'+(w?'Live · updated just now':'Loading weather…')+'</div>'
-    +'</div></div>';
-}
-
-// ── MAP PICKER ────────────────────────────────────────────────────────
-function openMap(addr,name){
-  mapAddr=addr;mapName=name;
-  document.getElementById('map-place-name').textContent=name;
-  document.getElementById('map-place-addr').textContent=addr;
-  document.getElementById('map-overlay').classList.add('show');
-}
-function closeMap(){document.getElementById('map-overlay').classList.remove('show');}
-document.getElementById('map-gmaps-btn').addEventListener('click',function(){window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(mapAddr),'_blank');closeMap();});
-document.getElementById('map-waze-btn').addEventListener('click',function(){window.open('https://waze.com/ul?q='+encodeURIComponent(mapAddr),'_blank');closeMap();});
-document.getElementById('map-cancel-btn').addEventListener('click',closeMap);
-document.getElementById('map-overlay').addEventListener('click',function(e){if(e.target===this)closeMap();});
-function bindMap(el){
-  el.querySelectorAll('.map-btn').forEach(function(btn){
-    btn.addEventListener('click',function(e){e.stopPropagation();openMap(this.getAttribute('data-addr'),this.getAttribute('data-name'));});
-  });
-  el.querySelectorAll('.share-btn').forEach(function(btn){
-    btn.addEventListener('click',function(e){e.stopPropagation();shareItem(this.getAttribute('data-name'));});
-  });
-}
-
-// ── CARD BUILDERS ─────────────────────────────────────────────────────
-function featuredCard(f){
-  var priceHTML=f.pricing?'<div class="feat-pricing">'+f.pricing.map(function(p){return '<div class="feat-price-row"><span>'+p.l+'</span><span class="feat-price-val">'+p.v+'</span></div>';}).join('')+'</div>':'';
-  var actionsHTML='<div class="feat-actions">'
-    +(f.book?'<a class="feat-btn primary" href="'+f.book+'" target="_blank">Book Now</a>':'')
-    +'<button class="feat-btn secondary map-btn" data-addr="'+f.addr+'" data-name="'+f.n+'">📍 Directions</button>'
-    +(f.ph?'<a class="feat-btn secondary" href="tel:'+f.ph+'" style="flex:none;padding:11px 12px">📞</a>':'')
-    +'</div>';
-  return '<div class="feat-card '+f.style+'">'
-    +'<div class="feat-badge">'+f.badge+'</div>'
-    +'<div class="feat-name">'+f.name+'</div>'
-    +'<div class="feat-tagline">'+f.tagline+'</div>'
-    +'<div class="feat-note">'+f.note+'</div>'
-    +priceHTML
-    +'<div class="feat-tags">'+f.tags.map(function(t){return '<span class="feat-tag">'+t+'</span>';}).join('')+'</div>'
-    +actionsHTML
-    +(f.seasonal?'<div class="feat-seasonal">📅 '+f.seasonal+'</div>':'')
-    +'</div>';
-}
-
-function outdoorCard(item){
-  var dist=getDist(item.a);
-  var isAct=item.t==='Activity';
-  var priceHTML=item.pricing?'<div class="pricing-inline">'
-    +item.pricing.map(function(p){return '<div class="pricing-row"><span class="pricing-label">'+p.l+'</span><span class="pricing-val">'+p.v+'</span></div>';}).join('')
-    +(item.priceNote?'<div style="font-size:10px;color:#A08060;margin-top:4px;font-style:italic">'+item.priceNote+'</div>':'')
-    +'</div>':'';
-  var playgroundNote=item.hasPlayground?'<span class="tag playground">🛝 Playground on-site</span>':'';
-  var dogNote=item.hasDogs?'<span class="tag g">🐾 Dogs welcome</span>':'';
-  var isFreeItem=(item.t==='Park'||item.t==='Beach')&&!item.pricing;
-  var dim=!outdoor&&item.t==='Beach';
-  return '<div class="card'+(dim?' dimmed':'')+'">'
-    +'<div class="c-header">'
-    +'<div class="c-name-row"><span style="font-size:18px">'+item.e+'</span><span class="c-name">'+item.n+'</span>'+areaLabel(item.a)+'</div>'
-    +'<div style="display:flex;gap:5px;align-items:center;flex-shrink:0">'+(isFreeItem?'<span class="free-pill" style="font-size:12px;padding:4px 10px">🆓 FREE</span>':'')+openBadge(item.h)+'</div>'
-    +'</div>'
-    +'<div class="c-meta">'+(dist?dist+' away · ':'')+item.h+'</div>'
-    +'<div class="c-note">'+item.note+'</div>'
-    +'<div class="tags">'+item.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')
-    +'<span class="tag '+(item.age==='Little ones'||item.age==='Under 7'?'g':'b')+'">👶 '+item.age+'</span>'
-    +playgroundNote+dogNote+'</div>'
-    +priceHTML
-    +'<div class="addr-row"><span class="addr-txt">📍 '+item.addr+'</span>'
-    +'<button class="map-btn" data-addr="'+item.addr+'" data-name="'+item.n+'">🗺 Maps</button></div>'
-    +'<div class="card-actions">'
-    +(item.ph?'<a class="phone-link" href="tel:'+item.ph+'">📞 '+item.ph+'</a>':'')
-    +(item.book?'<a class="book-link" href="'+item.book+'" target="_blank">Book →</a>':'')
-    +(item.link&&!item.book?'<a class="book-link" href="'+item.link+'" target="_blank">More info →</a>':'')
-    +'<button class="share-btn" data-name="'+item.n+'">Share ↗</button>'
-    +'</div></div>';
-}
-
-function eatCard(item){
-  var stars='★'.repeat(item.s)+'☆'.repeat(5-item.s);
-  var dist=getDist(item.a);
-  return '<div class="card'+(item.featured?' featured-listing':'')+'">'
-    +'<div class="c-header">'
-    +'<div class="c-name-row"><span style="font-size:18px">'+item.e+'</span><span class="c-name">'+item.n+'</span>'+areaLabel(item.a)
-    +(item.featured?'<span class="c-featured-badge">⭐ Featured</span>':'')+'</div>'
-    +openBadge(item.h)+'</div>'
-    +'<div style="display:flex;align-items:center;gap:8px;margin:3px 0 5px"><span class="stars">'+stars+'</span><span style="font-size:12px;color:#A08060;font-weight:600">'+item.p+'</span>'+(dist?'<span style="font-size:12px;color:#A08060">· '+dist+'</span>':'')+'</div>'
-    +'<div class="c-note">'+item.note+'</div>'
-    +'<div class="tags">'+item.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')+'</div>'
-    +'<div class="addr-row"><span class="addr-txt">📍 '+item.addr+'</span>'
-    +'<button class="map-btn" data-addr="'+item.addr+'" data-name="'+item.n+'">🗺 Maps</button></div>'
-    +'<div class="card-actions">'+(item.ph?'<a class="phone-link" href="tel:'+item.ph+'">📞 '+item.ph+'</a>':'')
-    +'<span style="font-size:12px;color:#A08060">🕐 '+item.h+'</span>'
-    +'<button class="share-btn" data-name="'+item.n+'">Share ↗</button>'
-    +'</div></div>';
-}
-
-function kidCard(k){
-  var isFreeKid=(k.cat==='Free'||k.cat==='Event');
-  return '<div class="prog-card" style="background:'+k.bg+';border-color:'+k.bc+'">'
-    +'<div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:22px;line-height:1;flex-shrink:0;margin-top:2px">'+k.icon+'</span>'
-    +'<div style="flex:1">'
-    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">'
-    +'<div style="font-weight:800;font-size:14px;color:'+k.tc+';line-height:1.2;flex:1;margin-right:8px">'+k.title+'</div>'
-    +(isFreeKid?'<span class="free-pill" style="font-size:12px;padding:4px 10px;flex-shrink:0">🆓 FREE</span>':'')
-    +'</div>'
-    +'<div style="display:flex;gap:6px;margin-bottom:5px;flex-wrap:wrap">'
-    +'<span class="tag p">'+k.cat+'</span><span class="tag g">'+k.ages+'</span></div>'
-    +'<div style="font-size:12px;font-weight:600;color:'+k.tc+';margin-bottom:5px;opacity:0.75">📅 '+k.date+'</div>'
-    +'<div style="font-size:13px;color:#6B4C2A;line-height:1.5;margin-bottom:8px">'+k.detail+'</div>'
-    +(k.link?'<a class="prog-link" href="'+k.link+'" target="_blank">Register / Learn more →</a>':'')
-    +'</div></div></div>';
-}
-
-// ── PILLS ─────────────────────────────────────────────────────────────
-function makePills(id,opts,active,cb){
-  var el=document.getElementById(id);
-  el.innerHTML=opts.map(function(o){return '<button class="pill'+(active===o?' on':'')+'" data-val="'+o+'">'+o+'</button>';}).join('');
-  el.querySelectorAll('.pill').forEach(function(btn){btn.addEventListener('click',function(){cb(this.getAttribute('data-val'));});});
-}
-
-// ── RENDER ────────────────────────────────────────────────────────────
-function renderHome(){
-  document.getElementById('wx-home').innerHTML=wxHTML(wx);
-  document.getElementById('home-beach-ttl').textContent=outdoor?'Top Beaches':'Covered Spots';
-  // Featured
-  var hf=document.getElementById('home-featured');
-  hf.innerHTML=FEATURED.map(function(f){return featuredCard(f);}).join('');
-  bindMap(hf);
-  // Beaches (2 cards)
-  var spots=outdoor?OUTDOORS.filter(function(b){return b.t==='Beach';}).slice(0,2):OUTDOORS.filter(function(b){return b.t==='Activity'||b.t==='Park';}).slice(0,2);
-  var hb=document.getElementById('home-beaches');hb.innerHTML=spots.map(outdoorCard).join('');bindMap(hb);
-  // Eats (3 cards, featured first)
-  var eatsSorted=EATS.slice().sort(function(a,b){return (b.featured?1:0)-(a.featured?1:0);}).slice(0,3);
-  var he=document.getElementById('home-eats');he.innerHTML=eatsSorted.map(eatCard).join('');bindMap(he);
-  // Kids
-  var hk=document.getElementById('home-kids');hk.innerHTML=KIDS.slice(0,3).map(kidCard).join('');
-  // Events preview — show 2 upcoming/recurring events
-  var heEl=document.getElementById('home-events');
-  if(heEl){heEl.innerHTML=EVENTS.slice(0,2).map(eventCard).join('');bindMap(heEl);}
-}
-
-function renderOutdoors(){
-  document.getElementById('wx-outdoors').innerHTML=wxHTML(wx);
-  document.getElementById('rain-notice').style.display=outdoor?'none':'block';
-  var f=outFilter,af=ageFilter;
-  var list=OUTDOORS.filter(function(item){
-    var typeOk=(f==='All')||(f==='Beaches'&&item.t==='Beach')||(f==='Parks & Playgrounds'&&item.t==='Park')||(f==='Activities'&&item.t==='Activity');
-    var ageOk=af==='All'||(af==='Tots (2–5)'&&(item.kidAges==='toddler'||item.kidAges==='all'))||(af==='Elementary (6–11)'&&(item.kidAges==='elementary'||item.kidAges==='all'));
-    return typeOk&&ageOk;
-  });
-  // On rain, sort Activities first
-  if(!outdoor)list.sort(function(a,b){var s={Activity:0,Park:1,Beach:2};return (s[a.t]||9)-(s[b.t]||9);});
-  var ao=document.getElementById('all-outdoors');ao.innerHTML=list.map(outdoorCard).join('');bindMap(ao);
-  makePills('outdoor-pills',['All','Beaches','Parks & Playgrounds','Activities'],outFilter,function(v){outFilter=v;renderOutdoors();});
-  makePills('age-pills',['All','Tots (2–5)','Elementary (6–11)'],ageFilter,function(v){ageFilter=v;renderOutdoors();});
-}
-
-function renderEats(){
-  var list=eFilter==='All'?EATS:EATS.filter(function(e){return e.a===eFilter;});
-  list=list.slice().sort(function(a,b){return (b.featured?1:0)-(a.featured?1:0);});
-  var ae=document.getElementById('all-eats');ae.innerHTML=list.map(eatCard).join('');bindMap(ae);
-  makePills('eat-pills',['All','Tahoe City','Carnelian Bay','Kings Beach','Truckee'],eFilter,function(v){eFilter=v;renderEats();});
-}
-
-function renderKids(){
-  var list=kFilter==='All'?KIDS:KIDS.filter(function(k){return k.cat===kFilter;});
-  document.getElementById('all-kids').innerHTML=list.map(kidCard).join('');
-  makePills('kids-pills',['All','Camp','Sport','Arts','Academic','Free','Event','Info'],kFilter,function(v){kFilter=v;renderKids();});
-}
-
-function eventCard(ev){
-  var freeBadge=ev.free?'<span class="free-pill" style="font-size:12px;padding:4px 11px;margin-bottom:6px;display:inline-flex">🆓 FREE</span>':'<span class="tag o" style="margin-bottom:6px;display:inline-flex">💰 Paid</span>';
-  var kidsBadge=ev.kidsArea?'<span class="tag g">🧒 Kids Area</span>':'';
-  var dogBadge=ev.dogFriendly?'<span class="tag g">🐾 Dogs OK</span>':'';
-  var dist=getDist(ev.area);
-  return '<div class="prog-card" style="background:'+ev.bg+';border-color:'+ev.bc+'">'
-    +'<div style="display:flex;gap:10px;align-items:flex-start">'
-    +'<span style="font-size:26px;line-height:1;flex-shrink:0;margin-top:2px">'+ev.icon+'</span>'
-    +'<div style="flex:1">'
-    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">'
-    +'<div style="font-weight:800;font-size:15px;color:'+ev.tc+';line-height:1.2;flex:1;margin-right:8px">'+ev.name+'</div>'
-    +freeBadge
-    +'</div>'
-    +'<div style="font-size:11px;font-weight:800;color:'+ev.tc+';opacity:0.7;letter-spacing:0.5px;margin-bottom:5px">'+ev.cat.toUpperCase()+' · '+ev.area+(dist?' · '+dist:'')+'</div>'
-    +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">'
-    +'<span style="font-size:12px;font-weight:700;color:'+ev.tc+'">📅 '+ev.day+' · '+ev.time+'</span>'
-    +'</div>'
-    +'<div style="font-size:12px;color:#6B4C2A;margin-bottom:6px;font-style:italic">'+ev.dates+'</div>'
-    +'<div style="font-size:13px;color:#2C1A0E;line-height:1.55;margin-bottom:8px">'+ev.detail+'</div>'
-    +(ev.tips?'<div style="font-size:12px;color:#6B4C2A;background:rgba(255,255,255,0.5);border-radius:8px;padding:7px 10px;margin-bottom:8px;line-height:1.5">💡 <strong>Tip:</strong> '+ev.tips+'</div>':'')
-    +'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">'+kidsBadge+dogBadge+'</div>'
-    +'<div class="addr-row"><span class="addr-txt">📍 '+ev.addr+'</span>'
-    +'<button class="map-btn" data-addr="'+ev.addr+'" data-name="'+ev.name+'">🗺 Maps</button></div>'
-    +(ev.link?'<div style="margin-top:8px"><a class="prog-link" href="'+ev.link+'" target="_blank">More info &amp; details →</a></div>':'')
-    +'</div></div></div>';
-}
-
-function renderEvents(){
-  var list=evFilter==='All'?EVENTS:EVENTS.filter(function(e){return e.cat===evFilter;});
-  var ae=document.getElementById('all-events');ae.innerHTML=list.map(eventCard).join('');bindMap(ae);
-  makePills('events-pills',['All','Street Festival','Market','Live Music','Movies & Shows','Year-Round'],evFilter,function(v){evFilter=v;renderEvents();});
-}
-
-function renderFree(){
-  // Beaches
-  var beaches=OUTDOORS.filter(function(i){return i.t==='Beach'&&!i.pricing;});
-  var fbEl=document.getElementById('free-beaches');
-  fbEl.innerHTML=beaches.map(outdoorCard).join('');bindMap(fbEl);
-  // Parks
-  var parks=OUTDOORS.filter(function(i){return i.t==='Park';});
-  var fpEl=document.getElementById('free-parks');
-  fpEl.innerHTML=parks.map(outdoorCard).join('');bindMap(fpEl);
-  // Free events
-  var fevts=EVENTS.filter(function(e){return e.free;});
-  var feEl=document.getElementById('free-events');
-  feEl.innerHTML=fevts.map(eventCard).join('');bindMap(feEl);
-  // Free programs
-  var fkids=KIDS.filter(function(k){return k.cat==='Free'||k.cat==='Event';});
-  document.getElementById('free-kids').innerHTML=fkids.map(kidCard).join('');
-}
-
-function goTab(t){
-  tab=t;
-  ['home','outdoors','eats','kids','events','free'].forEach(function(id){
-    var s=document.getElementById('s-'+id);if(s)s.classList.toggle('active',id===t);
-    var nl=document.getElementById('nl-'+id);if(nl)nl.classList.toggle('on',id===t);
-    var nd=document.getElementById('nd-'+id);if(nd)nd.style.display=id===t?'block':'none';
-  });
-  if(t==='home')renderHome();
-  if(t==='outdoors')renderOutdoors();
-  if(t==='eats')renderEats();
-  if(t==='kids')renderKids();
-  if(t==='events')renderEvents();
-  if(t==='free')renderFree();
-  window.scrollTo(0,0);
-  closeSearch();
-}
-
-// ── SEARCH ────────────────────────────────────────────────────────────
-var searchOpen=false;
-function openSearch(){
-  searchOpen=true;
-  document.getElementById('search-bar').classList.add('open');
-  document.getElementById('search-results-page').style.display='block';
-  document.getElementById('search-input').focus();
-  document.getElementById('search-results-list').innerHTML='<div style="padding:20px 0;text-align:center;font-size:14px;color:#A08060">Start typing to search beaches, parks, restaurants…</div>';
-}
-function closeSearch(){
-  if(!searchOpen)return;
-  searchOpen=false;
-  document.getElementById('search-bar').classList.remove('open');
-  document.getElementById('search-results-page').style.display='none';
-  document.getElementById('search-input').value='';
-}
-document.getElementById('search-toggle-btn').addEventListener('click',function(){searchOpen?closeSearch():openSearch();});
-document.getElementById('search-input').addEventListener('input',function(){
-  var q=this.value.trim().toLowerCase();
-  var results=document.getElementById('search-results-list');
-  if(q.length<2){results.innerHTML='<div style="padding:20px;text-align:center;font-size:14px;color:#A08060">Keep typing…</div>';return;}
-  var hits=[];
-  OUTDOORS.forEach(function(item){
-    if(item.n.toLowerCase().indexOf(q)>-1||item.note.toLowerCase().indexOf(q)>-1||item.a.toLowerCase().indexOf(q)>-1||item.tags.join(' ').toLowerCase().indexOf(q)>-1)
-      hits.push({ico:item.e,name:item.n,meta:item.a+' · '+item.t,type:item.t,addr:item.addr});
-  });
-  EATS.forEach(function(item){
-    if(item.n.toLowerCase().indexOf(q)>-1||item.note.toLowerCase().indexOf(q)>-1||item.a.toLowerCase().indexOf(q)>-1||item.tags.join(' ').toLowerCase().indexOf(q)>-1)
-      hits.push({ico:item.e,name:item.n,meta:item.a+' · Restaurant',type:'Restaurant',addr:item.addr});
-  });
-  EVENTS.forEach(function(item){
-    if(item.name.toLowerCase().indexOf(q)>-1||item.detail.toLowerCase().indexOf(q)>-1||item.area.toLowerCase().indexOf(q)>-1||item.cat.toLowerCase().indexOf(q)>-1)
-      hits.push({ico:item.icon,name:item.name,meta:item.area+' · '+item.cat+' · '+item.day,type:'Event',addr:item.addr});
-  });
-  FEATURED.forEach(function(item){
-    if(item.name.toLowerCase().indexOf(q)>-1||item.note.toLowerCase().indexOf(q)>-1||item.a.toLowerCase().indexOf(q)>-1)
-      hits.push({ico:'⭐',name:item.name,meta:item.a+' · Featured',type:'Featured',addr:item.addr});
-  });
-  if(hits.length===0){results.innerHTML='<div style="padding:20px;text-align:center;font-size:14px;color:#A08060">No results for "'+q+'"</div>';return;}
-  results.innerHTML=hits.map(function(h){
-    return '<div class="search-result-item" onclick="openMap(\''+h.addr.replace(/'/g,"\\'")+'`,\''+h.name.replace(/'/g,"\\'")+'\');closeSearch()">'
-      +'<span class="sr-ico">'+h.ico+'</span>'
-      +'<div style="flex:1"><div class="sr-name">'+h.name+'</div><div class="sr-meta">'+h.meta+'</div></div>'
-      +'<span class="sr-type">'+h.type+'</span></div>';
+  // City table
+  document.getElementById('city-tbl').innerHTML=sortedCities.map(function(c){
+    var pct=Math.round(cities[c]/users.length*100);
+    return '<tr><td class="nm">'+c+'</td><td class="num">'+cities[c]+'</td><td><span class="badge ac">'+pct+'%</span></td></tr>';
   }).join('');
-});
 
-// ── WEATHER + AI FETCH ────────────────────────────────────────────────
-function fetchWeather(){
-  var city=CITIES[userCity]||CITIES['Carnelian Bay'];
-  fetch('https://api.open-meteo.com/v1/forecast?latitude='+city.lat+'&longitude='+city.lon+'&current=temperature_2m,weathercode,windspeed_10m,apparent_temperature&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/Los_Angeles')
-  .then(function(r){return r.json();})
-  .then(function(d){
-    wx=d.current;
-    var info=wxInfo(wx.weathercode);
-    outdoor=info.out===true||info.out==='snow';
-    document.getElementById('wx-beta-note').style.display='none';
-    renderHome();
-    if(tab==='outdoors')document.getElementById('wx-outdoors').innerHTML=wxHTML(wx);
-  })
-  .catch(function(){
-    wx=null;document.getElementById('wx-beta-note').style.display='block';renderHome();
+  // ── CHARTS ────────────────────────────────────────────────────────
+
+  // 1. Growth chart — cumulative sign-ins over time
+  var sorted=users.slice().sort(function(a,b){return new Date(a.signed_in_at)-new Date(b.signed_in_at);});
+  var growthLabels=[],growthData=[];
+  sorted.forEach(function(u,i){
+    var d=new Date(u.signed_in_at);
+    growthLabels.push(d.toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+    growthData.push(i+1);
   });
+  destroyChart('growthC');
+  var gc=document.getElementById('growthC');
+  if(gc){
+    chartInstances['growthC']=new Chart(gc,{
+      type:'line',
+      data:{labels:growthLabels,datasets:[{label:'Total Users',data:growthData,
+        borderColor:'#3B82F6',backgroundColor:B+'0.08)',borderWidth:2.5,tension:.3,fill:true,pointRadius:growthData.length>20?0:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:10},maxTicksLimit:8}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
+
+  // 2. City donut
+  var cityColors=['#3B82F6','#10B981','#F59E0B','#8B5CF6','#EF4444','#06B6D4','#F97316'];
+  destroyChart('cityC');
+  var cc=document.getElementById('cityC');
+  if(cc){
+    chartInstances['cityC']=new Chart(cc,{
+      type:'doughnut',
+      data:{labels:sortedCities,datasets:[{data:sortedCities.map(function(c){return cities[c];}),
+        backgroundColor:cityColors.slice(0,sortedCities.length),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'right',labels:{font:{size:11},padding:12}}}}
+    });
+  }
+
+  // 3. Daily sign-ins bar chart
+  var dailyCounts={};
+  sorted.forEach(function(u){
+    var d=new Date(u.signed_in_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    dailyCounts[d]=(dailyCounts[d]||0)+1;
+  });
+  var dailyLabels=Object.keys(dailyCounts);
+  var dailyData=dailyLabels.map(function(d){return dailyCounts[d];});
+  destroyChart('dailyC');
+  var dc=document.getElementById('dailyC');
+  if(dc){
+    chartInstances['dailyC']=new Chart(dc,{
+      type:'bar',
+      data:{labels:dailyLabels,datasets:[{data:dailyData,backgroundColor:B+'0.75)',borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:10},maxTicksLimit:10}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
+
+  // 4. Day of week breakdown
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var dowCounts=[0,0,0,0,0,0,0];
+  sorted.forEach(function(u){dowCounts[new Date(u.signed_in_at).getDay()]++;});
+  destroyChart('dowC');
+  var dwc=document.getElementById('dowC');
+  if(dwc){
+    chartInstances['dowC']=new Chart(dwc,{
+      type:'bar',
+      data:{labels:days,datasets:[{data:dowCounts,
+        backgroundColor:dowCounts.map(function(v){return v===Math.max.apply(null,dowCounts)?G+'0.85)':B+'0.5)';}),borderRadius:5}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:11}}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+    });
+  }
 }
 
-// ── SETTINGS ──────────────────────────────────────────────────────────
-function buildCityGrid(containerId,selectedVal,onSelect){
-  var grid=document.getElementById(containerId),isSmall=containerId==='settings-city-grid',cls=isSmall?'city-btn-sm':'city-btn';
-  grid.innerHTML=Object.keys(CITIES).map(function(city){
-    var c=CITIES[city];
-    return '<div class="'+cls+(city===selectedVal?' selected':'')+'" data-city="'+city+'">'
-      +'<div class="city-ico">'+c.ico+'</div><div class="city-lbl">'+city+'</div>'
-      +(isSmall?'':'<div class="city-desc">'+c.desc+'</div>')+'</div>';
+// ── LOAD ANALYTICS ───────────────────────────────────────────────────
+function loadAnalytics(){
+  var B='rgba(59,130,246,',G='rgba(245,158,11,',Gr='rgba(16,185,129,',P='rgba(139,92,246,';
+  Chart.defaults.color='#8B9ABF';
+  Chart.defaults.borderColor='#2A3448';
+
+  fetch('/api/analytics')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      // KPIs
+      document.getElementById('an-total').textContent=d.totalEvents||0;
+      var mapTotal=d.listingBoard.reduce(function(s,l){return s+l.mapOpens;},0);
+      var phoneTotal=d.listingBoard.reduce(function(s,l){return s+l.phoneTaps;},0);
+      var filterTotal=Object.values(d.filterClicks||{}).reduce(function(s,v){return s+v;},0);
+      document.getElementById('an-maps').textContent=mapTotal;
+      document.getElementById('an-phones').textContent=phoneTotal;
+      document.getElementById('an-filters').textContent=filterTotal;
+
+      // Hourly chart
+      destroyChart('hourlyC');
+      var hc=document.getElementById('hourlyC');
+      if(hc&&d.hourly){
+        var hrs=d.hourly.map(function(_,i){return i===0?'12a':i<12?i+'a':i===12?'12p':(i-12)+'p';});
+        chartInstances['hourlyC']=new Chart(hc,{
+          type:'bar',
+          data:{labels:hrs,datasets:[{data:d.hourly,
+            backgroundColor:d.hourly.map(function(v){return v===Math.max.apply(null,d.hourly)?G+'0.85)':B+'0.5)';}),
+            borderRadius:3}]},
+          options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:10},stepSize:1},min:0}}}
+        });
+      }
+
+      // Provider donut
+      destroyChart('providerC');
+      var pc=document.getElementById('providerC');
+      if(pc&&d.mapProviders){
+        var pKeys=Object.keys(d.mapProviders);
+        chartInstances['providerC']=new Chart(pc,{
+          type:'doughnut',
+          data:{labels:pKeys,datasets:[{data:pKeys.map(function(k){return d.mapProviders[k];}),
+            backgroundColor:['#3B82F6','#10B981','#F59E0B'],borderWidth:0}]},
+          options:{responsive:true,maintainAspectRatio:false,
+            plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}
+        });
+      }
+
+      // Tab popularity
+      destroyChart('tabPopC');
+      var tpc=document.getElementById('tabPopC');
+      if(tpc&&d.tabStats&&d.tabStats.length){
+        chartInstances['tabPopC']=new Chart(tpc,{
+          type:'bar',
+          data:{labels:d.tabStats.map(function(t){return t.tab;}),
+            datasets:[{data:d.tabStats.map(function(t){return t.visits;}),
+              backgroundColor:B+'0.75)',borderRadius:5}]},
+          options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+            plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}
+        });
+      }
+
+      // Dwell time
+      destroyChart('dwellC');
+      var dwc=document.getElementById('dwellC');
+      if(dwc&&d.tabStats&&d.tabStats.length){
+        chartInstances['dwellC']=new Chart(dwc,{
+          type:'bar',
+          data:{labels:d.tabStats.map(function(t){return t.tab;}),
+            datasets:[{data:d.tabStats.map(function(t){return t.avgDuration;}),
+              backgroundColor:Gr+'0.75)',borderRadius:5}]},
+          options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+            plugins:{legend:{display:false}},
+            scales:{x:{ticks:{font:{size:10},callback:function(v){return v+'s';}}},y:{ticks:{font:{size:11}}}}}
+        });
+      }
+
+      // Listing table
+      var lt=document.getElementById('listing-tbl');
+      if(d.listingBoard&&d.listingBoard.length){
+        lt.innerHTML=d.listingBoard.slice(0,20).map(function(l){
+          var score=l.mapOpens*3+l.phoneTaps*5+l.views;
+          var badge=l.mapCtr>15?'<span class="badge gr">🔥 Hot</span>':l.mapCtr>8?'<span class="badge ac">Active</span>':'<span class="badge gy">Low</span>';
+          return '<tr><td class="nm">'+l.name+'</td>'
+            +'<td class="num">'+l.views+'</td>'
+            +'<td class="num">'+l.mapOpens+'</td>'
+            +'<td class="num">'+l.mapCtr+'%</td>'
+            +'<td class="num">'+l.phoneTaps+'</td>'
+            +'<td>'+badge+' <span style="font-size:11px;color:var(--t3)">'+score+'pts</span></td>'
+            +'</tr>';
+        }).join('');
+      } else {
+        lt.innerHTML='<tr><td colspan="6" class="loading">No listing data yet. Users need to interact with listings.</td></tr>';
+      }
+
+      // Filter clicks
+      var ft=document.getElementById('filter-tbl');
+      var fKeys=Object.keys(d.filterClicks||{}).sort(function(a,b){return d.filterClicks[b]-d.filterClicks[a];});
+      ft.innerHTML=fKeys.length?fKeys.map(function(k){
+        return '<tr><td class="nm">'+k+'</td><td class="num">'+d.filterClicks[k]+'</td></tr>';
+      }).join(''):'<tr><td colspan="2" class="loading">No filter clicks yet</td></tr>';
+
+      // Weather breakdown
+      var wt=document.getElementById('weather-tbl');
+      var wKeys=Object.keys(d.weatherEvents||{}).sort(function(a,b){return d.weatherEvents[b]-d.weatherEvents[a];});
+      wt.innerHTML=wKeys.length?wKeys.map(function(k){
+        return '<tr><td class="nm">'+k+'</td><td class="num">'+d.weatherEvents[k]+'</td></tr>';
+      }).join(''):'<tr><td colspan="2" class="loading">No weather data yet</td></tr>';
+
+      // Recent events
+      var et=document.getElementById('events-tbl');
+      var evtLabels={app_launch:'🚀 App Launch',tab_view:'📱 Tab View',map_open:'🗺️ Map Open',
+        map_choice:'📍 Map Choice',phone_tap:'📞 Phone Tap',filter_click:'🔍 Filter',
+        listing_view:'👁️ Listing View',search_query:'🔎 Search'};
+      if(d.recentEvents&&d.recentEvents.length){
+        et.innerHTML=d.recentEvents.slice(0,50).map(function(e){
+          var t=new Date(e.created_at);
+          var timeStr=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+          var detail=e.listing_name||e.tab_name||e.filter_value||e.map_provider||e.search_query||'—';
+          var wxLabel=e.weather_code!==null&&e.weather_code!==undefined?(e.weather_code<=1?'☀️':e.weather_code<=3?'⛅':e.weather_code<=67?'🌧️':'❄️'):'—';
+          return '<tr><td style="font-family:var(--fm2);font-size:11px;color:var(--t3)">'+timeStr+'</td>'
+            +'<td><span style="font-size:12px">'+(evtLabels[e.event_type]||e.event_type)+'</span></td>'
+            +'<td style="font-size:12px;color:var(--t2)">'+detail+'</td>'
+            +'<td><span class="badge ac">'+(e.city||'—')+'</span></td>'
+            +'<td style="font-size:14px">'+wxLabel+'</td>'
+            +'</tr>';
+        }).join('');
+      } else {
+        et.innerHTML='<tr><td colspan="5" class="loading">No events yet. Start using the app!</td></tr>';
+      }
+    })
+    .catch(function(err){
+      console.error('Analytics error:',err);
+    });
+}
+
+// ── STATIC BUSINESS DATA ──────────────────────────────────────────────
+var PITCHES=[
+  {n:"BridgeTender Tavern",a:"Tahoe City · Restaurant",hot:true,why:"High intent — families are already navigating there. Top restaurant in the app.",rate:"$250/mo"},
+  {n:"KidZone Museum",a:"Truckee · Activity",hot:true,why:"Rainy-day anchor listing. High map opens. Families plan around it.",rate:"$250/mo"},
+  {n:"Kings Beach Miniature Golf",a:"Kings Beach · Mini Golf",hot:true,why:"Seasonal operator with loyal family audience. Only mini golf in Kings Beach.",rate:"$200/mo"},
+  {n:"Rosie's Cafe",a:"Tahoe City · Restaurant",hot:false,why:"Beloved local brand. Featured badge strengthens lead over competing breakfast spots.",rate:"$175/mo"},
+  {n:"Fireside Pizza",a:"Tahoe City · Restaurant",hot:false,why:"Consistent performer. Kid-friendly tag drives high filter match rate.",rate:"$175/mo"},
+  {n:"Magic Carpet Golf",a:"Carnelian Bay · Mini Golf",hot:false,why:"Only indoor mini golf — high rainy-day value. Undermonetized.",rate:"$150/mo"},
+  {n:"Squeeze In",a:"Truckee · Restaurant",hot:false,why:"Growing with Truckee user base. Good early pitch for market penetration.",rate:"$125/mo"},
+  {n:"Woodward Tahoe",a:"Truckee · Activity",hot:false,why:"Camps + drop-in sessions. Featured would drive camp signups — high LTV.",rate:"$100/mo"},
+];
+
+var GAPS=[
+  {i:"🍕",t:"Truckee restaurants — demand exceeds supply",d:"Truckee users browse Eats heavily but fewer listings exist. Add Pizza on the Hill, Great Gold, FiftyFifty.",o:"+3 listings"},
+  {i:"🛝",t:"Tahoma & Olympic Valley — zero playgrounds listed",d:"You have users in both cities with no local playground content.",o:"+2 listings"},
+  {i:"🎨",t:"Indoor rainy-day activities — major gap",d:"Rainy sessions are high but only KidZone + Woodward serve that demand.",o:"+3 listings"},
+  {i:"🍦",t:"Ice cream / dessert in Truckee",d:"No dessert listing exists for Truckee. Sweets Handmade Candies, gelato spots available.",o:"+2 listings"},
+  {i:"🏊",t:"Swim lessons & water programs",d:"NTPUD swim programs at Tahoe City Community Center not listed.",o:"+1 listing"},
+];
+
+function renderPitches(){
+  var pl=document.getElementById('pitchList');
+  pl.innerHTML=PITCHES.map(function(p){
+    return '<div class="pitch'+(p.hot?' hot':'')+'">'
+      +'<div style="flex:1">'+(p.hot?'<span class="badge go" style="margin-bottom:6px;display:inline-flex">🔥 Hot Pitch</span><br>':'')
+      +'<div class="pn">'+p.n+'</div><div class="pm">'+p.a+'</div>'
+      +'<div style="font-size:12px;color:var(--t3);margin-top:6px;line-height:1.5">'+p.why+'</div></div>'
+      +'<div><div class="pval">'+p.rate+'</div><div class="pstat-l" style="font-size:10px;color:var(--t3)">Suggested</div></div>'
+      +'</div>';
   }).join('');
-  grid.querySelectorAll('.'+cls).forEach(function(btn){
-    btn.addEventListener('click',function(){grid.querySelectorAll('.'+cls).forEach(function(b){b.classList.remove('selected');});this.classList.add('selected');onSelect(this.getAttribute('data-city'));});
-  });
 }
 
-function openSettings(){
-  document.getElementById('s-name').value=userName;
-  document.getElementById('s-email').value=userEmail;
-  buildCityGrid('settings-city-grid',userCity,function(c){selectedCity=c;});
-  selectedCity=userCity;
-  document.getElementById('settings-overlay').classList.add('show');
+function renderGaps(){
+  var gl=document.getElementById('gapList');
+  gl.innerHTML=GAPS.map(function(g){
+    return '<div class="gap"><div style="font-size:22px;flex-shrink:0">'+g.i+'</div>'
+      +'<div style="flex:1"><div style="font-weight:600;color:var(--t);font-size:13px;margin-bottom:2px">'+g.t+'</div>'
+      +'<div style="font-size:12px;color:var(--t3)">'+g.d+'</div></div>'
+      +'<div><div class="gap-opp">'+g.o+'</div><div style="font-size:10px;color:var(--t3);text-align:right">to add</div></div>'
+      +'</div>';
+  }).join('');
 }
-function closeSettings(){document.getElementById('settings-overlay').classList.remove('show');}
-document.getElementById('settings-btn').addEventListener('click',openSettings);
-document.getElementById('settings-close-btn').addEventListener('click',closeSettings);
-document.getElementById('settings-overlay').addEventListener('click',function(e){if(e.target===this)closeSettings();});
-document.getElementById('settings-save-btn').addEventListener('click',function(){
-  userName=document.getElementById('s-name').value;
-  userEmail=document.getElementById('s-email').value;
-  if(selectedCity&&selectedCity!==userCity){
-    userCity=selectedCity;
-    updateHeader();
-    fetchWeather();
-  }
-  renderHome();closeSettings();
-});
-
-// ── ONBOARDING ────────────────────────────────────────────────────────
-function buildCityGridOB(){
-  buildCityGrid('ob-city-grid',null,function(city){
-    selectedCity=city;
-    var btn=document.getElementById('ob-confirm-btn');btn.disabled=false;btn.classList.add('ready');
-  });
-}
-
-function updateHeader(){
-  var now=new Date();
-  document.getElementById('hdate').textContent=userCity.toUpperCase()+' · '+now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
-}
-
-function launchApp(){
-  document.getElementById('page-onboard').classList.remove('active');
-  document.getElementById('page-main').classList.add('active');
-  updateHeader();
-  renderHome();renderKids();renderEvents();renderFree();
-  fetchWeather();
-  setInterval(fetchWeather,600000);
-}
-
-// ── GOOGLE AUTH ───────────────────────────────────────────────────────
-// ⚠️  REPLACE THIS with your actual Google Client ID from console.cloud.google.com
-var GOOGLE_CLIENT_ID = '842780486437-8jm02c15dlj9ld9bijlplp6osa2n1upf.apps.googleusercontent.com';
-
-var userPhoto = '';
-
-function decodeJwt(token){
-  try{
-    var base64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-    return JSON.parse(atob(base64));
-  }catch(e){return null;}
-}
-
-function handleCredentialResponse(response){
-  var payload=decodeJwt(response.credential);
-  if(!payload){document.getElementById('signin-error').style.display='block';return;}
-  userName=payload.given_name||payload.name||'';
-  userEmail=payload.email||'';
-  userPhoto=payload.picture||'';
-  // Save to localStorage so they stay logged in
-  localStorage.setItem('llo_name',userName);
-  localStorage.setItem('llo_email',userEmail);
-  localStorage.setItem('llo_photo',userPhoto);
-  // Save to database
-  fetch('/api/signin',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name:userName,email:userEmail,photo:userPhoto,city:userCity})
-  }).catch(function(){});
-  updateAvatar();
-  document.getElementById('page-signin').classList.remove('active');
-  document.getElementById('page-onboard').classList.add('active');
-}
-
-function updateAvatar(){
-  var wrap=document.getElementById('user-avatar-placeholder');
-  if(!wrap)return;
-  if(userPhoto){
-    wrap.outerHTML='<img class="user-avatar" id="user-avatar-placeholder" src="'+userPhoto+'" alt="'+userName+'">';
-  } else if(userName){
-    wrap.textContent=userName.charAt(0).toUpperCase();
-    wrap.style.background='#1A6B9A';
-  }
-}
-
-function signOut(){
-  localStorage.removeItem('llo_name');
-  localStorage.removeItem('llo_email');
-  localStorage.removeItem('llo_photo');
-  userName='';userEmail='';userPhoto='';
-  // Revoke Google session and show sign-in page
-  if(window.google&&google.accounts){
-    google.accounts.id.disableAutoSelect();
-  }
-  ['home','outdoors','eats','kids','events','free'].forEach(function(id){
-    var s=document.getElementById('s-'+id);if(s)s.classList.remove('active');
-  });
-  document.getElementById('page-main').classList.remove('active');
-  document.getElementById('page-signin').classList.add('active');
-  // Re-render Google button
-  setTimeout(initGoogleSignIn,300);
-}
-
-function initGoogleSignIn(){
-  // HTML data-attribute approach handles rendering automatically
-  // This function kept for signOut re-init only
-  if(!window.google||!google.accounts){setTimeout(initGoogleSignIn,500);return;}
-  google.accounts.id.initialize({
-    client_id:GOOGLE_CLIENT_ID,
-    callback:handleCredentialResponse,
-    auto_select:false
-  });
-}
-
-// ── BOOT ──────────────────────────────────────────────────────────────
-buildCityGridOB();
-
-// Check if already signed in (returning user)
-var savedName=localStorage.getItem('llo_name');
-var savedEmail=localStorage.getItem('llo_email');
-var savedPhoto=localStorage.getItem('llo_photo');
-if(savedName&&savedEmail){
-  userName=savedName;userEmail=savedEmail;userPhoto=savedPhoto||'';
-  document.getElementById('page-signin').classList.remove('active');
-  document.getElementById('page-onboard').classList.remove('active');
-  document.getElementById('page-main').classList.add('active');
-  updateHeader();
-  setTimeout(updateAvatar,100);
-  launchApp();
-} else {
-  // New user — show sign-in, init Google button
-  initGoogleSignIn();
-}
-
-document.getElementById('ob-confirm-btn').addEventListener('click',function(){
-  if(!selectedCity)return;
-  userCity=selectedCity;
-  var nameInput=document.getElementById('ob-name');
-  if(nameInput&&nameInput.value.trim())userName=nameInput.value.trim();
-  // Update city in database
-  fetch('/api/signin',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name:userName,email:userEmail,photo:userPhoto,city:userCity})
-  }).catch(function(){});
-  launchApp();
-});
-
-document.getElementById('ob-skip').addEventListener('click',function(){launchApp();});
-
-// NAV
-document.getElementById('nb-home').addEventListener('click',function(){goTab('home');});
-document.getElementById('nb-outdoors').addEventListener('click',function(){goTab('outdoors');});
-document.getElementById('nb-eats').addEventListener('click',function(){goTab('eats');});
-document.getElementById('nb-kids').addEventListener('click',function(){goTab('kids');});
-document.getElementById('nb-events').addEventListener('click',function(){goTab('events');});
-document.getElementById('sa-beaches').addEventListener('click',function(){outFilter='All';goTab('outdoors');});
-document.getElementById('sa-eats').addEventListener('click',function(){goTab('eats');});
-document.getElementById('sa-kids').addEventListener('click',function(){goTab('kids');});
-document.getElementById('sa-events').addEventListener('click',function(){goTab('events');});
-document.getElementById('qc-beaches').addEventListener('click',function(){outFilter='Beaches';goTab('outdoors');});
-document.getElementById('qc-parks').addEventListener('click',function(){outFilter='Parks & Playgrounds';goTab('outdoors');});
-document.getElementById('qc-activities').addEventListener('click',function(){outFilter='Activities';goTab('outdoors');});
-document.getElementById('qc-eats').addEventListener('click',function(){goTab('eats');});
-document.getElementById('qc-kids').addEventListener('click',function(){goTab('kids');});
-document.getElementById('qc-events').addEventListener('click',function(){goTab('events');});
-document.getElementById('qc-free').addEventListener('click',function(){goTab('free');});
 </script>
 </body>
 </html>
