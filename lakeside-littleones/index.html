@@ -15,13 +15,14 @@
 <meta property="og:title" content="Lakeside + Little Ones">
 <meta property="og:description" content="North Shore family activity guide — find beaches, parks, kid-friendly eats & programs near you.">
 <meta property="og:type" content="website">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
 #app{width:100%;max-width:430px;min-height:100vh;background:#FDFAF3;position:relative;overflow-x:hidden;box-shadow:0 0 60px rgba(0,0,0,0.2)}
 .page{display:none;min-height:100vh}.page.active{display:block}
-.screen{display:none;padding-top:52px;padding-bottom:20px}.screen.active{display:block}
+.screen{display:none;padding-bottom:90px}.screen.active{display:block}
 
 /* ── SIGN IN ── */
 .sign{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px;background:linear-gradient(180deg,#F5E6C8 0%,#FDFAF3 100%)}
@@ -30,7 +31,11 @@ body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-con
 .sign-features{background:#fff;border:1px solid #F0DFB8;border-radius:18px;padding:20px 24px;margin:22px 0;width:100%;max-width:300px;font-size:13px;color:#6B4C2A;line-height:2.1}
 .gbtn{width:100%;max-width:300px;background:#fff;border:1.5px solid #E8C87A;border-radius:14px;padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:15px;color:#2C1A0E;box-shadow:0 4px 16px rgba(0,0,0,0.08);transition:transform 0.1s,box-shadow 0.1s}
 .gbtn:active{transform:scale(0.98);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-.sign-note{text-align:center;margin-top:14px;font-size:11px;color:#A08060}
+.sign-note{text-align:center;margin-top:12px;font-size:11px;color:#A08060}
+.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #F0DFB8}
+.user-avatar-placeholder{width:30px;height:30px;border-radius:50%;background:#1A6B9A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid #F0DFB8}
+.sign-note{text-align:center;margin-top:12px;font-size:11px;color:#A08060}
+
 
 /* ── ONBOARDING ── */
 .onboard{display:flex;flex-direction:column;min-height:100vh;padding:36px 24px 32px;background:#FDFAF3}
@@ -62,7 +67,7 @@ body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-con
 .search-bar.open{display:block}
 .search-input{width:100%;background:#F5E6C8;border:none;border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;color:#2C1A0E;outline:none}
 .search-input::placeholder{color:#A08060}
-.search-results{padding:0 16px;padding-top:8px;padding-bottom:20px}
+.search-results{padding:0 16px;padding-bottom:90px}
 .search-result-item{background:#fff;border:1px solid #F0DFB8;border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px}
 .search-result-item:active{background:#F5F0E8}
 .sr-ico{font-size:22px;flex-shrink:0}
@@ -183,7 +188,7 @@ body{background:#D4B896;font-family:'Nunito',sans-serif;display:flex;justify-con
 .qcat-ico{font-size:20px}.qcat-lbl{font-size:10px;font-weight:700;color:#6B4C2A;margin-top:3px}
 
 /* ── NAV ── */
-nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:2px solid #F0DFB8;display:flex;flex-direction:row;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid #F0DFB8;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,8px)}
 .nb{flex:1;background:none;border:none;padding:7px 0 5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',sans-serif;-webkit-tap-highlight-color:transparent}
 .nb-ico{font-size:22px;line-height:1}.nb-lbl{font-size:9px;font-weight:700;letter-spacing:0.3px;color:#A08060}
 .nb-lbl.on{color:#1A6B9A}.nb-dot{width:4px;height:4px;border-radius:50%;background:#1A6B9A;display:none}
@@ -263,6 +268,9 @@ nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-w
     <div style="padding:4px 20px">
       <button class="save-btn" id="settings-save-btn">Save Changes</button>
     </div>
+    <div style="padding:12px 20px 0">
+      <button onclick="signOut()" style="width:100%;background:none;border:1px solid #F0DFB8;border-radius:14px;padding:13px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;color:#A08060;cursor:pointer">Sign Out</button>
+    </div>
     <div class="sheet-sec" style="padding-top:18px">
       <div style="font-size:11px;color:#A08060;line-height:1.7">
         ⚠️ <strong style="color:#8B6914">Live weather</strong> requires opening in a real browser — Claude's preview sandbox blocks external API calls.<br><br>
@@ -274,7 +282,7 @@ nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-w
 </div>
 
 <!-- ───── PAGE 1: SIGN IN ───── -->
-<div id="page-signin" class="page" style="display:none">
+<div id="page-signin" class="page active">
   <div class="sign">
     <div style="font-size:52px">🏔️</div>
     <div class="sign-logo">Lakeside<br><em>+ Little Ones</em></div>
@@ -286,15 +294,14 @@ nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-w
       🚣 Rafting, mini golf, KidZone &amp; more<br>
       🎒 TCPUD camps &amp; programs
     </div>
-    <button class="gbtn" id="signin-btn">
-      🏔️ &nbsp; Explore Now →
-    </button>
+    <div id="google-btn-wrap" style="margin:8px 0 4px"></div>
+    <div id="signin-error" style="display:none;font-size:12px;color:#c0392b;margin-top:8px;text-align:center">Sign-in failed. Please try again.</div>
     <div class="sign-note">For North Shore families 🌲 · Free forever</div>
   </div>
 </div>
 
 <!-- ───── PAGE 2: ONBOARDING ───── -->
-<div id="page-onboard" class="page" style="display:none">
+<div id="page-onboard" class="page">
   <div class="onboard">
     <div class="ob-step">Step 1 of 2 — Quick Setup</div>
     <div class="ob-title">What should we call you?</div>
@@ -311,7 +318,7 @@ nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-w
 </div>
 
 <!-- ───── PAGE 3: MAIN APP ───── -->
-<div id="page-main" class="page active">
+<div id="page-main" class="page">
 
   <div class="sticky-header">
     <div>
@@ -320,6 +327,9 @@ nav{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:100%;max-w
     </div>
     <div class="header-right">
       <button class="search-toggle" id="search-toggle-btn">🔍</button>
+      <div id="user-avatar-wrap" style="cursor:pointer" id="settings-btn-wrap">
+        <div class="user-avatar-placeholder" id="user-avatar-placeholder">?</div>
+      </div>
       <button class="settings-btn" id="settings-btn">⚙️</button>
     </div>
   </div>
@@ -1255,8 +1265,106 @@ function launchApp(){
   setInterval(fetchWeather,600000);
 }
 
-// ── BOOT — No login required, launch immediately ──────────────────────
-launchApp();
+// ── GOOGLE AUTH ───────────────────────────────────────────────────────
+// ⚠️  REPLACE THIS with your actual Google Client ID from console.cloud.google.com
+var GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE';
+
+var userPhoto = '';
+
+function decodeJwt(token){
+  try{
+    var base64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(atob(base64));
+  }catch(e){return null;}
+}
+
+function handleCredentialResponse(response){
+  var payload=decodeJwt(response.credential);
+  if(!payload){document.getElementById('signin-error').style.display='block';return;}
+  userName=payload.given_name||payload.name||'';
+  userEmail=payload.email||'';
+  userPhoto=payload.picture||'';
+  // Save to localStorage so they stay logged in
+  localStorage.setItem('llo_name',userName);
+  localStorage.setItem('llo_email',userEmail);
+  localStorage.setItem('llo_photo',userPhoto);
+  updateAvatar();
+  document.getElementById('page-signin').classList.remove('active');
+  document.getElementById('page-onboard').classList.add('active');
+}
+
+function updateAvatar(){
+  var wrap=document.getElementById('user-avatar-placeholder');
+  if(!wrap)return;
+  if(userPhoto){
+    wrap.outerHTML='<img class="user-avatar" id="user-avatar-placeholder" src="'+userPhoto+'" alt="'+userName+'">';
+  } else if(userName){
+    wrap.textContent=userName.charAt(0).toUpperCase();
+    wrap.style.background='#1A6B9A';
+  }
+}
+
+function signOut(){
+  localStorage.removeItem('llo_name');
+  localStorage.removeItem('llo_email');
+  localStorage.removeItem('llo_photo');
+  userName='';userEmail='';userPhoto='';
+  // Revoke Google session and show sign-in page
+  if(window.google&&google.accounts){
+    google.accounts.id.disableAutoSelect();
+  }
+  ['home','outdoors','eats','kids','events','free'].forEach(function(id){
+    var s=document.getElementById('s-'+id);if(s)s.classList.remove('active');
+  });
+  document.getElementById('page-main').classList.remove('active');
+  document.getElementById('page-signin').classList.add('active');
+  // Re-render Google button
+  setTimeout(initGoogleSignIn,300);
+}
+
+function initGoogleSignIn(){
+  if(!window.google||!google.accounts){setTimeout(initGoogleSignIn,300);return;}
+  google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:handleCredentialResponse,
+    auto_select:false,
+    cancel_on_tap_outside:true
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('google-btn-wrap'),
+    {theme:'outline',size:'large',width:300,text:'continue_with',shape:'rectangular',logo_alignment:'left'}
+  );
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────
+buildCityGridOB();
+
+// Check if already signed in (returning user)
+var savedName=localStorage.getItem('llo_name');
+var savedEmail=localStorage.getItem('llo_email');
+var savedPhoto=localStorage.getItem('llo_photo');
+if(savedName&&savedEmail){
+  userName=savedName;userEmail=savedEmail;userPhoto=savedPhoto||'';
+  document.getElementById('page-signin').classList.remove('active');
+  document.getElementById('page-onboard').classList.remove('active');
+  document.getElementById('page-main').classList.add('active');
+  updateHeader();
+  setTimeout(updateAvatar,100);
+  launchApp();
+} else {
+  // New user — show sign-in, init Google button
+  initGoogleSignIn();
+}
+
+document.getElementById('ob-confirm-btn').addEventListener('click',function(){
+  if(!selectedCity)return;
+  userCity=selectedCity;
+  var nameInput=document.getElementById('ob-name');
+  if(nameInput&&nameInput.value.trim())userName=nameInput.value.trim();
+  launchApp();
+});
+
+document.getElementById('ob-skip').addEventListener('click',function(){launchApp();});
 
 // NAV
 document.getElementById('nb-home').addEventListener('click',function(){goTab('home');});
